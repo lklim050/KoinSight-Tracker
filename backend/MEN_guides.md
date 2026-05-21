@@ -3,31 +3,32 @@ In this tutorial, we will create a simple Express server that connects to a Mong
 
 TABLE OF CONTENTS
 
-- INSTALL PACKAGE INITIALIZATION[#package-installation]
-- CHANGE PACKAGE.JSON[#change-package-json]
-- ENVIRONMENT VARIABLES CREATION[#environment-variables-creation]
-- SRC FOLDER CREATE[#src-folder-create]
-  - DB FOLDER, DB.JS[#db-folder-dbjs]
-  - MODELS FOLDER, SCHEMA.JS[#models-folder-schemajs]
-  - CONTROLLERS FOLDER, CONTROLLER.JS[#controllers-folder-controllerjs]
-  - ROUTER FOLDER, ROUTER.JS[#router-folder-routerjs]
-  - VALIDATORS FOLDER, VALIDATOR.JS[#validators-folder-validatorjs]
-  - MIDDLEWARES FOLDER, MIDDLEWARE.JS[#middlewares-folder-middlewarejs]
-- SERVER.JS[#serverjs]
-- CREATE JWT[#create-jwt]
-  - INSTALL PACKAGES[#install-packages]
-  - ENV VARIABLES[#env-variables]
-  - MODELS FOLDER, USERSCHEMA.JS[#models-folder-userschemajs]
-  - CONTROLLERS FOLDER, AUTHCONTROLLER.JS[#controllers-folder-authcontrollerjs]
-  - BRUNO[#bruno]
-  - MIDDLEWARES FOLDER, AUTHMIDDLEWARE.JS[#middlewares-folder-authmiddlewarejs]
-- SECURING API ENDPOINTS (HARDENING)[#securing-api-endpoints-hardening]
-  - RATE LIMITING[#rate-limiting]
-  - CORS[#cors]
-  - HELMET[#helmet]
+- [INSTALL PACKAGE INITIALIZATION](#install-package-initialization)
+- [CHANGE PACKAGE.JSON](#change-packagejson)
+- [ENVIRONMENT VARIABLES CREATION](#environment-variables-creation)
+- [SRC FOLDER CREATE](#src-folder-create)
+  - [DB FOLDER, DB.JS](#db-folder-dbjs)
+  - [MODELS FOLDER, SCHEMA.JS](#models-folder-schemajs)
+  - [CONTROLLERS FOLDER, CONTROLLER.JS](#controllers-folder-controllerjs)
+  - [ROUTER FOLDER, ROUTER.JS](#router-folder-routerjs)
+  - [VALIDATORS FOLDER, VALIDATOR.JS](#validators-folder-validatorjs)
+  - [MIDDLEWARES FOLDER, MIDDLEWARE.JS](#middlewares-folder-middlewarejs)
+- [SERVER.JS](#serverjs)
+- [CREATE JWT](#create-jwt)
+  - [INSTALL PACKAGES](#install-packages)
+  - [ENV VARIABLES](#env-variables)
+  - [MODELS FOLDER, USERSCHEMA.JS](#models-folder-userschemajs)
+  - [CONTROLLERS FOLDER, AUTHCONTROLLER.JS](#controllers-folder-authcontrollerjs)
+  - [BRUNO](#bruno)
+  - [MIDDLEWARES FOLDER, AUTHMIDDLEWARE.JS](#middlewares-folder-authmiddlewarejs)
+- [SECURING API ENDPOINTS (HARDENING)](#securing-api-endpoints-hardening)
+  - [RATE LIMITING](#rate-limiting)
+  - [CORS](#cors)
+  - [HELMET](#helmet)
 
-1. INSTALL PACKAGE INITIALIZATION
-   Install the following packages
+## INSTALL PACKAGE INITIALIZATION
+
+Install the following packages
 
 - npm init -y
 - npm i express
@@ -35,8 +36,9 @@ TABLE OF CONTENTS
 - npm i dotenv
 - npm i mongoose
 
-2. CHANGE PACKAGE.JSON
-   Make a few changes to the package.json file:
+## CHANGE PACKAGE.JSON
+
+Make a few changes to the package.json file:
 
 ```js
 // add the following
@@ -50,19 +52,22 @@ TABLE OF CONTENTS
 
 ```
 
-3. ENVIRONMENT VARIABLES CREATION
-   Create a .env file and add the following code:
-   note that you need to define PORT and your DATABASE path here:
+## ENVIRONMENT VARIABLES CREATION
+
+Create a .env file and add the following code:
+note that you need to define PORT and your DATABASE path here:
 
 ```env
 PORT=5001
 MONGODB_URI=mongodb://127.0.0.1:27017/homework
 ```
 
-4. SRC FOLDER CREATE
-   create a src folder with the following folders (models, routes, controllers, middlewares, db, validators etc) and files (db.js, schema.js, router.js, controller.js, middleware.js, validator.js etc) inside it.
+## SRC FOLDER CREATE
 
-A. DB FOLDER, DB.JS
+create a src folder with the following folders (models, routes, controllers, middlewares, db, validators etc) and files (db.js, schema.js, router.js, controller.js, middleware.js, validator.js etc) inside it.
+
+### DB FOLDER, DB.JS
+
 Create db folder with db.js file created and add the following line:
 
 ```js
@@ -82,7 +87,8 @@ const connectDB = async () => {
 export default connectDB;
 ```
 
-B. MODELS FOLDER, SCHEMA.JS
+### MODELS FOLDER, SCHEMA.JS
+
 Create models folder with schema.js file created and add the following line:
 
 Below is an example of how to create a schema with an embedded schema:
@@ -141,7 +147,8 @@ const schema = new mongoose.Schema(
 export default mongoose.model("ModelName", schema);
 ```
 
-C. CONTROLLERS FOLDER, CONTROLLER.JS
+### CONTROLLERS FOLDER, CONTROLLER.JS
+
 Create controllers folder with controller.js file created and add the following line:
 
 ```js
@@ -150,7 +157,8 @@ import ModelName from "../models/schema.js";
 // Define your controller functions here
 ```
 
-D. ROUTER FOLDER, ROUTER.JS
+### ROUTER FOLDER, ROUTER.JS
+
 Create router folder with router.js file created and add the following line:
 
 ```js
@@ -164,7 +172,8 @@ router.post("/some-route", controllers.someOtherControllerFunction);
 export default router;
 ```
 
-Y. VALIDATORS FOLDER, VALIDATOR.JS
+### VALIDATORS FOLDER, VALIDATOR.JS
+
 Create validators folder with validator.js file created. Note you may google for more information on how to use express-validator and define your validation rules as you wish (with custom()). Below is an example of how to create a validator:
 
 ```js
@@ -231,7 +240,8 @@ const router = express.Router();
 router.post("/some-route", someValidator, checkError, someControllerFunction);
 ```
 
-Z. MIDDLEWARES FOLDER, MIDDLEWARE.JS
+### MIDDLEWARES FOLDER, MIDDLEWARE.JS
+
 Create middlewares folder with middleware.js file created.
 This is an example of errorhandler.js
 
@@ -272,8 +282,9 @@ export const globalErrorHandler = (err, req, res, next) => {
 };
 ```
 
-5. SERVER.JS
-   Create a file named server.js and add the following code with middleware and routes:
+## SERVER.JS
+
+Create a file named server.js and add the following code with middleware and routes:
 
 ```js
 import express from "express";
@@ -307,22 +318,23 @@ app.listen(process.env.PORT, () => {
 app.use(globalErrorHandler);
 ```
 
-6. CREATE JWT
-   A. INSTALL PACKAGES FOR JWT BCRYPT UUID
+## CREATE JWT
+
+### INSTALL PACKAGES
 
 - npm i jsonwebtoken
 - npm i bcrypt
 - npm i uuid
 
-B. ENV VARIABLES
-Add ACCESS_SECRET and REFRESH_SECRET to .env file
+### ENV VARIABLES
 
-```env
-ACCESS_SECRET=your_access_secret_key
-REFRESH_SECRET=your_refresh_secret_key
-```
+    ```env
+    ACCESS_SECRET=your_access_secret_key
+    REFRESH_SECRET=your_refresh_secret_key
+    ```
 
-C. MODELS FOLDER, USERSCHEMA.JS
+### MODELS FOLDER, USERSCHEMA.JS
+
 Add the following code to schema.js file:
 
 ```js
@@ -339,7 +351,8 @@ const authSchema = new mongoose.Schema(
 export default mongoose.model("Auth", authSchema);
 ```
 
-D. CONTROLLERS FOLDER, AUTHCONTROLLER.JS
+### CONTROLLERS FOLDER, AUTHCONTROLLER.JS
+
 Create authController.js file in controllers folder and add the following code:
 
 ```js
@@ -420,7 +433,8 @@ export const refreshAccessToken = async (req, res, next) => {
 };
 ```
 
-E. BRUNO
+#### BRUNO
+
 At bruno, add the following:
 
 1. Define environment variables for ACCESS_SECRET and REFRESH_SECRET.
@@ -433,7 +447,8 @@ bru.setEnvVar("access_token", jsonData.access);
 bru.setEnvVar("refresh_token", jsonData.refresh);
 ```
 
-F. MIDDLEWARES FOLDER, AUTHMIDDLEWARE.JS
+### MIDDLEWARES FOLDER, AUTHMIDDLEWARE.JS
+
 Create authMiddleware.js file in middlewares folder and add the following code:
 
 ```js
@@ -514,13 +529,19 @@ router.put("/protected-route", authAdmin, someControllerFunction);
 
 ?????
 
-7. SECURING API ENDPOINTS (HARDENING)
-   A. RATE LIMITING
-   Install the package: npm i express-rate-limit
-   B. CORS
-   Install the package: npm i cors
-   C. HELMET
-   Install the package: npm i helmet
+## SECURING API ENDPOINTS (HARDENING)
+
+### RATE LIMITING
+
+Install the package: npm i express-rate-limit
+
+### CORS
+
+Install the package: npm i cors
+
+### HELMET
+
+Install the package: npm i helmet
 
 At server.js, add the following code to import the packages and use them as follows:
 
