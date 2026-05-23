@@ -87,18 +87,20 @@ export const createTransaction = async (req, res) => {
       date: req.body.date,
       time: req.body.time,
     });
+
+    const show = await trans.populate("coinType", "id name symbol moreno");
     res.json({
       status: "ok",
       msg: "new transaction created successfully",
       show: {
-        transType: trans.transType,
-        coinType: trans.coinType,
-        quantity: trans.quantity,
-        pricePerCoin: trans.pricePerCoin,
-        fee: trans.fee,
-        notes: trans.notes,
-        date: trans.date,
-        time: trans.time,
+        transType: show.transType,
+        coinType: show.coinType,
+        quantity: show.quantity,
+        pricePerCoin: show.pricePerCoin,
+        fee: show.fee,
+        notes: show.notes,
+        date: show.date,
+        time: show.time,
       },
     });
   } catch (error) {
@@ -111,7 +113,7 @@ export const readAllTransactions = async (req, res) => {
   try {
     const all = await Transactions.find().populate(
       "coinType",
-      "id symbol name image current_price market_cap_rank",
+      "id symbol name image",
     );
     res.json({
       status: "fetch successfully",
@@ -139,10 +141,22 @@ export const updateTransaction = async (req, res) => {
     const trans = await Transactions.findByIdAndUpdate(
       req.params.transId,
       updated,
+      { new: true },
     );
+    const show = await trans.populate("coinType", "id name symbol image");
     res.json({
       status: "ok",
       msg: "update successfully",
+      show: {
+        transType: show.transType,
+        coinType: show.coinType,
+        quantity: show.quantity,
+        pricePerCoin: show.pricePerCoin,
+        fee: show.fee,
+        notes: show.notes,
+        date: show.date,
+        time: show.time,
+      },
     });
   } catch (error) {
     console.error(error.message);
@@ -175,18 +189,19 @@ export const postTransaction = async (req, res) => {
       return res
         .status(404)
         .json({ status: "error", msg: "id does not exist" });
+    const show = await trans.populate("coinType", "id name symbol image");
     res.json({
       status: "ok",
       msg: "entry found",
       show: {
-        transType: trans.transType,
-        coinType: trans.coinType,
-        quantity: trans.quantity,
-        pricePerCoin: trans.pricePerCoin,
-        fee: trans.fee,
-        notes: trans.notes,
-        date: trans.date,
-        time: trans.time,
+        transType: show.transType,
+        coinType: show.coinType,
+        quantity: show.quantity,
+        pricePerCoin: show.pricePerCoin,
+        fee: show.fee,
+        notes: show.notes,
+        date: show.date,
+        time: show.time,
       },
     });
   } catch (error) {
