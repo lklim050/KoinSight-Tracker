@@ -6,7 +6,7 @@ import {
   NavbarToggle,
 } from "flowbite-react";
 
-export function Navbar() {
+export function Navbar({ setShowAuthModal }) {
   return (
     <FlowbiteNavbar fluid rounded className="fixed top-0 w-full z-50">
       <NavbarBrand href="https://flowbite-react.com">
@@ -26,6 +26,16 @@ export function Navbar() {
         </NavbarLink>
         <NavbarLink href="#">Marketplace</NavbarLink>
         <NavbarLink href="#">Watchlist</NavbarLink>
+        <button
+          onClick={() => setShowAuthModal(true)}
+          className="
+    text-white
+    hover:text-purple-400
+    cursor-pointer
+  "
+        >
+          Log In
+        </button>
       </NavbarCollapse>
     </FlowbiteNavbar>
   );

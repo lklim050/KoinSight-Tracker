@@ -5,14 +5,20 @@ import heroImg from "./assets/hero.png";
 import "./App.css";
 import PortfolioPage from "./pages/PortfolioPage";
 import { Navbar } from "./components/Navbar.jsx";
+import AuthModal from "./pages/AuthModal.jsx";
 
 function App() {
   const [count, setCount] = useState(0);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   return (
     <>
-      <Navbar />
+      <Navbar setShowAuthModal={setShowAuthModal} />
       <PortfolioPage />
+      <AuthModal
+        showAuthModal={showAuthModal}
+        setShowAuthModal={setShowAuthModal}
+      />
     </>
   );
 }
