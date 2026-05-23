@@ -143,16 +143,6 @@ export const updateTransaction = async (req, res) => {
     res.json({
       status: "ok",
       msg: "update successfully",
-      show: {
-        transType: trans.transType,
-        coinType: trans.coinType,
-        quantity: trans.quantity,
-        pricePerCoin: trans.pricePerCoin,
-        fee: trans.fee,
-        notes: trans.notes,
-        date: trans.date,
-        time: trans.time,
-      },
     });
   } catch (error) {
     console.error(error.message);
