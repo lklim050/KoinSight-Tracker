@@ -21,17 +21,10 @@ export default function PortfolioPage() {
       </div>
 
       {/* Charts Grid */}
-      <div className="grid grid-cols-2 gap-6 mb-8">
+      <div className="gap-6 mb-8">
         {/* Holdings Chart */}
         <Card className="bg-gray-800">
           <h3 className="text-xl font-semibold mb-4">Holdings</h3>
-          {/* Your chart component here */}
-          <div className="h-64 bg-gray-700 rounded">Chart placeholder</div>
-        </Card>
-
-        {/* Performance Chart */}
-        <Card className="bg-gray-800">
-          <h3 className="text-xl font-semibold mb-4">Performance</h3>
           {/* Your chart component here */}
           <div className="h-64 bg-gray-700 rounded">Chart placeholder</div>
         </Card>
