@@ -9,11 +9,10 @@ import rateLimit from "express-rate-limit";
 import cors from "cors";
 import helmet from "helmet";
 import auth from "./src/routers/auth.js";
-import {
-  readAllAssets,
-  seedAssets,
-} from "./src/controllers/portofoiloTracker/assets.js";
 import transactions from "./src/routers/portofoiloTracker/transactions.js";
+import assets from "./src/routers/portofoiloTracker/assets.js";
+import histories from "./src/routers/portofoiloTracker/histories.js";
+import { initCronJobs } from "./src/config/cron.js";
 
 dotenv.config();
 connectDB();
@@ -34,8 +33,8 @@ app.use("/auth", auth);
 app.use(jsonErrorHandler);
 
 // Define all your routes and controllers here:
-app.get("/assets", readAllAssets);
-app.get("/assets/seed", seedAssets);
+app.use("/db", histories);
+app.use("/assets", assets);
 app.use("/transactions", transactions);
 
 const PORT = process.env.PORT || 5001;
@@ -44,3 +43,5 @@ app.listen(PORT, () => {
 });
 
 app.use(globalErrorHandler);
+
+initCronJobs();
