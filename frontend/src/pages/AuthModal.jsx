@@ -4,6 +4,7 @@ import { X } from "lucide-react";
 
 function AuthModal({ showAuthModal, setShowAuthModal }) {
   const [isLogin, setIsLogin] = useState(true);
+  const [message, setMessage] = useState("");
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -19,6 +20,7 @@ function AuthModal({ showAuthModal, setShowAuthModal }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setMessage("");
 
     try {
       let data;
@@ -28,9 +30,25 @@ function AuthModal({ showAuthModal, setShowAuthModal }) {
           email: formData.email,
           password: formData.password,
         });
+
         console.log("Login successful:", data);
       } else {
         data = await signupUser(formData);
+        setMessage(data.message);
+        setFormData({
+          username: "",
+          email: "",
+          password: "",
+        });
+      }
+
+      if (data.success === false) {
+        setMessage(data.message);
+        return;
+      }
+
+      if (isLogin) {
+        setShowAuthModal(false);
       }
 
       if (data.token) {
@@ -40,8 +58,6 @@ function AuthModal({ showAuthModal, setShowAuthModal }) {
           data.token,
         );
       }
-
-      setShowAuthModal(false);
     } catch (error) {
       console.error(error);
     }
@@ -107,7 +123,10 @@ function AuthModal({ showAuthModal, setShowAuthModal }) {
           "
         >
           <button
-            onClick={() => setIsLogin(true)}
+            onClick={() => {
+              setIsLogin(true);
+              setMessage("");
+            }}
             className={`
               text-lg
               font-semibold
@@ -121,7 +140,10 @@ function AuthModal({ showAuthModal, setShowAuthModal }) {
           </button>
 
           <button
-            onClick={() => setIsLogin(false)}
+            onClick={() => {
+              setIsLogin(false);
+              setMessage("");
+            }}
             className={`
               text-lg
               font-semibold
@@ -187,6 +209,18 @@ function AuthModal({ showAuthModal, setShowAuthModal }) {
               outline-none
             "
           />
+          {message && (
+            <p
+              className="
+        text-red-400
+        text-sm
+        mb-4
+        text-center
+      "
+            >
+              {message}
+            </p>
+          )}
 
           <button
             type="submit"
