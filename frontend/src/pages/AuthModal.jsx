@@ -41,8 +41,6 @@ function AuthModal({ showAuthModal, setShowAuthModal }) {
       }
 
       setShowAuthModal(false);
-
-      window.location.reload();
     } catch (error) {
       console.error(error);
     }
@@ -190,6 +188,7 @@ function AuthModal({ showAuthModal, setShowAuthModal }) {
           />
 
           <button
+            type="submit"
             className="
               w-full
               bg-purple-600
