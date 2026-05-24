@@ -1,0 +1,26 @@
+{
+  "name": "ga-p3",
+  "version": "1.0.0",
+  "description": "hihi",
+  "main": "index.js",
+  "scripts": {
+    "frontend": "cd frontend && npm run dev",
+    "backend": "cd backend && npm run dev",
+    "dev": "concurrently \"npm run frontend\" \"npm run backend\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ericistan/GA-P3.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ericistan/GA-P3/issues"
+  },
+  "homepage": "https://github.com/ericistan/GA-P3#readme",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

@@ -1,9 +1,51 @@
 import { useState } from "react";
-
+import { loginUser, signupUser } from "../services/authApi.js";
 import { X } from "lucide-react";
 
 function AuthModal({ showAuthModal, setShowAuthModal }) {
   const [isLogin, setIsLogin] = useState(true);
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      let data;
+
+      if (isLogin) {
+        data = await loginUser({
+          email: formData.email,
+          password: formData.password,
+        });
+        console.log("Login successful:", data);
+      } else {
+        data = await signupUser(formData);
+      }
+
+      if (data.token) {
+        localStorage.setItem(
+          "token",
+
+          data.token,
+        );
+      }
+
+      setShowAuthModal(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   if (!showAuthModal) return null;
 
@@ -95,11 +137,14 @@ function AuthModal({ showAuthModal, setShowAuthModal }) {
 
         {/* FORM */}
 
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={handleSubmit}>
           {!isLogin && (
             <input
               type="text"
               placeholder="Username"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
               className="
                 w-full
                 p-3
@@ -114,6 +159,9 @@ function AuthModal({ showAuthModal, setShowAuthModal }) {
           <input
             type="email"
             placeholder="Email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
             className="
               w-full
               p-3
@@ -127,6 +175,9 @@ function AuthModal({ showAuthModal, setShowAuthModal }) {
           <input
             type="password"
             placeholder="Password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
             className="
               w-full
               p-3
@@ -138,6 +189,7 @@ function AuthModal({ showAuthModal, setShowAuthModal }) {
           />
 
           <button
+            type="submit"
             className="
               w-full
               bg-purple-600
