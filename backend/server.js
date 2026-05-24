@@ -11,7 +11,8 @@ import helmet from "helmet";
 import auth from "./src/routers/auth.js";
 import transactions from "./src/routers/portofoiloTracker/transactions.js";
 import assets from "./src/routers/portofoiloTracker/assets.js";
-import histories from "./src/routers/portofoiloTracker/histories.js";
+import getAPI from "./src/routers/portofoiloTracker/getAPI.js";
+import getDB from "./src/routers/portofoiloTracker/getDB.js";
 import { initCronJobs } from "./src/config/cron.js";
 
 dotenv.config();
@@ -33,7 +34,8 @@ app.use("/auth", auth);
 app.use(jsonErrorHandler);
 
 // Define all your routes and controllers here:
-app.use("/db", histories);
+app.use("/api", getAPI);
+app.use("/db", getDB);
 app.use("/assets", assets);
 app.use("/transactions", transactions);
 
