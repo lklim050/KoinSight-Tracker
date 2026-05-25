@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { TableList } from "../components/portfolioDashboard/TableList.jsx";
+import { AssetsTable } from "../components/AssetsTable.jsx";
+import { TransactionTable } from "../components/TransactionTable.jsx";
 
 import { Card, Tabs, Button } from "flowbite-react";
 import SelectCoinModalTransaction from "./addTransactionButton/SelectCoinModalTransaction.jsx";
-
 export default function PortfolioPage() {
   const [showModal, setShowModal] = useState(false);
   return (
@@ -72,9 +72,11 @@ export default function PortfolioPage() {
       {/* Tabs & Table */}
       <Tabs>
         <Tabs.Item title="Assets" active>
-          <TableList />
+          <AssetsTable />
         </Tabs.Item>
-        <Tabs.Item title="Transactions">{/* Transaction table */}</Tabs.Item>
+        <Tabs.Item title="Transactions">
+          <TransactionTable />
+        </Tabs.Item>
       </Tabs>
     </div>
   );

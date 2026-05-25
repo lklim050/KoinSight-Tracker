@@ -3,6 +3,7 @@ import {
   sync24hrHistories,
   sync30daysHistories,
 } from "../scripts/syncHistory.js";
+import { syncTop250coins } from "../scripts/syncTop250.js";
 
 // 🌟 THE LAZY LOCK: Keeps track of whether ANY sync job is running right now
 let isDbSyncing = false;
@@ -39,6 +40,19 @@ export const initCronJobs = () => {
     isDbSyncing = true;
     try {
       await sync30daysHistories();
+    } catch (error) {
+      console.error("❌ Background cron failed:", error.message);
+    } finally {
+      isDbSyncing = false; // 🔓 Always release the lock when done
+    }
+  });
+
+  // Job: to fetch top 250coins
+  cron.schedule("*/15 * * * *", async () => {
+    await waitForLock();
+    isDbSyncing = true;
+    try {
+      await syncTop250coins();
     } catch (error) {
       console.error("❌ Background cron failed:", error.message);
     } finally {
