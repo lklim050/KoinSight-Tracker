@@ -6,11 +6,13 @@ import {
   readAllTransactions,
   seedTranactions,
   updateTransaction,
+  getUserAssets,
 } from "../../controllers/portofoiloTracker/transactions.js";
 
 const router = express.Router({ mergeParams: true });
 
 router.get("/seed", seedTranactions);
+router.get("/myAssets", getUserAssets);
 router.get("/", readAllTransactions);
 router.put("/", createTransaction);
 router.post("/:transId", postTransaction);
