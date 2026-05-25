@@ -1,12 +1,17 @@
 import React, { useState } from "react";
 import { AssetsTable } from "../components/AssetsTable.jsx";
 import { TransactionTable } from "../components/TransactionTable.jsx";
-import SelectCoinModalTransaction from "./addTransactionButton/SelectedCoinModalTransaction.jsx";
+import SelectCoinModal from "./addTransactionButton/SelectCoinModal.jsx";
 
 import { Card, Tabs, Button } from "flowbite-react";
+import AddTransactionModal from "./addTransactionButton/AddTransactionModal.jsx";
 1;
 export default function PortfolioPage() {
-  const [showModal, setShowModal] = useState(false);
+  const [showCoinModal, setShowCoinModal] = useState(false);
+  const [showTransactionModal, setShowTransactionModal] = useState(false);
+
+  const [selectedCoin, setSelectedCoin] = useState(null);
+
   return (
     <div className="min-h-screen bg-gray-900 text-white p-6 pt-24">
       {/* Header */}
@@ -18,11 +23,25 @@ export default function PortfolioPage() {
             <div className="text-red-500">-$2.5476 ▼ 3.66% (24h)</div>
           </div>
           <div className="flex gap-2">
-            <Button onClick={() => setShowModal(true)} className="bg-blue-600">
+            <Button
+              onClick={() => setShowCoinModal(true)}
+              className="bg-blue-600"
+            >
               + Add Transaction
             </Button>
-            {showModal && (
-              <SelectCoinModalTransaction setShowModal={setShowModal} />
+            {showCoinModal && (
+              <SelectCoinModal
+                setShowCoinModal={setShowCoinModal}
+                setSelectedCoin={setSelectedCoin}
+                setShowTransactionModal={setShowTransactionModal}
+              />
+            )}
+
+            {showTransactionModal && (
+              <AddTransactionModal
+                selectedCoin={selectedCoin}
+                setShowTransactionModal={setShowTransactionModal}
+              />
             )}
           </div>
         </div>
