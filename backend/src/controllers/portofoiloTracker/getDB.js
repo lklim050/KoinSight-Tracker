@@ -2,6 +2,7 @@ import {
   Crypto24hrHistory,
   Crypto30daysHistory,
 } from "../../scripts/syncHistory.js";
+import { CryptoTop250Coins } from "../../scripts/syncTop250.js";
 
 export const postCoin24hrHistory = async (req, res) => {
   try {
@@ -48,6 +49,34 @@ export const postCoin30daysHistory = async (req, res) => {
       first_date: earliest,
       latest_date: latest,
       show: coin30days,
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ msg: "Internal server error" });
+  }
+};
+
+export const getTop250Coins = async (req, res) => {
+  try {
+    const allCoins = await CryptoTop250Coins.find();
+    res.json({
+      status: "fetch successfully from Database",
+      msg: `${allCoins.length} entries fetched`,
+      show: allCoins,
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ msg: "Internal server error" });
+  }
+};
+
+export const postTop250Coins = async (req, res) => {
+  try {
+    const coin = await CryptoTop250Coins.findOne({ id: req.body.id });
+
+    res.json({
+      status: "fetch successfully from Database",
+      show: coin,
     });
   } catch (error) {
     console.error(error.message);
