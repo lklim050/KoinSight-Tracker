@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { TableList } from "../components/portfolioDashboard/TableList.jsx";
 
 import { Card, Tabs, Button } from "flowbite-react";
+import SelectCoinModalTransaction from "./addTransactionButton/SelectCoinModalTransaction.jsx";
 
 export default function PortfolioPage() {
+  const [showModal, setShowModal] = useState(false);
   return (
     <div className="min-h-screen bg-gray-900 text-white p-6 pt-24">
       {/* Header */}
@@ -15,7 +17,15 @@ export default function PortfolioPage() {
             <div className="text-red-500">-$2.5476 ▼ 3.66% (24h)</div>
           </div>
           <div className="flex gap-2">
-            <Button className="bg-blue-600">+ Add Transaction</Button>
+            <Button
+              onClick={() => setShowModal(true)}
+              className="bg-blue-600 cursor-pointer"
+            >
+              + Add Transaction
+            </Button>
+            {showModal && (
+              <SelectCoinModalTransaction setShowModal={setShowModal} />
+            )}
           </div>
         </div>
       </div>
