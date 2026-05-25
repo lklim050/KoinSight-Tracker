@@ -1,8 +1,9 @@
 import React from "react";
-import { TableList } from "../components/portfolioDashboard/TableList.jsx";
+import { AssetsTable } from "../components/portfolioDashboard/AssetsTable.jsx";
+import { TransactionTable } from "../components/portfolioDashboard/TransactionTable.jsx";
 
 import { Card, Tabs, Button } from "flowbite-react";
-
+1;
 export default function PortfolioPage() {
   return (
     <div className="min-h-screen bg-gray-900 text-white p-6 pt-24">
@@ -62,9 +63,11 @@ export default function PortfolioPage() {
       {/* Tabs & Table */}
       <Tabs>
         <Tabs.Item title="Assets" active>
-          <TableList />
+          <AssetsTable />
         </Tabs.Item>
-        <Tabs.Item title="Transactions">{/* Transaction table */}</Tabs.Item>
+        <Tabs.Item title="Transactions">
+          <TransactionTable />
+        </Tabs.Item>
       </Tabs>
     </div>
   );
