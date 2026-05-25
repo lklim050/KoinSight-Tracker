@@ -1,6 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { fetchCoins } from "../../services/assetApi.js";
 
 const SelectCoinModalTransaction = ({ setShowModal }) => {
+  const [coins, setCoins] = useState([]);
+  useEffect(() => {
+    const getCoins = async () => {
+      const data = await fetchCoins();
+
+      setCoins(data);
+    };
+
+    getCoins();
+  }, []);
   return (
     <div
       className="
@@ -21,6 +32,8 @@ const SelectCoinModalTransaction = ({ setShowModal }) => {
         max-w-lg
         rounded-3xl
         p-6
+       max-h-[70vh]
+       overflow-hidden
       "
       >
         <div
@@ -65,6 +78,41 @@ const SelectCoinModalTransaction = ({ setShowModal }) => {
     mb-6
   "
         />
+        <div
+          className="space-y-4
+    max-h-[500px]
+    overflow-y-auto
+    hide-scrollbar
+    pr-2"
+        >
+          {coins.map((coin) => (
+            <div
+              key={coin.id}
+              className="
+              flex
+              justify-between
+              items-center
+              hover:bg-[#2A2E45]
+              p-3
+              rounded-xl
+              cursor-pointer
+              transition
+            "
+            >
+              <div className="flex items-center gap-3">
+                <img src={coin.image} alt={coin.name} className="w-8 h-8" />
+
+                <div className="flex gap-2">
+                  <p className="text-white font-semibold">{coin.name}</p>
+
+                  <p className="text-gray-400">{coin.symbol}</p>
+                </div>
+              </div>
+
+              <p className="text-white text-2xl">›</p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
