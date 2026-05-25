@@ -1,5 +1,17 @@
 import mongoose from "mongoose";
 
+const TransactionsSchema = new mongoose.Schema({
+  transType: { type: String, required: true },
+  coinType: { type: String, required: true, ref: "CryptoTop250coins" },
+  quantity: { type: Number, required: true },
+  pricePerCoin: { type: Number, required: true },
+  fee: { type: Number, required: false },
+  notes: { type: String, required: false, maxLength: 200 },
+  date: { type: Date, required: true },
+  time: { type: String, required: true },
+  created_at: { type: Date, default: Date.now },
+});
+
 const UserSchema = new mongoose.Schema(
   {
     username: {
@@ -19,6 +31,7 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    transactions: [TransactionsSchema],
   },
 
   {
