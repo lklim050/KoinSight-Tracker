@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchCoins } from "../../services/assetApi.js";
+import { fetchAssets } from "../../services/api.js";
 
 const SelectCoinModalTransaction = ({ setShowModal }) => {
   const [coins, setCoins] = useState([]);
@@ -15,9 +15,13 @@ const SelectCoinModalTransaction = ({ setShowModal }) => {
 
   useEffect(() => {
     const getCoins = async () => {
-      const data = await fetchCoins();
+      try {
+        const data = await fetchAssets();
 
-      setCoins(data);
+        setCoins(data.show);
+      } catch (error) {
+        console.error(error);
+      }
     };
 
     getCoins();
