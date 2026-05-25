@@ -41,7 +41,7 @@ export const Crypto30daysHistory =
   mongoose.models.Crypto30daysHistory ||
   mongoose.model("Crypto30daysHistory", Crypto30daysHistorySchema);
 
-// 1a. Don't forget to add delay for multiple fetch requests
+// Add delay for multiple fetch requests to counter the 3rd party API rate limit
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 // 🌟 Pass targetCoins dynamically as an argument
 export const sync24hrHistories = async (
