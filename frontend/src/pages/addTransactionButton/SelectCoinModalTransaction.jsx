@@ -3,6 +3,16 @@ import { fetchCoins } from "../../services/assetApi.js";
 
 const SelectCoinModalTransaction = ({ setShowModal }) => {
   const [coins, setCoins] = useState([]);
+  const [search, setSearch] = useState("");
+  const filteredCoins = coins.filter((coin) => {
+    const searchTerm = search.toLowerCase();
+
+    return (
+      coin.name.toLowerCase().includes(searchTerm) ||
+      coin.symbol.toLowerCase().includes(searchTerm)
+    );
+  });
+
   useEffect(() => {
     const getCoins = async () => {
       const data = await fetchCoins();
@@ -55,6 +65,7 @@ const SelectCoinModalTransaction = ({ setShowModal }) => {
           </p>
 
           <button
+            onClick={() => setShowModal(false)}
             className="
       text-gray-400
       text-4xl
@@ -67,6 +78,8 @@ const SelectCoinModalTransaction = ({ setShowModal }) => {
         <input
           type="text"
           placeholder="Search"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
           className="
     w-full
     bg-[#2A2E45]
@@ -85,7 +98,7 @@ const SelectCoinModalTransaction = ({ setShowModal }) => {
     hide-scrollbar
     pr-2"
         >
-          {coins.map((coin) => (
+          {filteredCoins.map((coin) => (
             <div
               key={coin.id}
               className="
