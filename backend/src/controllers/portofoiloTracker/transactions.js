@@ -125,7 +125,7 @@ export const readAllTransactions = async (req, res) => {
     const userIdFromToken = req.user.id.toString();
     const user = await UserModel.findById(userIdFromToken).populate(
       "transactions.coinType",
-      "id symbol name image current_price market_cap_rank",
+      "-__v",
     );
     if (!user) return res.status(404).json({ msg: "user not found" });
     res.json({
@@ -198,7 +198,10 @@ export const postTransaction = async (req, res) => {
   try {
     // to stop using userId at params for security reason
     const userIdFromToken = req.user.id.toString();
-    const user = await UserModel.findById(userIdFromToken);
+    const user = await UserModel.findById(userIdFromToken).populate(
+      "transactions.coinType",
+      "-__v",
+    );
     if (!user) return res.status(404).json({ msg: "user not found" });
     const trans = user.transactions.id(req.params.transId);
     if (!trans)

@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const TransactionsSchema = new mongoose.Schema({
   transType: { type: String, required: true },
-  coinType: { type: String, required: true, ref: "CryptoTop250coins" },
+  coinType: { type: String, required: true, ref: "CryptoTop250Coins" },
   quantity: { type: Number, required: true },
   pricePerCoin: { type: Number, required: true },
   fee: { type: Number, required: false },

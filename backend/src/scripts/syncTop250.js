@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const CryptoTop250CoinsSchema = new mongoose.Schema(
   {
-    id: { type: String, required: true },
+    _id: { type: String, required: true },
     symbol: { type: String, required: true },
     name: { type: String, required: true },
     image: { type: String, required: true },
@@ -19,12 +19,12 @@ const CryptoTop250CoinsSchema = new mongoose.Schema(
     market_cap_change_percentage_24h: { type: Number, default: 0 },
     last_updated: { type: Date, required: true },
   },
-  { collection: "crypto_top250coins" },
+  { collection: "crypto_top250Coins" },
 );
 
 export const CryptoTop250Coins =
-  mongoose.models.CryptoTop250coins ||
-  mongoose.model("CryptoTop250coins", CryptoTop250CoinsSchema);
+  mongoose.models.CryptoTop250Coins ||
+  mongoose.model("CryptoTop250Coins", CryptoTop250CoinsSchema);
 
 // Add delay for multiple fetch requests to counter the 3rd party API rate limit
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -53,9 +53,11 @@ export const syncTop250coins = async () => {
         }
       }
 
+      updated._id = item.id;
+
       return {
         updateOne: {
-          filter: { id: item.id },
+          filter: { _id: item.id },
           update: { $set: updated },
           upsert: true,
         },
