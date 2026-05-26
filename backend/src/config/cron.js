@@ -12,9 +12,9 @@ let isDbSyncing = false;
 const waitForLock = async () => {
   while (isDbSyncing) {
     console.log(
-      "⏳ DB is currently busy syncing another job. Waiting 3 seconds...",
+      "⏳ DB is currently busy syncing another job. Waiting 6 seconds...",
     );
-    await new Promise((resolve) => setTimeout(resolve, 3000)); // Pause for 3 seconds before checking again
+    await new Promise((resolve) => setTimeout(resolve, 5000)); // Pause for 3 seconds before checking again
   }
 };
 
