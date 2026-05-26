@@ -6,7 +6,7 @@ import {
   readAllTransactions,
   seedTranactions,
   updateTransaction,
-  getUserAssets,
+  // getUserAssets,
 } from "../../controllers/portofoiloTracker/transactions.js";
 import { protect } from "../../middlewares/auth.js";
 
