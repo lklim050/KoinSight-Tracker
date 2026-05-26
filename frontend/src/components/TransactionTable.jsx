@@ -59,7 +59,7 @@ export function TransactionTable() {
     const fetchTransactions = async () => {
       try {
         const data = await getTransactions();
-        setTransactions(data.transactions);
+        setTransactions(data.data);
       } catch (err) {
         setError("Failed to load transactions");
       } finally {
