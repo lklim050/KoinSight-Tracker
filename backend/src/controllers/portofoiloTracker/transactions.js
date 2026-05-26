@@ -15,22 +15,22 @@ export const seedTranactions = async (req, res) => {
         _id: "6a0b0f79e03e3f8a0c7caea6",
         transType: "Buy",
         coinType: "bitcoin",
-        quantity: 0.02,
+        quantity: 0.1,
         fee: 2,
         notes: "this is a test transaction to input, does not mean i very rich",
-        pricePerCoin: 77600.02,
+        pricePerCoin: 77500.02,
         date: "2026-06-10",
         time: "14:00",
       },
       {
         _id: "6a0b0f79e03e3f8a0c7caea7",
-        transType: "Buy",
+        transType: "Sell",
         coinType: "bitcoin",
-        quantity: 0.02,
+        quantity: 0.05,
         fee: 2,
         notes:
           "this is a test transaction to input, does not mean i very rich plus I am super poor you know",
-        pricePerCoin: 77600.01,
+        pricePerCoin: 77598.01,
         date: "2026-06-12",
         time: "15:00",
       },
@@ -48,8 +48,8 @@ export const seedTranactions = async (req, res) => {
       },
       {
         _id: "6a0b0f79e03e3f8a0c7caea9",
-        transType: "Sell",
-        coinType: "bnb",
+        transType: "Buy",
+        coinType: "binancecoin",
         quantity: 2,
         fee: 2.5,
         notes:
@@ -61,6 +61,18 @@ export const seedTranactions = async (req, res) => {
       {
         _id: "6a0b0f79e03e3f8a0c7caeaa",
         transType: "Sell",
+        coinType: "binancecoin",
+        quantity: 0.4,
+        fee: 2.5,
+        notes:
+          "this is a test transaction to input, sell liao also not my money",
+        pricePerCoin: 649.18,
+        date: "2026-05-25",
+        time: "14:30",
+      },
+      {
+        _id: "6a0b0f79e03e3f8a0c7caeab",
+        transType: "Buy",
         coinType: "solana",
         quantity: 2,
         fee: 2.5,
@@ -69,6 +81,18 @@ export const seedTranactions = async (req, res) => {
         pricePerCoin: 86.65,
         date: "2026-05-29",
         time: "14:30",
+      },
+      {
+        _id: "6a0b0f79e03e3f8a0c7caeab",
+        transType: "Buy",
+        coinType: "solana",
+        quantity: 3,
+        fee: 2.5,
+        notes:
+          "this is a test transaction to input, sell liao also not my money",
+        pricePerCoin: 85.65,
+        date: "2026-05-31",
+        time: "09:30",
       },
     ];
     user.transactions.push(...seed);
