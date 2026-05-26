@@ -8,17 +8,57 @@ import {
 } from "flowbite-react";
 
 import { useState, useEffect } from "react";
-import { fetchTransactions } from "../services/api.js";
+import { getTransactions } from "../services/transactionApi.js";
 
 export function TransactionTable() {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const formatTransactionType = (type) => {
+    switch (type) {
+      case "buy":
+        return "Buy";
+
+      case "sell":
+        return "Sell";
+
+      case "transfer_in":
+        return "Transfer In";
+
+      case "transfer_out":
+        return "Transfer Out";
+
+      default:
+        return type;
+    }
+  };
+  const transactionConfig = {
+    buy: {
+      label: "Buy",
+      color: "text-green-600",
+      sign: "+",
+    },
+    sell: {
+      label: "Sell",
+      color: "text-red-600",
+      sign: "-",
+    },
+    transfer_in: {
+      label: "Transfer In",
+      color: "text-purple-400",
+      sign: "+",
+    },
+    transfer_out: {
+      label: "Transfer Out",
+      color: "text-orange-400",
+      sign: "-",
+    },
+  };
 
   useEffect(() => {
-    const getTransactions = async () => {
+    const fetchTransactions = async () => {
       try {
-        const data = await fetchTransactions();
+        const data = await getTransactions();
         setTransactions(data.transactions);
       } catch (err) {
         setError("Failed to load transactions");
@@ -26,7 +66,7 @@ export function TransactionTable() {
         setLoading(false);
       }
     };
-    getTransactions();
+    fetchTransactions();
   }, []);
 
   if (loading) {
@@ -58,20 +98,46 @@ export function TransactionTable() {
               key={transaction._id}
               className="bg-white dark:border-gray-700 dark:bg-gray-800"
             >
-              <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                {transaction.transType}
-              </TableCell>
-              <TableCell>
-                {new Date(transaction.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
-              </TableCell>
-              <TableCell>
-                {transaction.coinType?.name || "Unknown"} {transaction.coinType?.symbol?.toUpperCase() || ""}
-              </TableCell>
-              <TableCell>--</TableCell>
-              <TableCell>
-                <span className={transaction.transType === "Buy" ? "text-green-600" : "text-red-600"}>
-                  {transaction.transType === "Buy" ? "+" : "-"}{transaction.quantity}
+              <TableCell className="whitespace-nowrap font-medium">
+                <span
+                  className={transactionConfig[transaction.transType]?.color}
+                >
+                  {transactionConfig[transaction.transType]?.label}
                 </span>
+              </TableCell>
+              <TableCell>
+                <div className="flex gap-2 ">
+                  <span>
+                    {new Date(transaction.date).toLocaleDateString("en-SG", {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    })}
+                  </span>
+
+                  <span>{transaction.time}</span>
+                </div>
+              </TableCell>
+              <TableCell>
+                {transaction.coinType?.name || "Unknown"}{" "}
+                {transaction.coinType?.symbol?.toUpperCase() || ""}
+              </TableCell>
+              <TableCell>{transaction.pricePerCoin}</TableCell>
+              <TableCell>
+                <p
+                  className={`${transactionConfig[transaction.transType]?.color} font-semibold`}
+                >
+                  {transactionConfig[transaction.transType]?.sign}
+                  {transaction.quantity}{" "}
+                  {transaction.coinType?.symbol?.toUpperCase()}
+                </p>
+
+                <p className="text-sm text-gray-400 ">
+                  $
+                  {(
+                    transaction.quantity * transaction.pricePerCoin
+                  ).toLocaleString()}
+                </p>
               </TableCell>
               <TableCell>${transaction.fee}</TableCell>
               <TableCell>{transaction.notes}</TableCell>

@@ -13,13 +13,15 @@ import { protect } from "../../middlewares/auth.js";
 const router = express.Router({ mergeParams: true });
 
 router.get("/seed", protect, seedTranactions);
+// router.get("/myAssets", protect, getUserAssets);
 router.get("/", protect, readAllTransactions);
-router.put("/", protect, createTransaction);
+router.post("/", protect, createTransaction);
+
 router.post("/:transId", protect, postTransaction);
 router.patch("/:transId", protect, updateTransaction);
 router.delete("/:transId", protect, deleteTransaction);
 // router.get("/seed", seedTranactions);
-// router.get("/myAssets", getUserAssets);
+
 // router.get("/", readAllTransactions);
 // router.put("/", createTransaction);
 // router.post("/:transId", postTransaction);

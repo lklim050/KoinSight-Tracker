@@ -46,4 +46,4 @@ app.listen(PORT, () => {
 
 app.use(globalErrorHandler);
 
-// initCronJobs();
+initCronJobs();
