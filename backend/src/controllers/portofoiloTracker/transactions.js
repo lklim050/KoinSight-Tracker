@@ -90,7 +90,6 @@ export const seedTranactions = async (req, res) => {
 export const createTransaction = async (req, res) => {
   try {
     const userIdFromToken = req.user.id.toString();
-    console.log(userIdFromToken);
     const user = await UserModel.findById(userIdFromToken);
     if (!user) return res.status(404).json({ msg: "user not found" });
     const trans = {
@@ -128,10 +127,31 @@ export const readAllTransactions = async (req, res) => {
       "-__v",
     );
     if (!user) return res.status(404).json({ msg: "user not found" });
+
+    const data = user.transactions.map((item) => {
+      // need to convert item (mongoose doc) to raw json
+      const object = item.toObject();
+      const value = item.pricePerCoin * item.quantity;
+      const fee = item.fee || 0;
+      let total = 0;
+      if (item.transType === "Buy") {
+        total = value + fee; // Cost of buying
+      } else if (item.transType === "Sell") {
+        total = value - fee; // Cash returned from selling
+      } else if (item.transType === "Transfer") {
+        total = fee; // If there is any network fee incurred
+      }
+      return {
+        ...object,
+        amount: total,
+      };
+    });
+
     res.json({
-      status: "fetch successfully",
+      status: "ok",
       user: user.username,
-      transactions: user.transactions,
+      // transactions: user.transactions,
+      data: data,
     });
   } catch (error) {
     console.error(error.message);
@@ -161,7 +181,7 @@ export const updateTransaction = async (req, res) => {
     await user.save();
     res.json({
       status: "ok",
-      message: "update successfully",
+      msg: "update successfully",
       content: updated,
     });
   } catch (error) {
@@ -214,10 +234,12 @@ export const postTransaction = async (req, res) => {
       "id symbol name image current_price market_cap_rank", // Select only the fields you need
     );
 
+    const cal = trans.pricePerCoin * trans.quantity + (trans.fee || 0);
+
     res.json({
       status: "ok",
       msg: "entry found",
-      show: {
+      data: {
         transType: trans.transType,
         coinType: coinData ? coinData : { id: trans.coinType },
         quantity: trans.quantity,
@@ -226,6 +248,7 @@ export const postTransaction = async (req, res) => {
         notes: trans.notes,
         date: trans.date,
         time: trans.time,
+        amount: cal,
       },
     });
   } catch (error) {
@@ -237,67 +260,67 @@ export const postTransaction = async (req, res) => {
   }
 };
 
-export const getUserAssets = async (req, res) => {
-  try {
-    const transactions = await Transactions.find().populate(
-      "coinType",
-      "id symbol name image current_price",
-    );
+// export const getUserAssets = async (req, res) => {
+//   try {
+//     const transactions = await Transactions.find().populate(
+//       "coinType",
+//       "id symbol name image current_price",
+//     );
 
-    const assetsMap = {};
+//     const assetsMap = {};
 
-    transactions.forEach((transaction) => {
-      if (!transaction.coinType) return;
+//     transactions.forEach((transaction) => {
+//       if (!transaction.coinType) return;
 
-      const coinId = transaction.coinType._id;
-      if (!assetsMap[coinId]) {
-        assetsMap[coinId] = {
-          coin: transaction.coinType,
-          totalQuantity: 0,
-          totalCost: 0,
-          buys: [],
-        };
-      }
+//       const coinId = transaction.coinType._id;
+//       if (!assetsMap[coinId]) {
+//         assetsMap[coinId] = {
+//           coin: transaction.coinType,
+//           totalQuantity: 0,
+//           totalCost: 0,
+//           buys: [],
+//         };
+//       }
 
-      const amount = transaction.quantity * transaction.pricePerCoin;
+//       const amount = transaction.quantity * transaction.pricePerCoin;
 
-      if (transaction.transType === "Buy") {
-        assetsMap[coinId].totalQuantity += transaction.quantity;
-        assetsMap[coinId].totalCost += amount;
-        assetsMap[coinId].buys.push(transaction);
-      } else {
-        assetsMap[coinId].totalQuantity -= transaction.quantity;
-      }
-    });
+//       if (transaction.transType === "Buy") {
+//         assetsMap[coinId].totalQuantity += transaction.quantity;
+//         assetsMap[coinId].totalCost += amount;
+//         assetsMap[coinId].buys.push(transaction);
+//       } else {
+//         assetsMap[coinId].totalQuantity -= transaction.quantity;
+//       }
+//     });
 
-    const assets = Object.values(assetsMap)
-      .filter((asset) => asset.totalQuantity > 0)
-      .map((asset) => {
-        const totalBuyQuantity = asset.buys.reduce(
-          (sum, t) => sum + t.quantity,
-          0,
-        );
-        return {
-          _id: asset.coin._id,
-          name: asset.coin.name,
-          symbol: asset.coin.symbol,
-          image: asset.coin.image,
-          currentPrice: asset.coin.current_price,
-          holdings: asset.totalQuantity,
-          avgBuyPrice:
-            totalBuyQuantity > 0 ? asset.totalCost / totalBuyQuantity : 0,
-          totalValue: asset.totalQuantity * asset.coin.current_price,
-          profitLoss:
-            asset.totalQuantity * asset.coin.current_price - asset.totalCost,
-        };
-      });
+//     const assets = Object.values(assetsMap)
+//       .filter((asset) => asset.totalQuantity > 0)
+//       .map((asset) => {
+//         const totalBuyQuantity = asset.buys.reduce(
+//           (sum, t) => sum + t.quantity,
+//           0,
+//         );
+//         return {
+//           _id: asset.coin._id,
+//           name: asset.coin.name,
+//           symbol: asset.coin.symbol,
+//           image: asset.coin.image,
+//           currentPrice: asset.coin.current_price,
+//           holdings: asset.totalQuantity,
+//           avgBuyPrice:
+//             totalBuyQuantity > 0 ? asset.totalCost / totalBuyQuantity : 0,
+//           totalValue: asset.totalQuantity * asset.coin.current_price,
+//           profitLoss:
+//             asset.totalQuantity * asset.coin.current_price - asset.totalCost,
+//         };
+//       });
 
-    res.json({
-      status: "success",
-      assets,
-    });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ message: "Failed to fetch assets" });
-  }
-};
+//     res.json({
+//       status: "success",
+//       assets,
+//     });
+//   } catch (error) {
+//     console.error(error.message);
+//     res.status(500).json({ message: "Failed to fetch assets" });
+//   }
+// };

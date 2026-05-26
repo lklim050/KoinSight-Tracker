@@ -39,6 +39,7 @@ export function TransactionTable() {
 
   return (
     <div className="overflow-x-auto">
+      {/* {JSON.stringify(transactions)} */}
       <Table className="w-full">
         <TableHead>
           <TableRow>
@@ -62,15 +63,29 @@ export function TransactionTable() {
                 {transaction.transType}
               </TableCell>
               <TableCell>
-                {new Date(transaction.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                {new Date(transaction.date).toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
               </TableCell>
               <TableCell>
-                {transaction.coinType?.name || "Unknown"} {transaction.coinType?.symbol?.toUpperCase() || ""}
+                {transaction.coinType?.name || "Unknown"}{" "}
+                {transaction.coinType?.symbol?.toUpperCase() || ""}
               </TableCell>
               <TableCell>--</TableCell>
               <TableCell>
-                <span className={transaction.transType === "Buy" ? "text-green-600" : "text-red-600"}>
-                  {transaction.transType === "Buy" ? "+" : "-"}{transaction.quantity}
+                <span
+                  className={
+                    transaction.transType === "Buy"
+                      ? "text-green-600"
+                      : "text-red-600"
+                  }
+                >
+                  {transaction.transType === "Buy" ? "+" : "-"}
+                  {transaction.quantity}
                 </span>
               </TableCell>
               <TableCell>${transaction.fee}</TableCell>
