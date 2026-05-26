@@ -14,17 +14,9 @@ export const fetchAssets = async () => {
   }
 };
 
-export const fetchTransactions = async (
-  token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMTE4YTY2ZDYzOWRiOTc4ZDQ4ZTI2ZiIsImlhdCI6MTc3OTc3NzA5MywiZXhwIjoxNzgwMzgxODkzfQ.nalZQxVqBeKkruRns65-aXcUquzayAQKQ4jNDU1HgOU",
-) => {
+export const fetchTransactions = async () => {
   try {
-    const response = await fetch(`${BASE_URL}/transactions`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      },
-    });
+    const response = await fetch(`${BASE_URL}/transactions`);
     if (!response.ok) {
       throw new Error("Failed to fetch transactions");
     }
