@@ -18,6 +18,9 @@ const CryptoTop250CoinsSchema = new mongoose.Schema(
     market_cap_change_24h: { type: Number, default: 0 },
     market_cap_change_percentage_24h: { type: Number, default: 0 },
     last_updated: { type: Date, required: true },
+    price_change_percentage_1h_in_currency: { type: Number, default: 0 },
+    price_change_percentage_24h_in_currency: { type: Number, default: 0 },
+    price_change_percentage_7d_in_currency: { type: Number, default: 0 },
   },
   { collection: "crypto_top250Coins" },
 );
@@ -34,7 +37,7 @@ export const syncTop250coins = async () => {
     await delay(13000);
     console.log(`⏳ Fetching Top 250...`);
     const res = await fetch(
-      `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1`,
+      `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=false&price_change_percentage=1h,24h,7d`,
     );
 
     if (!res.ok) {
