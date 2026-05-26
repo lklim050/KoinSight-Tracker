@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { fetchAssets } from "../../services/api.js";
 
-const SelectCoinModalTransaction = ({ setShowModal }) => {
+const SelectCoinModalTransaction = ({
+  setShowCoinModal,
+  setSelectedCoin,
+  setShowTransactionModal,
+}) => {
   const [coins, setCoins] = useState([]);
   const [search, setSearch] = useState("");
   const filteredCoins = coins.filter((coin) => {
@@ -18,7 +22,7 @@ const SelectCoinModalTransaction = ({ setShowModal }) => {
       try {
         const data = await fetchAssets();
 
-        setCoins(data.show);
+        setCoins(data);
       } catch (error) {
         console.error(error);
       }
@@ -61,7 +65,7 @@ const SelectCoinModalTransaction = ({ setShowModal }) => {
           <p
             className="
       text-white
-      text-3xl
+      text-2xl
       font-bold
     "
           >
@@ -69,7 +73,7 @@ const SelectCoinModalTransaction = ({ setShowModal }) => {
           </p>
 
           <button
-            onClick={() => setShowModal(false)}
+            onClick={() => setShowCoinModal(false)}
             className="
       text-gray-400
       text-4xl
@@ -105,6 +109,13 @@ const SelectCoinModalTransaction = ({ setShowModal }) => {
           {filteredCoins.map((coin) => (
             <div
               key={coin.id}
+              onClick={() => {
+                setSelectedCoin(coin);
+
+                setShowCoinModal(false);
+
+                setShowTransactionModal(true);
+              }}
               className="
               flex
               justify-between
