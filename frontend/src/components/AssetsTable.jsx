@@ -14,20 +14,20 @@ export function AssetsTable() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const getAssets = async () => {
-      try {
-        const data = await fetchMyAssets();
-        console.log("Assets data:", data);
-        setAssets(data.assets);
-      } catch (err) {
-        setError("Failed to load assets");
-      } finally {
-        setLoading(false);
-      }
-    };
-    getAssets();
-  }, []);
+  // useEffect(() => {
+  //   const getAssets = async () => {
+  //     try {
+  //       const data = await fetchMyAssets();
+  //       console.log("Assets data:", data);
+  //       setAssets(data.assets);
+  //     } catch (err) {
+  //       setError("Failed to load assets");
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   getAssets();
+  // }, []);
 
   if (loading) {
     return <p>Loading...</p>;
@@ -66,7 +66,11 @@ export function AssetsTable() {
               <TableCell>--</TableCell>
               <TableCell>{asset.holdings}</TableCell>
               <TableCell>${asset.avgBuyPrice.toLocaleString()}</TableCell>
-              <TableCell className={asset.profitLoss >= 0 ? "text-green-600" : "text-red-600"}>
+              <TableCell
+                className={
+                  asset.profitLoss >= 0 ? "text-green-600" : "text-red-600"
+                }
+              >
                 ${asset.profitLoss.toLocaleString()}
               </TableCell>
               <TableCell className="text-right">
