@@ -6,8 +6,37 @@ import {
   TableHeadCell,
   TableRow,
 } from "flowbite-react";
+import { useState, useEffect } from "react";
+import { fetchMyAssets } from "../services/api.js";
 
 export function AssetsTable() {
+  const [assets, setAssets] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const getAssets = async () => {
+      try {
+        const data = await fetchMyAssets();
+        console.log("Assets data:", data);
+        setAssets(data.assets);
+      } catch (err) {
+        setError("Failed to load assets");
+      } finally {
+        setLoading(false);
+      }
+    };
+    getAssets();
+  }, []);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
+
   return (
     <div className="overflow-x-auto">
       <Table className="w-full">
@@ -24,63 +53,32 @@ export function AssetsTable() {
           </TableRow>
         </TableHead>
         <TableBody className="divide-y">
-          <TableRow className="bg-white dark:border-gray-700 dark:bg-gray-800">
-            <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-              Bitcoin
-            </TableCell>
-            <TableCell>$70,000(mock)</TableCell>
-            <TableCell>12%</TableCell>
-            <TableCell>3%</TableCell>
-            <TableCell>$2,234.21</TableCell>
-            <TableCell>$40,000</TableCell>
-            <TableCell>$5,000(green)</TableCell>
-            <TableCell className="text-right">
-              <a
-                href="#"
-                className="font-medium text-primary-600 hover:underline dark:text-primary-500"
-              >
-                Edit
-              </a>
-            </TableCell>
-          </TableRow>
-          <TableRow className="bg-white dark:border-gray-700 dark:bg-gray-800">
-            <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-              Ethereum
-            </TableCell>
-            <TableCell>$70,0000(mock)</TableCell>
-            <TableCell>12%</TableCell>
-            <TableCell>3%</TableCell>
-            <TableCell>$2,234.21</TableCell>
-            <TableCell>$40,000</TableCell>
-            <TableCell>$5,000(green)</TableCell>
-            <TableCell className="text-right">
-              <a
-                href="#"
-                className="font-medium text-primary-600 hover:underline dark:text-primary-500"
-              >
-                Edit
-              </a>
-            </TableCell>
-          </TableRow>
-          <TableRow className="bg-white dark:border-gray-700 dark:bg-gray-800">
-            <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-              Dogecoin
-            </TableCell>
-            <TableCell>$70,000(mock)</TableCell>
-            <TableCell>12%</TableCell>
-            <TableCell>3%</TableCell>
-            <TableCell>$2,234.21</TableCell>
-            <TableCell>$40,000</TableCell>
-            <TableCell>$5,000(green)</TableCell>
-            <TableCell className="text-right">
-              <a
-                href="#"
-                className="font-medium text-primary-600 hover:underline dark:text-primary-500"
-              >
-                Edit
-              </a>
-            </TableCell>
-          </TableRow>
+          {assets.map((asset) => (
+            <TableRow
+              key={asset._id}
+              className="bg-white dark:border-gray-700 dark:bg-gray-800"
+            >
+              <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                {asset.name} {asset.symbol}
+              </TableCell>
+              <TableCell>${asset.currentPrice.toLocaleString()}</TableCell>
+              <TableCell>--</TableCell>
+              <TableCell>--</TableCell>
+              <TableCell>{asset.holdings}</TableCell>
+              <TableCell>${asset.avgBuyPrice.toLocaleString()}</TableCell>
+              <TableCell className={asset.profitLoss >= 0 ? "text-green-600" : "text-red-600"}>
+                ${asset.profitLoss.toLocaleString()}
+              </TableCell>
+              <TableCell className="text-right">
+                <a
+                  href="#"
+                  className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                >
+                  Edit
+                </a>
+              </TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </div>
