@@ -1,13 +1,9 @@
-import Auth from "../../models/Auth.js";
+import Transactions from "../../models/Portofoilo/Transactions.js";
 
 export const seedTranactions = async (req, res) => {
   try {
-    const userIdFromToken = req.decoded._id.toString();
-    const user = await Auth.findById(userIdFromToken);
-    if (!user) return res.status(404).json({ msg: "user not found" });
-    user.transactions = [];
-
-    const seed = [
+    await Transactions.deleteMany({});
+    const seed = await Transactions.create([
       {
         _id: "6a0b0f79e03e3f8a0c7caea6",
         transType: "Buy",
@@ -67,84 +63,71 @@ export const seedTranactions = async (req, res) => {
         date: "2026-05-29",
         time: "14:30",
       },
-    ];
-    user.transactions.push(...seed);
-    await user.save();
+    ]);
     res.json({
       status: "ok",
       msg: "seeding success",
-      count: `${user.transactions.length} entries created`,
+      count: `${seed.length} entries created`,
     });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({
-      status: "error",
-      msg: "internal server error, check console message",
-    });
+    res.status(404).json({ status: "error", msg: "fail to seed data" });
   }
 };
 
 export const createTransaction = async (req, res) => {
   try {
-    const userIdFromToken = req.decoded._id.toString();
-    const user = await Auth.findById(userIdFromToken);
-    if (!user) return res.status(404).json({ msg: "user not found" });
-    const trans = {
+    const trans = await Transactions.create({
       transType: req.body.transType,
       coinType: req.body.coinType,
-      quantity: req.body.quantity || "",
-      pricePerCoin: req.body.pricePerCoin || "",
-      fee: req.body.fee || 0,
-      notes: req.body.notes || "",
+      quantity: req.body.quantity,
+      pricePerCoin: req.body.pricePerCoin,
+      fee: req.body.fee,
+      notes: req.body.notes,
       date: req.body.date,
       time: req.body.time,
-    };
-    user.transactions.push(trans);
-    await user.save();
-    const last = user.transactions.at(-1);
+    });
+
+    const show = await trans.populate("coinType", "id name symbol moreno");
     res.json({
       status: "ok",
-      msg: "transaction created successfully",
-      create: last,
+      msg: "new transaction created successfully",
+      show: {
+        transType: show.transType,
+        coinType: show.coinType,
+        quantity: show.quantity,
+        pricePerCoin: show.pricePerCoin,
+        fee: show.fee,
+        notes: show.notes,
+        date: show.date,
+        time: show.time,
+      },
     });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({
-      status: "error",
-      msg: "internal server error, check console message",
-    });
+    res.status(404).json({ status: "error", msg: "fail to create" });
   }
 };
 
 export const readAllTransactions = async (req, res) => {
   try {
-    const userIdFromToken = req.decoded._id.toString();
-    const user = await Auth.findById(userIdFromToken).populate(
-      "transactions.coinType",
-      "id symbol name image current_price market_cap_rank",
+    const all = await Transactions.find().populate(
+      "coinType",
+      "id symbol name image",
     );
-    if (!user) return res.status(404).json({ msg: "user not found" });
     res.json({
       status: "fetch successfully",
-      user: user.username,
-      transactions: user.transactions,
+      transactions: all,
     });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({
-      status: "error",
-      msg: "internal server error, check console message",
-    });
+    res.status(404).json("cannot fetch data");
   }
 };
 
 export const updateTransaction = async (req, res) => {
   try {
-    const userIdFromToken = req.decoded._id.toString();
-    const user = await Auth.findById(userIdFromToken);
-    if (!user) return res.status(404).json({ msg: "user not found" });
-    const updated = user.transactions.id(req.params.transId);
-    if (!updated) return res.status(404).json({ msg: "entry not found" });
+    const updated = {};
     if ("transType" in req.body) updated.transType = req.body.transType;
     if ("coinType" in req.body) updated.coinType = req.body.coinType;
     if ("quantity" in req.body) updated.quantity = req.body.quantity;
@@ -154,75 +137,75 @@ export const updateTransaction = async (req, res) => {
     if ("notes" in req.body) updated.notes = req.body.notes;
     if ("date" in req.body) updated.date = req.body.date;
     if ("time" in req.body) updated.time = req.body.time;
-    await user.save();
+
+    const trans = await Transactions.findByIdAndUpdate(
+      req.params.transId,
+      updated,
+      { new: true },
+    );
+    const show = await trans.populate("coinType", "id name symbol image");
     res.json({
       status: "ok",
-      message: "update successfully",
-      content: updated,
+      msg: "update successfully",
+      show: {
+        transType: show.transType,
+        coinType: show.coinType,
+        quantity: show.quantity,
+        pricePerCoin: show.pricePerCoin,
+        fee: show.fee,
+        notes: show.notes,
+        date: show.date,
+        time: show.time,
+      },
     });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({
-      status: "error",
-      msg: "internal server error, check console message",
-    });
+    res.status(404).json({ status: "error", msg: "fail to update" });
   }
 };
 
 export const deleteTransaction = async (req, res) => {
   try {
-    const userIdFromToken = req.decoded._id.toString();
-    const user = await Auth.findById(userIdFromToken);
-    if (!user) return res.status(404).json({ msg: "user not found" });
-    user.transactions.pull(req.params.transId);
-    await user.save();
+    const found = await Transactions.findById(req.params.transId);
+    if (!found)
+      return res
+        .status(404)
+        .json({ status: "error", msg: "id does not exist" });
+    const deleted = await Transactions.findByIdAndDelete(req.params.transId);
     res.json({
       status: "ok",
-      msg: "entry deleted",
-      content: user.transactions,
+      msg: `entry [${found.transType} ${found.coinType}] deleted successfully `,
     });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({
-      status: "error",
-      msg: "internal server error, check console message",
-    });
+    res.status(404).json({ status: "error", msg: "fail to delete" });
   }
 };
 
 export const postTransaction = async (req, res) => {
   try {
-    // to stop using userId at params for security reason
-    const userIdFromToken = req.decoded._id.toString();
-    const user = await Auth.findById(userIdFromToken).populate(
-      "transactions.coinType",
-      "id symbol name image current_price market_cap_rank",
-    );
-    if (!user) return res.status(404).json({ msg: "user not found" });
-    const trans = user.transactions.id(req.params.transId);
+    const trans = await Transactions.findById(req.params.transId);
     if (!trans)
       return res
         .status(404)
         .json({ status: "error", msg: "id does not exist" });
+    const show = await trans.populate("coinType", "id name symbol image");
     res.json({
       status: "ok",
       msg: "entry found",
       show: {
-        transType: trans.transType,
-        coinType: trans.coinType,
-        quantity: trans.quantity,
-        pricePerCoin: trans.pricePerCoin,
-        fee: trans.fee,
-        notes: trans.notes,
-        date: trans.date,
-        time: trans.time,
+        transType: show.transType,
+        coinType: show.coinType,
+        quantity: show.quantity,
+        pricePerCoin: show.pricePerCoin,
+        fee: show.fee,
+        notes: show.notes,
+        date: show.date,
+        time: show.time,
       },
     });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({
-      status: "error",
-      msg: "internal server error, check console message",
-    });
+    res.status(404).json({ status: "error", msg: "fail to find" });
   }
 };

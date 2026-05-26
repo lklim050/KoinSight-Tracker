@@ -1,338 +1,76 @@
 # API Dictionary
 
-This document summarizes the backend routes defined in `server.js`, the transaction router, and the controller functions.
+Simple reference for the backend routes defined in `backend/server.js` and the mounted routers/controllers.
 
-## Base Setup
+## Setup ENVIRONMENT VARIABLES
 
-- Base server entry: `backend/server.js`
-- Transactions router mount path: `/transactions`
-- JSON body parsing is enabled with `express.json()` and `express.urlencoded()`
+| Key    | Value                   | Comment                                                    |
+| ------ | ----------------------- | ---------------------------------------------------------- |
+| server | `http://localhost:5001` | port number is defined by your server app.listen           |
+| token  | ----------------------- | leave the value empty as it will be written by post script |
 
-## Quick View
+## Auth
 
-| Method | Route                    | Purpose                                 | Success Response                                                                                                      |
-| ------ | ------------------------ | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| GET    | `/assets`                | Fetch all asset records                 | Raw array of assets                                                                                                   |
-| GET    | `/assets/seed`           | Seed asset records from `coinList.json` | `{ status: "ok", msg: "seed successfully, <n> entries created" }`                                                     |
-| GET    | `/transactions/seed`     | Seed sample transactions                | `{ status: "ok", msg: "seeding success", count: "5 entries created" }`                                                |
-| GET    | `/transactions`          | Fetch all transactions                  | `{ status: "fetch successfully", transactions: [ { ..., coinType: { id, symbol, name, image } } ] }`                  |
-| PUT    | `/transactions`          | Create a transaction                    | `{ status: "ok", msg: "new transaction created successfully", show: { ..., coinType: { id, name, symbol, image } } }` |
-| POST   | `/transactions/:transId` | Fetch one transaction by id             | `{ status: "ok", msg: "entry found", show: { ..., coinType: { id, name, symbol, image } } }`                          |
-| PATCH  | `/transactions/:transId` | Update one transaction by id            | `{ status: "ok", msg: "update successfully", show: { ..., coinType: { id, name, symbol, image } } }`                  |
-| DELETE | `/transactions/:transId` | Delete one transaction by id            | `{ status: "ok", msg: "entry [Buy bitcoin] deleted successfully " }`                                                  |
+- Choose Bearer Token and write {{token}}, to be filled in by your environment variables
 
-## Assets API
+## Post-Script
 
-### `GET /assets`
+For Login only, add the following line at post script of bruno. This is used to set your environment variables
 
-Returns all asset records from the database.
+- Note: Vary depending on how the login controller or middleware is written.
 
-Response:
-
-```json
-[
-  {
-    "_id": "bitcoin",
-    "id": "bitcoin",
-    "symbol": "btc",
-    "name": "Bitcoin",
-    "image": "...",
-    "current_price": 0,
-    "market_cap_rank": 1
-  }
-]
+```
+const jsonData = res.getBody();
+bru.setEnvVar("token",jsonData.token);
 ```
 
-Notes:
+## Auth
 
-- The controller returns the raw array from `Assets.find()`.
-- On failure, the route responds with `404` and:
+| Endpoint        | Method | Required (params or body)             | Expected response                                              |
+| --------------- | ------ | ------------------------------------- | -------------------------------------------------------------- |
+| `/auth/signup`  | `POST` | Body: `username`, `email`, `password` | `201` with `{ message, user: { id, username, email } }`        |
+| `/auth/login`   | `POST` | Body: `email`, `password`             | `200` with `{ message, token, user: { id, username, email } }` |
+| `/auth/profile` | `GET`  | Auth required                         | `200` with `{ message: "Protected route accessed", user }`     |
 
-```json
-{
-  "status": "error",
-  "msg": "fail to update"
-}
-```
+## Assets
 
-### `GET /assets/seed`
+| Endpoint       | Method | Required (params or body) | Expected response                                                            |
+| -------------- | ------ | ------------------------- | ---------------------------------------------------------------------------- |
+| `/assets`      | `GET`  | None                      | `200` with an array of asset records                                         |
+| `/assets/seed` | `GET`  | None                      | `200` with `{ status: "ok", msg: "seed successfully, <n> entries created" }` |
 
-Deletes all existing assets and seeds the database from `coinList.json`.
+## Transactions
 
-Success response:
+- Note: requires login (Refer to Auth, run bruno POST /auth/login, if no account, use /auth/signup to create account before login)
 
-```json
-{
-  "status": "ok",
-  "msg": "seed successfully, <n> entries created"
-}
-```
+| Endpoint                 | Method   | Required (params or body)                                               | Expected response                                                                     |
+| ------------------------ | -------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `/transactions/seed`     | `GET`    | Auth required                                                           | `200` with `{ status: "ok", msg: "seeding success", count: "5 entries created" }`     |
+| `/transactions`          | `GET`    | Auth required                                                           | `200` with `{ status: "fetch successfully", user, transactions: [...] }`              |
+| `/transactions`          | `PUT`    | Auth required. Body: `transType`, `coinType`, `date`, `time`            | `200` with `{ status: "ok", msg: "transaction created successfully", create: {...} }` |
+| `/transactions/:transId` | `POST`   | Auth required. Param: `transId`                                         | `200` with `{ status: "ok", msg: "entry found", show: {...} }`                        |
+| `/transactions/:transId` | `PATCH`  | Auth required. Param: `transId`. Body: any transaction fields to update | `200` with `{ status: "ok", message: "update successfully", content: {...} }`         |
+| `/transactions/:transId` | `DELETE` | Auth required. Param: `transId`                                         | `200` with `{ status: "ok", msg: "entry deleted", content: [...] }`                   |
 
-Failure response:
+## API Sync
 
-```json
-{
-  "status": "error",
-  "msg": "fail to seed"
-}
-```
+| Endpoint          | Method | Required (params or body) | Expected response                                                                                        |
+| ----------------- | ------ | ------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `/api/sync24hr`   | `POST` | Body: `coins` optional    | `200` with `{ status: "ok", msg: "All target chart histories synchronized successfully!", syncedCoins }` |
+| `/api/sync30days` | `POST` | Body: `coins` optional    | `200` with `{ status: "ok", msg: "All target chart histories synchronized successfully!", syncedCoins }` |
+| `/api/syncTop250` | `POST` | None                      | `200` with `{ status: "ok", msg: "All top 250 synchronized successfully!", show: "<n> entries saved" }`  |
 
-## Transactions API
+## DB Reads
 
-### `GET /transactions/seed`
-
-Deletes all existing transactions and seeds the database with sample transaction records.
-
-Success response:
-
-```json
-{
-  "status": "ok",
-  "msg": "seeding success",
-  "count": "5 entries created"
-}
-```
-
-Failure response:
-
-```json
-{
-  "status": "error",
-  "msg": "fail to seed data"
-}
-```
-
-### `GET /transactions`
-
-Returns all transactions.
-
-The controller populates the `coinType` field with asset details (`id`, `symbol`, `name`, `image`).
-
-Success response (example with populated `coinType`):
-
-```json
-{
-  "status": "fetch successfully",
-  "transactions": [
-    {
-      "_id": "6a0b0f79e03e3f8a0c7caea6",
-      "transType": "Buy",
-      "coinType": {
-        "id": "bitcoin",
-        "symbol": "btc",
-        "name": "Bitcoin",
-        "image": "..."
-      },
-      "quantity": 0.02,
-      "pricePerCoin": 77600.02,
-      "fee": 2,
-      "notes": "...",
-      "date": "2026-06-10",
-      "time": "14:00"
-    }
-  ]
-}
-```
-
-Failure response:
-
-```json
-"cannot fetch data"
-```
-
-### `PUT /transactions`
-
-Creates a new transaction.
-
-Request body fields:
-
-- `transType`
-- `coinType`
-- `quantity`
-- `pricePerCoin`
-- `fee` (optional)
-- `notes` (optional)
-- `date`
-- `time`
-
-Example request body:
-
-```json
-{
-  "transType": "Buy",
-  "coinType": "bitcoin",
-  "quantity": 0.02,
-  "pricePerCoin": 77600.02,
-  "fee": 2,
-  "notes": "test",
-  "date": "2026-06-10",
-  "time": "14:00"
-}
-```
-
-Success response (note: `coinType` is populated):
-
-```json
-{
-  "status": "ok",
-  "msg": "new transaction created successfully",
-  "show": {
-    "transType": "Buy",
-    "coinType": {
-      "id": "bitcoin",
-      "symbol": "btc",
-      "name": "Bitcoin",
-      "image": "..."
-    },
-    "quantity": 0.02,
-    "pricePerCoin": 77600.02,
-    "fee": 2,
-    "notes": "test",
-    "date": "2026-06-10",
-    "time": "14:00"
-  }
-}
-```
-
-Failure response:
-
-```json
-{
-  "status": "error",
-  "msg": "fail to create"
-}
-```
-
-### `POST /transactions/:transId`
-
-Fetches a single transaction by id.
-
-Path parameter:
-
-- `transId`: transaction document id
-
-Success response (note: `coinType` is populated):
-
-```json
-{
-  "status": "ok",
-  "msg": "entry found",
-  "show": {
-    "transType": "Buy",
-    "coinType": {
-      "id": "bitcoin",
-      "symbol": "btc",
-      "name": "Bitcoin",
-      "image": "..."
-    },
-    "quantity": 0.02,
-    "pricePerCoin": 77600.02,
-    "fee": 2,
-    "notes": "test",
-    "date": "2026-06-10",
-    "time": "14:00"
-  }
-}
-```
-
-Not-found response:
-
-```json
-{
-  "status": "error",
-  "msg": "id does not exist"
-}
-```
-
-Failure response:
-
-```json
-{
-  "status": "error",
-  "msg": "fail to find"
-}
-```
-
-### `PATCH /transactions/:transId`
-
-Updates one or more fields on an existing transaction.
-
-Path parameter:
-
-- `transId`: transaction document id
-
-Supported body fields are the same as the create route. Only provided fields are updated.
-
-Success response (updated record is returned with populated `coinType`):
-
-```json
-{
-  "status": "ok",
-  "msg": "update successfully",
-  "show": {
-    "transType": "Buy",
-    "coinType": {
-      "id": "bitcoin",
-      "symbol": "btc",
-      "name": "Bitcoin",
-      "image": "..."
-    },
-    "quantity": 0.02,
-    "pricePerCoin": 77600.02,
-    "fee": 2,
-    "notes": "test",
-    "date": "2026-06-10",
-    "time": "14:00"
-  }
-}
-```
-
-Failure response:
-
-```json
-{
-  "status": "error",
-  "msg": "fail to update"
-}
-```
-
-### `DELETE /transactions/:transId`
-
-Deletes a transaction by id.
-
-Path parameter:
-
-- `transId`: transaction document id
-
-Success response:
-
-```json
-{
-  "status": "ok",
-  "msg": "entry [Buy bitcoin] deleted successfully "
-}
-```
-
-Not-found response:
-
-```json
-{
-  "status": "error",
-  "msg": "id does not exist"
-}
-```
-
-Failure response:
-
-```json
-{
-  "status": "error",
-  "msg": "fail to delete"
-}
-```
+| Endpoint         | Method | Required (params or body) | Expected response                                                                                                     |
+| ---------------- | ------ | ------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `/db/post24hr`   | `POST` | Body: `id`                | `200` with `{ status: "fetch successfully from Database", show, first_price, latest_price, first_date, latest_date }` |
+| `/db/post30days` | `POST` | Body: `id`                | `200` with `{ status: "fetch successfully from Database", show, first_price, latest_price, first_date, latest_date }` |
+| `/db/getTop250`  | `GET`  | None                      | `200` with `{ status: "fetch successfully from Database", msg: "<n> entries fetched", show: [...] }`                  |
+| `/db/postTop250` | `POST` | Body: `id`                | `200` with `{ status: "fetch successfully from Database", show }`                                                     |
 
 ## Notes
 
-- The transaction create route uses `PUT /transactions`, while the single-record fetch route uses `POST /transactions/:transId`.
-- The code returns `404` for most failures, even when the issue is not strictly a missing resource.
-- The route and controller file names use the existing project spelling `portofoiloTracker`.
+- Routes like `/auth/profile`, `/transactions/*`, and `/transactions/seed` require a valid authenticated user.
+- `transId` is the transaction document id stored inside the user record.
+- `coinType` is often populated with asset data when a matching coin exists.

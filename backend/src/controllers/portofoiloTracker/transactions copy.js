@@ -12,9 +12,9 @@ export const seedTranactions = async (req, res) => {
 
     const seed = [
       {
-        userId: dummyUserId,
+        _id: "6a0b0f79e03e3f8a0c7caea6",
         transType: "Buy",
-        coinType: bitcoin._id,
+        coinType: "bitcoin",
         quantity: 0.02,
         fee: 2,
         notes: "this is a test transaction to input, does not mean i very rich",
@@ -23,9 +23,9 @@ export const seedTranactions = async (req, res) => {
         time: "14:00",
       },
       {
-        userId: dummyUserId,
+        _id: "6a0b0f79e03e3f8a0c7caea7",
         transType: "Buy",
-        coinType: bitcoin._id,
+        coinType: "bitcoin",
         quantity: 0.02,
         fee: 2,
         notes:
@@ -35,9 +35,9 @@ export const seedTranactions = async (req, res) => {
         time: "15:00",
       },
       {
-        userId: dummyUserId,
+        _id: "6a0b0f79e03e3f8a0c7caea8",
         transType: "Buy",
-        coinType: ethereum._id,
+        coinType: "ethereum",
         quantity: 0.1,
         fee: 2,
         notes:
@@ -47,9 +47,9 @@ export const seedTranactions = async (req, res) => {
         time: "09:00",
       },
       {
-        userId: dummyUserId,
+        _id: "6a0b0f79e03e3f8a0c7caea9",
         transType: "Sell",
-        coinType: bnb._id,
+        coinType: "bnb",
         quantity: 2,
         fee: 2.5,
         notes:
@@ -59,9 +59,9 @@ export const seedTranactions = async (req, res) => {
         time: "14:30",
       },
       {
-        userId: dummyUserId,
+        _id: "6a0b0f79e03e3f8a0c7caeaa",
         transType: "Sell",
-        coinType: solana._id,
+        coinType: "solana",
         quantity: 2,
         fee: 2.5,
         notes:
@@ -125,7 +125,7 @@ export const readAllTransactions = async (req, res) => {
     const userIdFromToken = req.user.id.toString();
     const user = await UserModel.findById(userIdFromToken).populate(
       "transactions.coinType",
-      "-__v",
+      "id symbol name image current_price market_cap_rank",
     );
     if (!user) return res.status(404).json({ msg: "user not found" });
     res.json({
@@ -198,10 +198,7 @@ export const postTransaction = async (req, res) => {
   try {
     // to stop using userId at params for security reason
     const userIdFromToken = req.user.id.toString();
-    const user = await UserModel.findById(userIdFromToken).populate(
-      "transactions.coinType",
-      "-__v",
-    );
+    const user = await UserModel.findById(userIdFromToken);
     if (!user) return res.status(404).json({ msg: "user not found" });
     const trans = user.transactions.id(req.params.transId);
     if (!trans)
@@ -234,70 +231,5 @@ export const postTransaction = async (req, res) => {
       status: "error",
       msg: "internal server error, check console message",
     });
-  }
-};
-
-export const getUserAssets = async (req, res) => {
-  try {
-    const transactions = await Transactions.find().populate(
-      "coinType",
-      "id symbol name image current_price",
-    );
-
-    const assetsMap = {};
-
-    transactions.forEach((transaction) => {
-      if (!transaction.coinType) return;
-
-      const coinId = transaction.coinType._id;
-      if (!assetsMap[coinId]) {
-        assetsMap[coinId] = {
-          coin: transaction.coinType,
-          totalQuantity: 0,
-          totalCost: 0,
-          buys: [],
-        };
-      }
-
-      const amount = transaction.quantity * transaction.pricePerCoin;
-
-      if (transaction.transType === "Buy") {
-        assetsMap[coinId].totalQuantity += transaction.quantity;
-        assetsMap[coinId].totalCost += amount;
-        assetsMap[coinId].buys.push(transaction);
-      } else {
-        assetsMap[coinId].totalQuantity -= transaction.quantity;
-      }
-    });
-
-    const assets = Object.values(assetsMap)
-      .filter((asset) => asset.totalQuantity > 0)
-      .map((asset) => {
-        const totalBuyQuantity = asset.buys.reduce(
-          (sum, t) => sum + t.quantity,
-          0,
-        );
-        return {
-          _id: asset.coin._id,
-          name: asset.coin.name,
-          symbol: asset.coin.symbol,
-          image: asset.coin.image,
-          currentPrice: asset.coin.current_price,
-          holdings: asset.totalQuantity,
-          avgBuyPrice:
-            totalBuyQuantity > 0 ? asset.totalCost / totalBuyQuantity : 0,
-          totalValue: asset.totalQuantity * asset.coin.current_price,
-          profitLoss:
-            asset.totalQuantity * asset.coin.current_price - asset.totalCost,
-        };
-      });
-
-    res.json({
-      status: "success",
-      assets,
-    });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ message: "Failed to fetch assets" });
   }
 };
