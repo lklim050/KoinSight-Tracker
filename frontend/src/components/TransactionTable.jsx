@@ -79,6 +79,7 @@ export function TransactionTable() {
 
   return (
     <div className="overflow-x-auto">
+      {/* {JSON.stringify(transactions)} */}
       <Table className="w-full">
         <TableHead>
           <TableRow>
