@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { createTransaction } from "../../services/transactionApi.js";
 
-function AddTransactionModal({ selectedCoin, setShowTransactionModal }) {
+function AddTransactionModal({
+  selectedCoin,
+  setShowTransactionModal,
+  onSuccess,
+}) {
   const [error, setError] = useState("");
   const [transactionType, setTransactionType] = useState("buy");
   const [quantity, setQuantity] = useState("");
@@ -45,6 +49,7 @@ function AddTransactionModal({ selectedCoin, setShowTransactionModal }) {
       return;
     }
 
+    onSuccess?.();
     setShowTransactionModal(false);
   };
   return (

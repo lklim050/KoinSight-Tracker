@@ -10,7 +10,7 @@ import {
 import { useState, useEffect } from "react";
 import { getTransactions } from "../services/transactionApi.js";
 
-export function TransactionTable() {
+export function TransactionTable({ refreshTrigger }) {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -58,8 +58,10 @@ export function TransactionTable() {
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
+        setLoading(true);
+        setError(null);
         const data = await getTransactions();
-        setTransactions(data.data);
+        setTransactions(data.transactions);
       } catch (err) {
         setError("Failed to load transactions");
       } finally {
@@ -67,7 +69,7 @@ export function TransactionTable() {
       }
     };
     fetchTransactions();
-  }, []);
+  }, [refreshTrigger]);
 
   if (loading) {
     return <p>Loading...</p>;
@@ -94,9 +96,9 @@ export function TransactionTable() {
           </TableRow>
         </TableHead>
         <TableBody className="divide-y">
-          {transactions.map((transaction) => (
+          {transactions.map((transaction, idx) => (
             <TableRow
-              key={transaction._id}
+              key={`${idx}-${transaction._id}`}
               className="bg-white dark:border-gray-700 dark:bg-gray-800"
             >
               <TableCell className="whitespace-nowrap font-medium">

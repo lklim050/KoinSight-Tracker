@@ -9,6 +9,7 @@ import AddTransactionModal from "./addTransactionButton/AddTransactionModal.jsx"
 export default function PortfolioPage() {
   const [showCoinModal, setShowCoinModal] = useState(false);
   const [showTransactionModal, setShowTransactionModal] = useState(false);
+  const [transactionRefreshKey, setTransactionRefreshKey] = useState(0);
 
   const [selectedCoin, setSelectedCoin] = useState(null);
 
@@ -41,6 +42,9 @@ export default function PortfolioPage() {
               <AddTransactionModal
                 selectedCoin={selectedCoin}
                 setShowTransactionModal={setShowTransactionModal}
+                onSuccess={() =>
+                  setTransactionRefreshKey((currentKey) => currentKey + 1)
+                }
               />
             )}
           </div>
@@ -92,7 +96,7 @@ export default function PortfolioPage() {
           <AssetsTable />
         </Tabs.Item>
         <Tabs.Item title="Transactions">
-          <TransactionTable />
+          <TransactionTable refreshTrigger={transactionRefreshKey} />
         </Tabs.Item>
       </Tabs>
     </div>

@@ -51,9 +51,9 @@ const SelectCoinModalTransaction = ({
           className="w-full bg-[#2A2E45] text-white px-4 py-3 rounded-xl outline-none mb-6 "
         />
         <div className="space-y-4 max-h-[500px] overflow-y-auto hide-scrollbar pr-2">
-          {filteredCoins.map((coin) => (
+          {filteredCoins.map((coin, idx) => (
             <div
-              key={coin.id}
+              key={`${idx}-${coin.id}`}
               onClick={() => {
                 setSelectedCoin(coin);
                 setShowCoinModal(false);

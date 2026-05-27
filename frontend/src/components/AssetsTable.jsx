@@ -8,6 +8,7 @@ import {
 } from "flowbite-react";
 import { useState, useEffect } from "react";
 import { fetchMyAssets } from "../services/api.js";
+import { getMyAssets } from "../services/transactionApi.js";
 
 export function AssetsTable() {
   const [assets, setAssets] = useState([]);
@@ -17,7 +18,7 @@ export function AssetsTable() {
   useEffect(() => {
     const getAssets = async () => {
       try {
-        const data = await fetchMyAssets();
+        const data = await getMyAssets();
         console.log("Assets data:", data);
         setAssets(data.assets);
       } catch (err) {
@@ -53,9 +54,9 @@ export function AssetsTable() {
           </TableRow>
         </TableHead>
         <TableBody className="divide-y">
-          {assets.map((asset) => (
+          {assets.map((asset, idx) => (
             <TableRow
-              key={asset._id}
+              key={`${idx}-${asset._id}`}
               className="bg-white dark:border-gray-700 dark:bg-gray-800"
             >
               <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
