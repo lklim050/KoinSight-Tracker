@@ -98,7 +98,6 @@ export default function PortfolioPage({ user }) {
       {/* Tabs & Table */}
       <Tabs>
         <Tabs.Item title="Assets" active>
-          // Pass user prop to AssetsTable to fetch and display user's assets
           <AssetsTable user={user} />
         </Tabs.Item>
         <Tabs.Item title="Transactions">

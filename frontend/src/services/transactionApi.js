@@ -4,13 +4,14 @@ export const createTransaction = async (transactionData) => {
   try {
     const token = localStorage.getItem("token");
     const response = await fetch(`${BASE_URL}/transactions`, {
-      method: "PUT",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(transactionData),
     });
+    if (!response.ok) throw new Error("Failed to fetch transactions");
     const data = await response.json();
     if (!response.ok) {
       throw new Error(data.message || "Transaction failed");
@@ -18,6 +19,7 @@ export const createTransaction = async (transactionData) => {
     return data;
   } catch (error) {
     console.error("Create Transaction Error:", error);
+    throw error; // ← rethrow so the catch in TransactionTable handles it
     return {
       success: false,
       message: error.message,
@@ -37,6 +39,7 @@ export const getTransactions = async () => {
     return data;
   } catch (error) {
     console.error(error);
+    throw error;
   }
 };
 

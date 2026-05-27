@@ -12,7 +12,7 @@ import { getMyAssets } from "../services/transactionApi.js";
 
 export function AssetsTable({ user }) {
   const [assets, setAssets] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -40,6 +40,17 @@ export function AssetsTable({ user }) {
 
   if (error) {
     return <p>{error}</p>;
+  }
+
+  if (assets.length === 0) {
+    return (
+      <div className="text-center py-12 text-gray-400">
+        <p className="text-lg mb-2">No assets yet</p>
+        <p className="text-sm">
+          Add a transaction to start tracking your portfolio
+        </p>
+      </div>
+    );
   }
 
   return (
