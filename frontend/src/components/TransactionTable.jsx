@@ -10,7 +10,7 @@ import {
 import { useState, useEffect } from "react";
 import { getTransactions } from "../services/transactionApi.js";
 
-export function TransactionTable({ refreshTrigger }) {
+export function TransactionTable({ refreshTrigger, user }) {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -56,6 +56,9 @@ export function TransactionTable({ refreshTrigger }) {
   };
 
   useEffect(() => {
+    if (!user) {
+      return;
+    }
     const fetchTransactions = async () => {
       try {
         setLoading(true);

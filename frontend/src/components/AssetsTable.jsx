@@ -10,12 +10,16 @@ import { useState, useEffect } from "react";
 import { fetchMyAssets } from "../services/api.js";
 import { getMyAssets } from "../services/transactionApi.js";
 
-export function AssetsTable() {
+export function AssetsTable({ user }) {
   const [assets, setAssets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (!user) {
+      return;
+    }
+
     const getAssets = async () => {
       try {
         const data = await getMyAssets();
