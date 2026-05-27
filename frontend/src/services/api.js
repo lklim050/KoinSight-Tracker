@@ -38,7 +38,7 @@ export const fetchTransactions = async (
 };
 
 export const fetchMyAssets = async (
-  token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMTQwOTY4MGFiNjkxZTU3NDFlN2E0ZSIsImlhdCI6MTc3OTgwNTc1OSwiZXhwIjoxNzgwNDEwNTU5fQ.HvA2UJS0rsDRcnbmFikmKXCn76mf7bTsyxp5nGd_koE",
+  token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMTU0MzM3MTlmMmZkNWY0NzZjZjAzZSIsImlhdCI6MTc3OTc3OTU2NSwiZXhwIjoxNzgwMzg0MzY1fQ.SZbdjBfrfE22DUzpgMkUmJthgCzhHnF48fLeazmv7YM",
 ) => {
   try {
     const response = await fetch(`${BASE_URL}/assets`, {
