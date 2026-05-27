@@ -5,8 +5,9 @@ import SelectCoinModal from "./addTransactionButton/SelectCoinModal.jsx";
 
 import { Card, Tabs, Button } from "flowbite-react";
 import AddTransactionModal from "./addTransactionButton/AddTransactionModal.jsx";
-1;
-export default function PortfolioPage() {
+
+//{user} prop is passed down from App.jsx to render username and conditionally show portfolio data
+export default function PortfolioPage({ user }) {
   const [showCoinModal, setShowCoinModal] = useState(false);
   const [showTransactionModal, setShowTransactionModal] = useState(false);
   const [transactionRefreshKey, setTransactionRefreshKey] = useState(0);
@@ -19,7 +20,11 @@ export default function PortfolioPage() {
       <div className="mb-8">
         <div className="flex justify-between items-start mb-4">
           <div>
-            <div className="text-sm text-blue-400 mb-2">test</div>
+            {user && (
+              <div className="text-4xl text-white-400 mb-8">
+                {user.username}'s Portfolio
+              </div>
+            )}
             <div className="text-4xl font-bold mb-2">$67.12</div>
             <div className="text-red-500">-$2.5476 ▼ 3.66% (24h)</div>
           </div>

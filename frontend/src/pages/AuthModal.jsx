@@ -2,7 +2,7 @@ import { useState } from "react";
 import { loginUser, signupUser } from "../services/authApi.js";
 import { X } from "lucide-react";
 
-function AuthModal({ showAuthModal, setShowAuthModal }) {
+function AuthModal({ showAuthModal, setShowAuthModal, onLogin }) {
   const [isLogin, setIsLogin] = useState(true);
   const [message, setMessage] = useState("");
   const [formData, setFormData] = useState({
@@ -51,12 +51,11 @@ function AuthModal({ showAuthModal, setShowAuthModal }) {
         setShowAuthModal(false);
       }
 
+      // Store token and user data in localStorage for session persistence
       if (data.token) {
-        localStorage.setItem(
-          "token",
-
-          data.token,
-        );
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+        onLogin(data.user);
       }
     } catch (error) {
       console.error(error);
