@@ -74,7 +74,12 @@ export function AssetsTable({ user, refreshTrigger }) {
               className="bg-white dark:border-gray-700 dark:bg-gray-800"
             >
               <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                {asset.name} {asset.symbol}
+                <img
+                  src={asset.image}
+                  alt={asset.name}
+                  style={{ width: "24px", height: "24px" }}
+                />
+                {asset.name}, {asset.symbol}
               </TableCell>
               <TableCell>${asset.currentPrice.toLocaleString()}</TableCell>
               <TableCell>--</TableCell>

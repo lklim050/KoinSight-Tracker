@@ -135,6 +135,11 @@ export function TransactionTable({ refreshTrigger, user }) {
                 </div>
               </TableCell>
               <TableCell>
+                <img
+                  src={transaction.coinType?.image || ""}
+                  alt={transaction.coinType?.name || "Unknown"}
+                  style={{ width: "24px", height: "24px" }}
+                />
                 {transaction.coinType?.name || "Unknown"}{" "}
                 {transaction.coinType?.symbol?.toUpperCase() || ""}
               </TableCell>
