@@ -65,7 +65,6 @@ export function AssetsTable({ user }) {
             <TableHeadCell>Holdings</TableHeadCell>
             <TableHeadCell>Avg.Buy Price</TableHeadCell>
             <TableHeadCell>Profit/Loss</TableHeadCell>
-            <TableHeadCell className="text-right">Action</TableHeadCell>
           </TableRow>
         </TableHead>
         <TableBody className="divide-y">
@@ -88,14 +87,6 @@ export function AssetsTable({ user }) {
                 }
               >
                 ${asset.profitLoss.toLocaleString()}
-              </TableCell>
-              <TableCell className="text-right">
-                <a
-                  href="#"
-                  className="font-medium text-primary-600 hover:underline dark:text-primary-500"
-                >
-                  Edit
-                </a>
               </TableCell>
             </TableRow>
           ))}

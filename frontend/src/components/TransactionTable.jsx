@@ -6,6 +6,7 @@ import {
   TableHeadCell,
   TableRow,
 } from "flowbite-react";
+import { Pencil, Trash2 } from "lucide-react";
 
 import { useState, useEffect } from "react";
 import { getTransactions } from "../services/transactionApi.js";
@@ -157,12 +158,20 @@ export function TransactionTable({ refreshTrigger, user }) {
               <TableCell>${transaction.fee}</TableCell>
               <TableCell>{transaction.notes}</TableCell>
               <TableCell className="text-right">
-                <a
-                  href="#"
-                  className="font-medium text-primary-600 hover:underline dark:text-primary-500"
-                >
-                  Edit
-                </a>
+                <div className="flex justify-end gap-3">
+                  <button
+                    onClick={""}
+                    className="text-gray-400 hover:text-blue-400 cursor-pointer transition"
+                  >
+                    <Pencil size={16} />
+                  </button>
+                  <button
+                    onClick={""}
+                    className="text-gray-400 hover:text-red-400 cursor-pointer transition"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
               </TableCell>
             </TableRow>
           ))}
