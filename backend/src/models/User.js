@@ -4,7 +4,7 @@ const TransactionsSchema = new mongoose.Schema({
   transType: { type: String, required: true },
   coinType: { type: String, required: true, ref: "CryptoTop250Coins" },
   quantity: { type: Number, required: true },
-  pricePerCoin: { type: Number, required: false, default: 0 },
+  pricePerCoin: { type: Number, default: 0, set: (v) => (v === null ? 0 : v) },
   fee: { type: Number, required: false },
   notes: { type: String, required: false, maxLength: 200 },
   date: { type: Date, required: true },

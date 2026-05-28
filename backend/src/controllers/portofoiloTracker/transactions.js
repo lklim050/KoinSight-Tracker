@@ -120,7 +120,7 @@ export const createTransaction = async (req, res) => {
       transType: req.body.transType,
       coinType: req.body.coinType,
       quantity: req.body.quantity || "",
-      pricePerCoin: req.body.pricePerCoin || "",
+      pricePerCoin: req.body.pricePerCoin || 0,
       fee: req.body.fee || 0,
       notes: req.body.notes || "",
       date: req.body.date,
