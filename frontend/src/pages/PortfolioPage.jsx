@@ -17,7 +17,7 @@ export default function PortfolioPage({ user }) {
   const [selectedCoin, setSelectedCoin] = useState(null);
 
   const [asset, setAsset] = useState([]);
-  const [portfolio, setPortfolio] = useState([]);
+  const [portfolio, setPortfolio] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -48,7 +48,7 @@ export default function PortfolioPage({ user }) {
     return <p>{error}</p>;
   }
 
-  if (portfolio.length === 0) {
+  if (!portfolio) {
     return (
       <div className="text-center py-12 text-gray-400">
         <p className="text-lg mb-2">No portfolio yet</p>
@@ -106,7 +106,7 @@ export default function PortfolioPage({ user }) {
       : "negative";
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-6 pt-24">
+    <div className="min-h-screen bg-slate-950 text-white p-6 pt-24">
       {/* Header */}
 
       <div className="mb-8">
@@ -186,7 +186,7 @@ export default function PortfolioPage({ user }) {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-3 gap-6 mb-8">
-        <Card className="bg-gray-800">
+        <Card className="bg-white/10 backdrop-blur-xl border border-white/20">
           <h4 className="text-gray-400 text-sm mb-2">All-time profit</h4>
           <p
             className={`${portfolioConfig[status_allTime]?.color} text-4xl font-semibold`}
@@ -206,7 +206,7 @@ export default function PortfolioPage({ user }) {
           </p>
         </Card>
 
-        <Card className="bg-gray-800">
+        <Card className="bg-white/10 backdrop-blur-xl border border-white/20">
           <h4 className="text-gray-400 text-sm mb-2">Cost Basis</h4>
           <p className="text-3xl font-bold">
             {portfolio.totalPortfolioCost.toLocaleString("en-US", {
@@ -218,7 +218,7 @@ export default function PortfolioPage({ user }) {
           </p>
         </Card>
 
-        <Card className="bg-gray-800">
+        <Card className="bg-white/10 backdrop-blur-xl border border-white/20">
           <div className="grid grid-cols-2 gap-4">
             <div>
               <h4 className="text-gray-400 text-sm mb-2">Best Performer</h4>

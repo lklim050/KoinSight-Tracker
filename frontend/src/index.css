@@ -2,6 +2,15 @@
 @import "flowbite-react/plugin/tailwindcss";
 @source "../.flowbite-react/class-list.json";
 
+body {
+  background-color: rgb(2 6 23); /* slate-950 */
+  font-family: 'Inter', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Bruno Ace SC', sans-serif;
+}
+
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
