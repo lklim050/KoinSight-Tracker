@@ -9,7 +9,7 @@ import {
 import { useState, useEffect } from "react";
 import { getMyAssets } from "../services/assetApi.js";
 
-export function AssetsTable({ user, refreshTrigger }) {
+export function AssetsTable({ user, refreshTrigger, getAssetToPortfolio }) {
   const [assets, setAssets] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -24,6 +24,7 @@ export function AssetsTable({ user, refreshTrigger }) {
         const data = await getMyAssets();
         console.log("Assets data:", data);
         setAssets(data.assets);
+        getAssetToPortfolio(data.assets);
       } catch (err) {
         setError("Failed to load assets");
       } finally {
@@ -145,21 +146,46 @@ export function AssetsTable({ user, refreshTrigger }) {
                   {assetConfig[status_7d]?.icon}{" "}
                   {percent_7d ? percent_7d.toFixed(2) : "--"}%
                 </TableCell>
-                <TableCell className="font-semibold">
-                  {asset.holdings}
+                <TableCell className="text-l font-bold">
+                  <p>
+                    {asset.holdings} {asset.symbol?.toUpperCase()}{" "}
+                  </p>
+                  <p>
+                    {(asset.holdings * asset.avgBuyPrice).toLocaleString(
+                      "en-US",
+                      {
+                        style: "currency",
+                        currency: "USD",
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      },
+                    )}
+                  </p>
                 </TableCell>
                 <TableCell className="font-semibold">
-                  ${asset.avgBuyPrice.toLocaleString()}
-                </TableCell>
-                <TableCell
-                  className={`${assetConfig[status_profitLoss]?.color} font-semibold`}
-                >
-                  {asset.profitLoss.toLocaleString("en-US", {
+                  $
+                  {asset.avgBuyPrice.toLocaleString("en-US", {
                     style: "currency",
                     currency: "USD",
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                   })}
+                </TableCell>
+                <TableCell
+                  className={`${assetConfig[status_profitLoss]?.color} font-bold`}
+                >
+                  <p>
+                    {asset.profitLoss.toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                  </p>
+                  <p>
+                    {assetConfig[status_profitLoss]?.icon}
+                    {asset.profitLoss_percentage.toFixed(2)}
+                  </p>
                 </TableCell>
               </TableRow>
             );

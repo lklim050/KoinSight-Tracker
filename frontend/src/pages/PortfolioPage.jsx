@@ -16,6 +16,7 @@ export default function PortfolioPage({ user }) {
   const [portfolioRefreshKey, setPortfolioRefreshKey] = useState(0);
   const [selectedCoin, setSelectedCoin] = useState(null);
 
+  const [asset, setAsset] = useState([]);
   const [portfolio, setPortfolio] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -57,6 +58,14 @@ export default function PortfolioPage({ user }) {
       </div>
     );
   }
+  const sortAsset = [...asset].sort((a, b) => {
+    const pctA = Number(a.profitLoss_percentage) || 0;
+    const pctB = Number(b.profitLoss_percentage) || 0;
+
+    return pctB - pctA;
+  });
+  const bestPerformer = sortAsset[0] ?? [];
+  const worstPerformer = sortAsset.at(-1) ?? [];
 
   const portfolioConfig = {
     positive: {
@@ -85,8 +94,16 @@ export default function PortfolioPage({ user }) {
     : portfolio.allTimeProfitLoss > 0
       ? "positive"
       : "negative";
-
-  portfolio.allTimeProfitLoss;
+  const status_profitLossBest = !bestPerformer.profitLoss_percentage
+    ? "neutral"
+    : bestPerformer.profitLoss_percentage > 0
+      ? "positive"
+      : "negative";
+  const status_profitLossWorst = !worstPerformer.profitLoss_percentage
+    ? "neutral"
+    : worstPerformer.profitLoss_percentage > 0
+      ? "positive"
+      : "negative";
 
   return (
     <div className="min-h-screen bg-gray-900 text-white p-6 pt-24">
@@ -160,6 +177,7 @@ export default function PortfolioPage({ user }) {
       {/* Charts Grid */}
       <div className="gap-6 mb-8">
         {/* Holdings Chart */}
+        {/* {JSON.stringify(asset)} */}
         <Card className="bg-gray-800">
           <h3 className="text-xl font-semibold mb-4">Holdings</h3>
           {/* Your chart component here */}
@@ -205,13 +223,51 @@ export default function PortfolioPage({ user }) {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <h4 className="text-gray-400 text-sm mb-2">Best Performer</h4>
-              <p className="text-lg font-bold">BTC</p>
-              <p className="text-red-500 text-sm">-$2.2634 ▼ 2.94%</p>
+              <div className="flex flex-row gap-3">
+                <img
+                  src={bestPerformer.image}
+                  alt={bestPerformer.name}
+                  style={{ width: "24px", height: "24px" }}
+                />{" "}
+                <p className="text-lg font-bold">
+                  {bestPerformer.symbol?.toUpperCase()}
+                </p>
+              </div>
+              <p className={`${portfolioConfig[status_profitLossBest]?.color}`}>
+                {bestPerformer.profitLoss?.toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}{" "}
+                {portfolioConfig[status_profitLossBest]?.sign}{" "}
+                {bestPerformer.profitLoss_percentage?.toFixed(2)}%
+              </p>
             </div>
             <div>
               <h4 className="text-gray-400 text-sm mb-2">Worst Performer</h4>
-              <p className="text-lg font-bold">BTC</p>
-              <p className="text-red-500 text-sm">-$2.2634 ▼ 2.94%</p>
+              <div className="flex flex-row gap-3">
+                <img
+                  src={worstPerformer.image}
+                  alt={worstPerformer.name}
+                  style={{ width: "24px", height: "24px" }}
+                />
+                <p className="text-lg font-bold">
+                  {worstPerformer.symbol?.toUpperCase()}
+                </p>
+              </div>
+              <p
+                className={`${portfolioConfig[status_profitLossWorst]?.color}`}
+              >
+                {worstPerformer.profitLoss?.toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}{" "}
+                {portfolioConfig[status_profitLossWorst]?.sign}{" "}
+                {worstPerformer.profitLoss_percentage?.toFixed(2)}%
+              </p>
             </div>
           </div>
         </Card>
@@ -220,7 +276,11 @@ export default function PortfolioPage({ user }) {
       {/* Tabs & Table */}
       <Tabs>
         <Tabs.Item title="Assets" active>
-          <AssetsTable user={user} refreshTrigger={assetRefreshKey} />
+          <AssetsTable
+            user={user}
+            refreshTrigger={assetRefreshKey}
+            getAssetToPortfolio={setAsset}
+          />
         </Tabs.Item>
         <Tabs.Item title="Transactions">
           <TransactionTable
