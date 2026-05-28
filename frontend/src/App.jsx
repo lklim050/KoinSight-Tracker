@@ -28,8 +28,6 @@ function App() {
 
   return (
     <>
-      // Pass user and onLogout props to Navbar for conditional rendering and
-      logout functionality
       <Navbar
         setShowAuthModal={setShowAuthModal}
         user={user}
