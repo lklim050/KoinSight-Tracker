@@ -13,6 +13,7 @@ export const calculateUserAssets = (user) => {
         coin: transaction.coinType,
         totalQuantityBought: 0,
         totalQuantitySold: 0,
+        totalQuantityTransfer: 0,
         totalBuyCost: 0,
         totalSellPrice: 0,
       };
@@ -28,16 +29,18 @@ export const calculateUserAssets = (user) => {
       assetsMap[coinId].totalQuantitySold += transaction.quantity;
       assetsMap[coinId].totalSellPrice += principal - fee;
     } else if (transaction.transType === "transfer_in") {
-      assetsMap[coinId].totalQuantityBought += transaction.quantity;
+      assetsMap[coinId].totalQuantityTransfer += transaction.quantity;
     } else if (transaction.transType === "transfer_out") {
-      assetsMap[coinId].totalQuantitySold += transaction.quantity;
+      assetsMap[coinId].totalQuantityTransfer -= transaction.quantity;
     }
   });
 
   return Object.values(assetsMap)
     .map((asset) => {
       const currentHoldings =
-        asset.totalQuantityBought - asset.totalQuantitySold;
+        asset.totalQuantityBought -
+        asset.totalQuantitySold +
+        asset.totalQuantityTransfer;
       const avgBuyPrice =
         asset.totalQuantityBought > 0
           ? asset.totalBuyCost / asset.totalQuantityBought
@@ -55,6 +58,8 @@ export const calculateUserAssets = (user) => {
         image: asset.coin.image,
         currentPrice: currentPrice,
         holdings: currentHoldings,
+        holdings_buySell: asset.totalQuantityBought - asset.totalQuantitySold,
+        holdings_transfer: asset.totalQuantityTransfer,
         avgBuyPrice: avgBuyPrice,
         totalValue: currentTotalValue,
         profitLoss: currentTotalValue - currentCostBasis,
