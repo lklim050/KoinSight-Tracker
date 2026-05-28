@@ -20,10 +20,10 @@ export const calculateUserAssets = (user) => {
     const principal = transaction.quantity * transaction.pricePerCoin;
     const fee = transaction.fee || 0;
 
-    if (transaction.transType === "Buy") {
+    if (transaction.transType === "buy") {
       assetsMap[coinId].totalQuantityBought += transaction.quantity;
       assetsMap[coinId].totalBuyCost += principal + fee;
-    } else if (transaction.transType === "Sell") {
+    } else if (transaction.transType === "sell") {
       assetsMap[coinId].totalQuantitySold += transaction.quantity;
     }
   });
