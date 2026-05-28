@@ -7,8 +7,7 @@ import {
   TableRow,
 } from "flowbite-react";
 import { useState, useEffect } from "react";
-import { fetchMyAssets } from "../services/api.js";
-import { getMyAssets } from "../services/transactionApi.js";
+import { getMyAssets } from "../services/assetApi.js";
 
 export function AssetsTable({ user, refreshTrigger }) {
   const [assets, setAssets] = useState([]);
