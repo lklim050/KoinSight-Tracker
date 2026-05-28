@@ -25,6 +25,10 @@ export const calculateUserAssets = (user) => {
       assetsMap[coinId].totalBuyCost += principal + fee;
     } else if (transaction.transType === "sell") {
       assetsMap[coinId].totalQuantitySold += transaction.quantity;
+    } else if (transaction.transType === "transfer_in") {
+      assetsMap[coinId].totalQuantityBought += transaction.quantity;
+    } else if (transaction.transType === "transfer_out") {
+      assetsMap[coinId].totalQuantitySold += transaction.quantity;
     }
   });
 

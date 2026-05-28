@@ -100,6 +100,7 @@ export function TransactionTable({ refreshTrigger, user }) {
           <TableRow>
             <TableHeadCell>Type</TableHeadCell>
             <TableHeadCell>Date</TableHeadCell>
+            <TableHeadCell>Time</TableHeadCell>
             <TableHeadCell>Assets</TableHeadCell>
             <TableHeadCell>Price</TableHeadCell>
             <TableHeadCell>Amount</TableHeadCell>
@@ -122,17 +123,18 @@ export function TransactionTable({ refreshTrigger, user }) {
                 </span>
               </TableCell>
               <TableCell>
-                <div className="flex gap-2 ">
-                  <span>
-                    {new Date(transaction.date).toLocaleDateString("en-SG", {
-                      day: "numeric",
-                      month: "short",
-                      year: "numeric",
-                    })}
-                  </span>
+                <div className="flex">
+                  {new Date(transaction.date).toLocaleDateString("en-SG", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  })}
 
-                  <span>{transaction.time}</span>
+                  {/* <span>{transaction.time}</span> */}
                 </div>
+              </TableCell>
+              <TableCell>
+                <div className="flex">{transaction.time}</div>
               </TableCell>
               <TableCell>
                 <img
