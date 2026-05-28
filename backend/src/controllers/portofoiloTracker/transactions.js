@@ -13,7 +13,7 @@ export const seedTranactions = async (req, res) => {
     const seed = [
       {
         _id: "6a0b0f79e03e3f8a0c7caea6",
-        transType: "Buy",
+        transType: "buy",
         coinType: "bitcoin",
         quantity: 0.1,
         fee: 2,
@@ -24,7 +24,7 @@ export const seedTranactions = async (req, res) => {
       },
       {
         _id: "6a0b0f79e03e3f8a0c7caea7",
-        transType: "Sell",
+        transType: "sell",
         coinType: "bitcoin",
         quantity: 0.05,
         fee: 2,
@@ -36,7 +36,7 @@ export const seedTranactions = async (req, res) => {
       },
       {
         _id: "6a0b0f79e03e3f8a0c7caea8",
-        transType: "Buy",
+        transType: "buy",
         coinType: "ethereum",
         quantity: 0.1,
         fee: 2,
@@ -48,7 +48,7 @@ export const seedTranactions = async (req, res) => {
       },
       {
         _id: "6a0b0f79e03e3f8a0c7caea9",
-        transType: "Buy",
+        transType: "buy",
         coinType: "binancecoin",
         quantity: 2,
         fee: 2.5,
@@ -60,7 +60,7 @@ export const seedTranactions = async (req, res) => {
       },
       {
         _id: "6a0b0f79e03e3f8a0c7caeaa",
-        transType: "Sell",
+        transType: "sell",
         coinType: "binancecoin",
         quantity: 0.4,
         fee: 2.5,
@@ -72,7 +72,7 @@ export const seedTranactions = async (req, res) => {
       },
       {
         _id: "6a0b0f79e03e3f8a0c7caeab",
-        transType: "Buy",
+        transType: "buy",
         coinType: "solana",
         quantity: 2,
         fee: 2.5,
@@ -84,7 +84,7 @@ export const seedTranactions = async (req, res) => {
       },
       {
         _id: "6a0b0f79e03e3f8a0c7caeab",
-        transType: "Buy",
+        transType: "buy",
         coinType: "solana",
         quantity: 3,
         fee: 2.5,

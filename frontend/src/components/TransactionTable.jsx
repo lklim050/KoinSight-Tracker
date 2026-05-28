@@ -64,7 +64,8 @@ export function TransactionTable({ refreshTrigger, user }) {
         setLoading(true);
         setError(null);
         const data = await getTransactions();
-        setTransactions(data.transactions);
+        console.log(`Transactions data:`, data);
+        setTransactions(data.data);
       } catch (err) {
         setError("Failed to load transactions");
       } finally {
