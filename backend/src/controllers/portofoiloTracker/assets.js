@@ -73,17 +73,28 @@ export const getPortfolio = async (req, res) => {
 
     let totalPortfolioCost = 0;
     let totalPortfolioValue = 0;
+    let totalPriceChange24h = 0;
+    let unrealisedEarning = 0;
+    let realisedEarning = 0;
 
     assets.forEach((asset) => {
-      totalPortfolioValue += asset.totalValue;
-      // Cost basis: holdings * avgBuyPrice
-      totalPortfolioCost += asset.holdings * asset.avgBuyPrice;
+      totalPortfolioValue += asset.totalValue; // total value
+      totalPortfolioCost += asset.holdings * asset.avgBuyPrice; // cost basis
+      totalPriceChange24h +=
+        asset.holdings * asset.currentPrice -
+        (asset.holdings * asset.currentPrice) /
+          (1 + asset.price_change_percentage_24h / 100);
+      unrealisedEarning +=
+        (asset.currentPrice - asset.avgBuyPrice) * asset.holdings;
+      realisedEarning += asset.assetEarning;
     });
 
     const allocation = assets.map((asset) => {
       const assetCostBasis = asset.avgBuyPrice * asset.holdings;
       const percent =
-        totalPortfolioCost > 0 ? assetCostBasis / totalPortfolioCost : 0;
+        totalPortfolioCost > 0
+          ? (assetCostBasis / totalPortfolioCost) * 100
+          : 0;
       return {
         _id: asset._id,
         percent: Number(percent),
@@ -93,14 +104,22 @@ export const getPortfolio = async (req, res) => {
     const totalProfitLoss = totalPortfolioValue - totalPortfolioCost;
     const profitLossPercentage =
       totalPortfolioCost > 0 ? (totalProfitLoss / totalPortfolioCost) * 100 : 0;
+    const totalPriceChange24hPercent =
+      (totalPriceChange24h / (totalPriceChange24h + totalPortfolioValue)) * 100;
+    const allTimeProfitLoss = unrealisedEarning + realisedEarning;
+    const allTimeProfitLossPercent = allTimeProfitLoss / totalPortfolioCost;
 
     res.json({
       status: "ok",
       data: {
         totalPortfolioValue: totalPortfolioValue,
         totalPortfolioCost: totalPortfolioCost,
+        totalPriceChange24h: totalPriceChange24h,
+        totalPriceChange24hPercent: totalPriceChange24hPercent,
         totalProfitLoss: totalProfitLoss,
         profitLossPercentage: profitLossPercentage,
+        allTimeProfitLoss: allTimeProfitLoss,
+        allTimeProfitLossPercent: allTimeProfitLossPercent,
         allocation,
       },
     });

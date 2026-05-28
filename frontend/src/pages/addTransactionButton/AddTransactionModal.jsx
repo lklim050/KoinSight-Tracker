@@ -13,6 +13,7 @@ function AddTransactionModal({
   const [fee, setFee] = useState("");
   const [notes, setNotes] = useState("");
   const [transferType, setTransferType] = useState("Transfer In");
+  const [isTransfer, setIsTransfer] = useState(false);
   const [date, setDate] = useState(() => {
     const now = new Date();
     now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
@@ -33,7 +34,7 @@ function AddTransactionModal({
           : transactionType,
       coinType: selectedCoin._id,
       quantity,
-      pricePerCoin: price,
+      pricePerCoin: isTransfer ? 0 : price,
       fee,
       notes,
       date: transactionDate,
@@ -73,7 +74,15 @@ function AddTransactionModal({
           {["buy", "sell", "transfer"].map((type) => (
             <button
               key={type}
-              onClick={() => setTransactionType(type)}
+              onClick={() => {
+                if (type === "transfer") {
+                  setIsTransfer(true);
+                  setPrice(0); // 👈 Force your input state to 0 immediately for the UI!
+                } else {
+                  setIsTransfer(false);
+                }
+                setTransactionType(type);
+              }}
               className={`flex-1 py-0.5 rounded-xl font-semibold capitalize transition cursor-pointer  
                 ${
                   transactionType === type
@@ -150,7 +159,8 @@ function AddTransactionModal({
               min="0"
               step="any"
               placeholder="0.00"
-              value={price}
+              value={isTransfer ? 0 : price}
+              disabled={isTransfer}
               onChange={(e) => setPrice(e.target.value)}
               className="w-full bg-[#2A2E45] text-white p-3 rounded-2xl outline-none "
             />

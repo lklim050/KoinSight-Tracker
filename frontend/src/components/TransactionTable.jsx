@@ -100,6 +100,7 @@ export function TransactionTable({ refreshTrigger, user }) {
           <TableRow>
             <TableHeadCell>Type</TableHeadCell>
             <TableHeadCell>Date</TableHeadCell>
+            <TableHeadCell>Time</TableHeadCell>
             <TableHeadCell>Assets</TableHeadCell>
             <TableHeadCell>Price</TableHeadCell>
             <TableHeadCell>Amount</TableHeadCell>
@@ -122,16 +123,14 @@ export function TransactionTable({ refreshTrigger, user }) {
                 </span>
               </TableCell>
               <TableCell>
-                <div className="flex gap-2 ">
-                  <span>
-                    {new Date(transaction.date).toLocaleDateString("en-SG", {
-                      day: "numeric",
-                      month: "short",
-                      year: "numeric",
-                    })}
-                  </span>
+                <div className="flex">
+                  {new Date(transaction.date).toLocaleDateString("en-SG", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  })}
 
-                  <span>{transaction.time}</span>
+                  {/* <span>{transaction.time}</span> */}
                 </div>
               </TableCell>
               <TableCell>
@@ -142,7 +141,9 @@ export function TransactionTable({ refreshTrigger, user }) {
                     className="w-6 h-6"
                   />
                   <span>{transaction.coinType?.name || "Unknown"}</span>
-                  <span className="text-gray-400 text-sm">{transaction.coinType?.symbol?.toUpperCase() || ""}</span>
+                  <span className="text-gray-400 text-sm">
+                    {transaction.coinType?.symbol?.toUpperCase() || ""}
+                  </span>
                 </div>
               </TableCell>
               <TableCell>{transaction.pricePerCoin}</TableCell>
