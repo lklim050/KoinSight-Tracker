@@ -53,6 +53,21 @@ export function AssetsTable({ user, refreshTrigger }) {
     );
   }
 
+  const assetConfig = {
+    positive: {
+      color: "text-green-600",
+      sign: "▲",
+    },
+    negative: {
+      color: "text-red-600",
+      sign: "▼",
+    },
+    neutral: {
+      color: "text-grey-400",
+      sign: "-",
+    },
+  };
+
   return (
     <div className="overflow-x-auto">
       <Table className="w-full">
@@ -60,6 +75,7 @@ export function AssetsTable({ user, refreshTrigger }) {
           <TableRow>
             <TableHeadCell>Name</TableHeadCell>
             <TableHeadCell>Price</TableHeadCell>
+            <TableHeadCell>1h%</TableHeadCell>
             <TableHeadCell>24h%</TableHeadCell>
             <TableHeadCell>7d%</TableHeadCell>
             <TableHeadCell>Holdings</TableHeadCell>
@@ -68,33 +84,79 @@ export function AssetsTable({ user, refreshTrigger }) {
           </TableRow>
         </TableHead>
         <TableBody className="divide-y">
-          {assets.map((asset, idx) => (
-            <TableRow
-              key={`${idx}-${asset._id}`}
-              className="bg-white dark:border-gray-700 dark:bg-gray-800"
-            >
-              <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                <img
-                  src={asset.image}
-                  alt={asset.name}
-                  style={{ width: "24px", height: "24px" }}
-                />
-                {asset.name}, {asset.symbol}
-              </TableCell>
-              <TableCell>${asset.currentPrice.toLocaleString()}</TableCell>
-              <TableCell>--</TableCell>
-              <TableCell>--</TableCell>
-              <TableCell>{asset.holdings}</TableCell>
-              <TableCell>${asset.avgBuyPrice.toLocaleString()}</TableCell>
-              <TableCell
-                className={
-                  asset.profitLoss >= 0 ? "text-green-600" : "text-red-600"
-                }
+          {assets.map((asset, idx) => {
+            const percent_1h = asset.price_change_percentage_1h;
+            const percent_24h = asset.price_change_percentage_24h;
+            const percent_7d = asset.price_change_percentage_7d;
+            const status_1h = !percent_1h
+              ? "neutral"
+              : percent_1h > 0
+                ? "positive"
+                : "negative";
+            const status_24h = !percent_24h
+              ? "neutral"
+              : percent_24h > 0
+                ? "positive"
+                : "negative";
+            const status_7d = !percent_7d
+              ? "neutral"
+              : percent_7d > 0
+                ? "positive"
+                : "negative";
+            const status_profitLoss = !asset.profitLoss
+              ? "neutral"
+              : asset.profitLoss > 0
+                ? "positive"
+                : "negative";
+
+            return (
+              <TableRow
+                key={`${idx}-${asset._id}`}
+                className="bg-white dark:border-gray-700 dark:bg-gray-800"
               >
-                ${asset.profitLoss.toLocaleString()}
-              </TableCell>
-            </TableRow>
-          ))}
+                <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                  <img
+                    src={asset.image}
+                    alt={asset.name}
+                    style={{ width: "24px", height: "24px" }}
+                  />
+                  {asset.name}, {asset.symbol?.toUpperCase()}
+                </TableCell>
+                <TableCell className="font-semibold">
+                  ${asset.currentPrice.toLocaleString()}
+                </TableCell>
+                <TableCell
+                  className={`${assetConfig[status_1h]?.color} font-semibold`}
+                >
+                  {assetConfig[status_1h]?.sign}{" "}
+                  {percent_1h ? percent_1h.toFixed(2) : "--"}
+                </TableCell>
+                <TableCell
+                  className={`${assetConfig[status_24h]?.color} font-semibold`}
+                >
+                  {assetConfig[status_24h]?.sign}{" "}
+                  {percent_24h ? percent_24h.toFixed(2) : "--"}
+                </TableCell>
+                <TableCell
+                  className={`${assetConfig[status_7d]?.color} font-semibold`}
+                >
+                  {assetConfig[status_7d]?.sign}{" "}
+                  {percent_7d ? percent_7d.toFixed(2) : "--"}
+                </TableCell>
+                <TableCell className="font-semibold">
+                  {asset.holdings}
+                </TableCell>
+                <TableCell className="font-semibold">
+                  ${asset.avgBuyPrice.toLocaleString()}
+                </TableCell>
+                <TableCell
+                  className={`${assetConfig[status_profitLoss]?.color} font-semibold`}
+                >
+                  ${asset.profitLoss.toLocaleString()}
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </div>
