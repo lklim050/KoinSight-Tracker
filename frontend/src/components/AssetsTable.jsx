@@ -55,15 +55,18 @@ export function AssetsTable({ user, refreshTrigger }) {
   const assetConfig = {
     positive: {
       color: "text-green-600",
-      sign: "▲",
+      icon: "▲",
+      sign: "+",
     },
     negative: {
       color: "text-red-600",
-      sign: "▼",
+      icon: "▼",
+      sign: "-",
     },
     neutral: {
       color: "text-grey-400",
-      sign: "-",
+      icon: "-",
+      sign: " ",
     },
   };
 
@@ -127,20 +130,20 @@ export function AssetsTable({ user, refreshTrigger }) {
                 <TableCell
                   className={`${assetConfig[status_1h]?.color} font-semibold`}
                 >
-                  {assetConfig[status_1h]?.sign}{" "}
-                  {percent_1h ? percent_1h.toFixed(2) : "--"}
+                  {assetConfig[status_1h]?.icon}{" "}
+                  {percent_1h ? percent_1h.toFixed(2) : "--"}%
                 </TableCell>
                 <TableCell
                   className={`${assetConfig[status_24h]?.color} font-semibold`}
                 >
-                  {assetConfig[status_24h]?.sign}{" "}
-                  {percent_24h ? percent_24h.toFixed(2) : "--"}
+                  {assetConfig[status_24h]?.icon}{" "}
+                  {percent_24h ? percent_24h.toFixed(2) : "--"}%
                 </TableCell>
                 <TableCell
                   className={`${assetConfig[status_7d]?.color} font-semibold`}
                 >
-                  {assetConfig[status_7d]?.sign}{" "}
-                  {percent_7d ? percent_7d.toFixed(2) : "--"}
+                  {assetConfig[status_7d]?.icon}{" "}
+                  {percent_7d ? percent_7d.toFixed(2) : "--"}%
                 </TableCell>
                 <TableCell className="font-semibold">
                   {asset.holdings}
@@ -151,7 +154,12 @@ export function AssetsTable({ user, refreshTrigger }) {
                 <TableCell
                   className={`${assetConfig[status_profitLoss]?.color} font-semibold`}
                 >
-                  ${asset.profitLoss.toLocaleString()}
+                  {asset.profitLoss.toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
                 </TableCell>
               </TableRow>
             );

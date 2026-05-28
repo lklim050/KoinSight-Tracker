@@ -107,6 +107,7 @@ export const getPortfolio = async (req, res) => {
     const totalPriceChange24hPercent =
       (totalPriceChange24h / (totalPriceChange24h + totalPortfolioValue)) * 100;
     const allTimeProfitLoss = unrealisedEarning + realisedEarning;
+    const allTimeProfitLossPercent = allTimeProfitLoss / totalPortfolioCost;
 
     res.json({
       status: "ok",
@@ -118,6 +119,7 @@ export const getPortfolio = async (req, res) => {
         totalProfitLoss: totalProfitLoss,
         profitLossPercentage: profitLossPercentage,
         allTimeProfitLoss: allTimeProfitLoss,
+        allTimeProfitLossPercent: allTimeProfitLossPercent,
         allocation,
       },
     });
