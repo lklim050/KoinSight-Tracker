@@ -14,6 +14,7 @@ export const calculateUserAssets = (user) => {
         totalQuantityBought: 0,
         totalQuantitySold: 0,
         totalBuyCost: 0,
+        totalSellPrice: 0,
       };
     }
 
@@ -25,6 +26,7 @@ export const calculateUserAssets = (user) => {
       assetsMap[coinId].totalBuyCost += principal + fee;
     } else if (transaction.transType === "sell") {
       assetsMap[coinId].totalQuantitySold += transaction.quantity;
+      assetsMap[coinId].totalSellPrice += principal - fee;
     } else if (transaction.transType === "transfer_in") {
       assetsMap[coinId].totalQuantityBought += transaction.quantity;
     } else if (transaction.transType === "transfer_out") {
@@ -43,6 +45,8 @@ export const calculateUserAssets = (user) => {
       const currentCostBasis = currentHoldings * avgBuyPrice;
       const currentPrice = asset.coin.current_price;
       const currentTotalValue = currentHoldings * currentPrice;
+      const assetEarning =
+        asset.totalSellPrice - asset.totalQuantitySold * avgBuyPrice; // this is realised earning to be accounted for all time profit
 
       return {
         _id: asset.coin._id,
@@ -62,6 +66,7 @@ export const calculateUserAssets = (user) => {
           asset.coin.price_change_percentage_24h_in_currency,
         price_change_percentage_7d:
           asset.coin.price_change_percentage_7d_in_currency,
+        assetEarning: assetEarning,
       };
     })
     .filter((asset) => asset.holdings > 0);

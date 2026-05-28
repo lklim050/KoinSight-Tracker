@@ -74,6 +74,8 @@ export const getPortfolio = async (req, res) => {
     let totalPortfolioCost = 0;
     let totalPortfolioValue = 0;
     let totalPriceChange24h = 0;
+    let unrealisedEarning = 0;
+    let realisedEarning = 0;
 
     assets.forEach((asset) => {
       totalPortfolioValue += asset.totalValue; // total value
@@ -82,6 +84,9 @@ export const getPortfolio = async (req, res) => {
         asset.holdings * asset.currentPrice -
         (asset.holdings * asset.currentPrice) /
           (1 + asset.price_change_percentage_24h / 100);
+      unrealisedEarning +=
+        (asset.currentPrice - asset.avgBuyPrice) * asset.holdings;
+      realisedEarning += asset.assetEarning;
     });
 
     const allocation = assets.map((asset) => {
@@ -101,6 +106,7 @@ export const getPortfolio = async (req, res) => {
       totalPortfolioCost > 0 ? (totalProfitLoss / totalPortfolioCost) * 100 : 0;
     const totalPriceChange24hPercent =
       (totalPriceChange24h / (totalPriceChange24h + totalPortfolioValue)) * 100;
+    const allTimeProfitLoss = unrealisedEarning + realisedEarning;
 
     res.json({
       status: "ok",
@@ -111,6 +117,7 @@ export const getPortfolio = async (req, res) => {
         totalPriceChange24hPercent: totalPriceChange24hPercent,
         totalProfitLoss: totalProfitLoss,
         profitLossPercentage: profitLossPercentage,
+        allTimeProfitLoss: allTimeProfitLoss,
         allocation,
       },
     });
