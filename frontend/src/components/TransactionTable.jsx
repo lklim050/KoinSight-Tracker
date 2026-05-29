@@ -36,12 +36,12 @@ export function TransactionTable({ refreshTrigger, user }) {
   const transactionConfig = {
     buy: {
       label: "Buy",
-      color: "text-green-600",
+      color: "text-green-400",
       sign: "+",
     },
     sell: {
       label: "Sell",
-      color: "text-red-600",
+      color: "text-red-400",
       sign: "-",
     },
     transfer_in: {

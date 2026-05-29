@@ -55,12 +55,12 @@ export function AssetsTable({ user, refreshTrigger, getAssetToPortfolio }) {
 
   const assetConfig = {
     positive: {
-      color: "text-green-600",
+      color: "text-green-400",
       icon: "▲",
       sign: "+",
     },
     negative: {
-      color: "text-red-600",
+      color: "text-red-400",
       icon: "▼",
       sign: "-",
     },
