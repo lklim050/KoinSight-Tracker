@@ -1,13 +1,4 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeadCell,
-  TableRow,
-} from "flowbite-react";
 import { Pencil, Trash2 } from "lucide-react";
-
 import { useState, useEffect } from "react";
 import { getTransactions } from "../services/transactionApi.js";
 
@@ -15,24 +6,7 @@ export function TransactionTable({ refreshTrigger, user }) {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const formatTransactionType = (type) => {
-    switch (type) {
-      case "buy":
-        return "Buy";
 
-      case "sell":
-        return "Sell";
-
-      case "transfer_in":
-        return "Transfer In";
-
-      case "transfer_out":
-        return "Transfer Out";
-
-      default:
-        return type;
-    }
-  };
   const transactionConfig = {
     buy: {
       label: "Buy",
@@ -65,7 +39,7 @@ export function TransactionTable({ refreshTrigger, user }) {
         setLoading(true);
         setError(null);
         const data = await getTransactions();
-        setTransactions(data.data || []); //empty array fallback because backend returns {transactions: null} when user has no transactions
+        setTransactions(data.data || []);
       } catch (err) {
         setError("Failed to load transactions");
       } finally {
@@ -93,47 +67,39 @@ export function TransactionTable({ refreshTrigger, user }) {
   }
 
   return (
-    <div className="overflow-x-auto">
-      {/* {JSON.stringify(transactions)} */}
-      <Table className="w-full">
-        <TableHead>
-          <TableRow>
-            <TableHeadCell>Type</TableHeadCell>
-            <TableHeadCell>Date</TableHeadCell>
-            <TableHeadCell>Time</TableHeadCell>
-            <TableHeadCell>Assets</TableHeadCell>
-            <TableHeadCell>Price</TableHeadCell>
-            <TableHeadCell>Amount</TableHeadCell>
-            <TableHeadCell>Fees</TableHeadCell>
-            <TableHeadCell>Notes</TableHeadCell>
-            <TableHeadCell className="text-right">Actions</TableHeadCell>
-          </TableRow>
-        </TableHead>
-        <TableBody className="divide-y">
+    <div className="overflow-x-auto rounded-3xl bg-white/5 backdrop-blur-lg border border-white/10">
+      <table className="w-full border-collapse">
+        <thead className="bg-white/10 backdrop-blur-xl">
+          <tr>
+            <th className="border-b border-white/10 p-4 text-left text-white text-sm font-semibold">Type</th>
+            <th className="border-b border-white/10 p-4 text-left text-white text-sm font-semibold">Date</th>
+            <th className="border-b border-white/10 p-4 text-left text-white text-sm font-semibold">Asset</th>
+            <th className="border-b border-white/10 p-4 text-left text-white text-sm font-semibold">Price</th>
+            <th className="border-b border-white/10 p-4 text-left text-white text-sm font-semibold">Amount</th>
+            <th className="border-b border-white/10 p-4 text-left text-white text-sm font-semibold">Fees</th>
+            <th className="border-b border-white/10 p-4 text-left text-white text-sm font-semibold">Notes</th>
+            <th className="border-b border-white/10 p-4 text-right text-white text-sm font-semibold">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
           {transactions.map((transaction, idx) => (
-            <TableRow
+            <tr
               key={`${idx}-${transaction._id}`}
-              className="bg-white dark:border-gray-700 dark:bg-gray-800"
+              className="border-b border-white/5 hover:bg-white/5 transition"
             >
-              <TableCell className="whitespace-nowrap font-medium">
-                <span
-                  className={transactionConfig[transaction.transType]?.color}
-                >
+              <td className="p-4 text-sm font-medium whitespace-nowrap">
+                <span className={transactionConfig[transaction.transType]?.color}>
                   {transactionConfig[transaction.transType]?.label}
                 </span>
-              </TableCell>
-              <TableCell>
-                <div className="flex">
-                  {new Date(transaction.date).toLocaleDateString("en-SG", {
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric",
-                  })}
-
-                  {/* <span>{transaction.time}</span> */}
-                </div>
-              </TableCell>
-              <TableCell>
+              </td>
+              <td className="p-4 text-white text-sm">
+                {new Date(transaction.date).toLocaleDateString("en-SG", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                })}
+              </td>
+              <td className="p-4 text-white text-sm">
                 <div className="flex items-center gap-2">
                   <img
                     src={transaction.coinType?.image || ""}
@@ -141,109 +107,40 @@ export function TransactionTable({ refreshTrigger, user }) {
                     className="w-6 h-6"
                   />
                   <span>{transaction.coinType?.name || "Unknown"}</span>
-                  <span className="text-gray-400 text-sm">
+                  <span className="text-gray-400 text-xs">
                     {transaction.coinType?.symbol?.toUpperCase() || ""}
                   </span>
                 </div>
-              </TableCell>
-              <TableCell>{transaction.pricePerCoin}</TableCell>
-              <TableCell>
-                <p
-                  className={`${transactionConfig[transaction.transType]?.color} font-semibold`}
-                >
+              </td>
+              <td className="p-4 text-white text-sm">
+                ${transaction.pricePerCoin}
+              </td>
+              <td className="p-4 text-sm">
+                <p className={`${transactionConfig[transaction.transType]?.color} font-semibold`}>
                   {transactionConfig[transaction.transType]?.sign}
                   {transaction.quantity}{" "}
                   {transaction.coinType?.symbol?.toUpperCase()}
                 </p>
-
-                <p className="text-sm text-gray-400 ">
-                  $
-                  {(
-                    transaction.quantity * transaction.pricePerCoin
-                  ).toLocaleString()}
+                <p className="text-xs text-gray-400">
+                  ${(transaction.quantity * transaction.pricePerCoin).toLocaleString()}
                 </p>
-              </TableCell>
-              <TableCell>${transaction.fee}</TableCell>
-              <TableCell>{transaction.notes}</TableCell>
-              <TableCell className="text-right">
+              </td>
+              <td className="p-4 text-white text-sm">${transaction.fee}</td>
+              <td className="p-4 text-gray-400 text-sm">{transaction.notes}</td>
+              <td className="p-4 text-right">
                 <div className="flex justify-end gap-3">
-                  <button
-                    // onClick={""}
-                    className="text-gray-400 hover:text-blue-400 cursor-pointer transition"
-                  >
+                  <button className="text-gray-400 hover:text-blue-400 cursor-pointer transition">
                     <Pencil size={16} />
                   </button>
-                  <button
-                    // onClick={""}
-                    className="text-gray-400 hover:text-red-400 cursor-pointer transition"
-                  >
+                  <button className="text-gray-400 hover:text-red-400 cursor-pointer transition">
                     <Trash2 size={16} />
                   </button>
                 </div>
-              </TableCell>
-            </TableRow>
+              </td>
+            </tr>
           ))}
-        </TableBody>
-        {/* <TableBody className="divide-y">
-          <TableRow className="bg-white dark:border-gray-700 dark:bg-gray-800">
-            <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-              Bitcoin
-            </TableCell>
-            <TableCell>$70,000(mock)</TableCell>
-            <TableCell>12%</TableCell>
-            <TableCell>3%</TableCell>
-            <TableCell>$2,234.21</TableCell>
-            <TableCell>$40,0000</TableCell>
-            <TableCell>$5,000(green)</TableCell>
-            <TableCell className="text-right">
-              <a
-                href="#"
-                className="font-medium text-primary-600 hover:underline dark:text-primary-500"
-              >
-                Edit
-              </a>
-            </TableCell>
-          </TableRow>
-          <TableRow className="bg-white dark:border-gray-700 dark:bg-gray-800">
-            <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-              Ethereum
-            </TableCell>
-            <TableCell>$70,000(mock)</TableCell>
-            <TableCell>12%</TableCell>
-            <TableCell>3%</TableCell>
-            <TableCell>$2,234.21</TableCell>
-            <TableCell>$40,000</TableCell>
-            <TableCell>$5,000(green)</TableCell>
-            <TableCell className="text-right">
-              <a
-                href="#"
-                className="font-medium text-primary-600 hover:underline dark:text-primary-500"
-              >
-                Edit
-              </a>
-            </TableCell>
-          </TableRow>
-          <TableRow className="bg-white dark:border-gray-700 dark:bg-gray-800">
-            <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-              Dogecoin
-            </TableCell>
-            <TableCell>$70,000(mock)</TableCell>
-            <TableCell>12%</TableCell>
-            <TableCell>3%</TableCell>
-            <TableCell>$2,234.21</TableCell>
-            <TableCell>$40,000</TableCell>
-            <TableCell>$5,000(green)</TableCell>
-            <TableCell className="text-right">
-              <a
-                href="#"
-                className="font-medium text-primary-600 hover:underline dark:text-primary-500"
-              >
-                Edit
-              </a>
-            </TableCell>
-          </TableRow>
-        </TableBody> */}
-      </Table>
+        </tbody>
+      </table>
     </div>
   );
 }

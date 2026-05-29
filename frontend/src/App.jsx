@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 import PortfolioPage from "./pages/PortfolioPage";
 import { Navbar } from "./components/Navbar.jsx";
 import AuthModal from "./pages/AuthModal.jsx";
+import MagicRings from "./components/MagicRings.jsx";
+import Lenis from "lenis";
+import "lenis/dist/lenis.css";
 
 function App() {
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -12,6 +15,11 @@ function App() {
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
   });
+
+  useEffect(() => {
+    const lenis = new Lenis({ autoRaf: true });
+    return () => lenis.destroy();
+  }, []);
 
   // Update localStorage whenever user state changes
   const handleLogin = (userData) => {
@@ -33,6 +41,17 @@ function App() {
         user={user}
         onLogout={handleLogout}
       />
+      {/* Animated background effect from Reactbits*/}
+      <div className="fixed inset-0 -z-10 bg-slate-950 pointer-events-none">
+        <MagicRings
+          color="#66DE7D"
+          colorTwo="#70f38a"
+          ringCount={8}
+          opacity={0.2}
+          followMouse={false}
+          clickBurst={false}
+        />
+      </div>
       <PortfolioPage user={user} />
       <AuthModal
         showAuthModal={showAuthModal}
