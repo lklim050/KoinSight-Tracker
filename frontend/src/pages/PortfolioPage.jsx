@@ -18,7 +18,6 @@ import {
   Cell,
   Legend,
 } from "recharts";
-import { getMyPortfolio } from "../services/assetApi.js";
 import DeleteTransactionModal from "../components/DeleteTransactionModal.jsx";
 
 import DecryptedText from "../components/DecryptedText.jsx";
@@ -195,7 +194,6 @@ export default function PortfolioPage({ user }) {
             <div
               className={`${portfolioConfig[status_priceChange24h]?.color} font-semibold text-sm flex items-center gap-1`}
             >
-              {JSON.stringify(allocationData)}
               {portfolio.totalPriceChange24h.toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD",
