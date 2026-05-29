@@ -33,3 +33,20 @@ export const getMyPortfolio = async () => {
     throw error;
   }
 };
+
+export const getMyChart = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${BASE_URL}/assets/chart`, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+    if (!response.ok) throw new Error("Failed to fetch assets");
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching assets:", error);
+    throw error;
+  }
+};
