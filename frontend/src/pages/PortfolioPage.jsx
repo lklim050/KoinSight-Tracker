@@ -5,6 +5,7 @@ import SelectCoinModal from "./addTransactionButton/SelectCoinModal.jsx";
 import { Tabs, Button, ButtonGroup } from "flowbite-react";
 import AddTransactionModal from "./addTransactionButton/AddTransactionModal.jsx";
 import { getMyPortfolio } from "../services/assetApi.js";
+import DeleteTransactionModal from "../components/DeleteTransactionModal.jsx";
 
 import DecryptedText from "../components/DecryptedText.jsx";
 
@@ -12,11 +13,14 @@ import DecryptedText from "../components/DecryptedText.jsx";
 export default function PortfolioPage({ user }) {
   const [showCoinModal, setShowCoinModal] = useState(false);
   const [showTransactionModal, setShowTransactionModal] = useState(false);
+  const [editingTransaction, setEditingTransaction] = useState(null);
   const [chartType, setChartType] = useState("line");
   const [transactionRefreshKey, setTransactionRefreshKey] = useState(0);
   const [assetRefreshKey, setAssetRefreshKey] = useState(0);
   const [portfolioRefreshKey, setPortfolioRefreshKey] = useState(0);
   const [selectedCoin, setSelectedCoin] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deletingTransaction, setDeletingTransaction] = useState(null);
 
   const [asset, setAsset] = useState([]);
   const [portfolio, setPortfolio] = useState(null);
@@ -153,8 +157,12 @@ export default function PortfolioPage({ user }) {
           </div>
           <div className="flex gap-2">
             <Button
-              onClick={() => setShowCoinModal(true)}
-              className="bg-blue-600"
+              onClick={() => {
+                setEditingTransaction(null);
+                setSelectedCoin(null);
+                setShowCoinModal(true);
+              }}
+              className="bg-blue-600 cursor-pointer"
             >
               + Add Transaction
             </Button>
@@ -169,11 +177,24 @@ export default function PortfolioPage({ user }) {
             {showTransactionModal && (
               <AddTransactionModal
                 selectedCoin={selectedCoin}
+                editingTransaction={editingTransaction}
                 setShowTransactionModal={setShowTransactionModal}
+                setEditingTransaction={setEditingTransaction}
                 onSuccess={() => {
                   setTransactionRefreshKey((currentKey) => currentKey + 1);
                   setAssetRefreshKey((currentKey) => currentKey + 1);
                   setPortfolioRefreshKey((currentKey) => currentKey + 1);
+                }}
+              />
+            )}
+            {showDeleteModal && (
+              <DeleteTransactionModal
+                deletingTransaction={deletingTransaction}
+                setShowDeleteModal={setShowDeleteModal}
+                onSuccess={() => {
+                  setTransactionRefreshKey((k) => k + 1);
+                  setAssetRefreshKey((k) => k + 1);
+                  setPortfolioRefreshKey((k) => k + 1);
                 }}
               />
             )}
@@ -314,6 +335,10 @@ export default function PortfolioPage({ user }) {
           <TransactionTable
             user={user}
             refreshTrigger={transactionRefreshKey}
+            setEditingTransaction={setEditingTransaction}
+            setShowTransactionModal={setShowTransactionModal}
+            setDeletingTransaction={setDeletingTransaction}
+            setShowDeleteModal={setShowDeleteModal}
           />
         </Tabs.Item>
       </Tabs>

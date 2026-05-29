@@ -193,8 +193,7 @@ export const updateTransaction = async (req, res) => {
     if (!user) return res.status(404).json({ msg: "user not found" });
     const updated = user.transactions.id(req.params.transId);
     if (!updated) return res.status(404).json({ msg: "entry not found" });
-    if ("transType" in req.body) updated.transType = req.body.transType;
-    if ("coinType" in req.body) updated.coinType = req.body.coinType;
+
     if ("quantity" in req.body) updated.quantity = req.body.quantity;
     if ("pricePerCoin" in req.body)
       updated.pricePerCoin = req.body.pricePerCoin;

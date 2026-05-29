@@ -42,3 +42,35 @@ export const getTransactions = async () => {
     throw error;
   }
 };
+
+export const updateTransaction = async (transactionId, transactionData) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(`${BASE_URL}/transactions/${transactionId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(transactionData),
+    });
+
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const deleteTransaction = async (transactionId) => {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(`${BASE_URL}/transactions/${transactionId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return await response.json();
+};

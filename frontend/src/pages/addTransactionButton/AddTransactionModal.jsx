@@ -1,15 +1,20 @@
-import { useState } from "react";
-import { createTransaction } from "../../services/transactionApi.js";
+import { useEffect, useState } from "react";
+import {
+  createTransaction,
+  updateTransaction,
+} from "../../services/transactionApi.js";
 
 function AddTransactionModal({
   selectedCoin,
+  editingTransaction,
+  setEditingTransaction,
   setShowTransactionModal,
   onSuccess,
 }) {
   const [error, setError] = useState("");
   const [transactionType, setTransactionType] = useState("buy");
   const [quantity, setQuantity] = useState("");
-  const [price, setPrice] = useState(selectedCoin.current_price);
+  const [price, setPrice] = useState(selectedCoin?.current_price);
   const [fee, setFee] = useState("");
   const [notes, setNotes] = useState("");
   const [transferType, setTransferType] = useState("Transfer In");
@@ -19,6 +24,23 @@ function AddTransactionModal({
     now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
     return now.toISOString().slice(0, 16);
   });
+  const coinData = editingTransaction
+    ? editingTransaction.coinType
+    : selectedCoin;
+  useEffect(() => {
+    if (!editingTransaction) return;
+
+    setQuantity(editingTransaction.quantity);
+    setPrice(editingTransaction.pricePerCoin);
+    setFee(editingTransaction.fee || "");
+    setNotes(editingTransaction.notes || "");
+
+    const datePart = editingTransaction.date.slice(0, 10);
+
+    const formattedDate = `${datePart}T${editingTransaction.time}`;
+
+    setDate(formattedDate);
+  }, [editingTransaction]);
 
   const totalSpent =
     (Number(quantity) || 0) * (Number(price) || 0) + (Number(fee) || 0);
@@ -33,7 +55,9 @@ function AddTransactionModal({
             ? "transfer_in"
             : "transfer_out"
           : transactionType,
-      coinType: selectedCoin._id,
+      coinType: editingTransaction
+        ? editingTransaction.coinType._id
+        : selectedCoin._id,
       quantity,
       pricePerCoin: isTransfer ? 0 : price,
       fee,
@@ -42,7 +66,13 @@ function AddTransactionModal({
       time: transactionTime,
     };
 
-    const data = await createTransaction(newTransaction);
+    let data;
+
+    if (editingTransaction) {
+      data = await updateTransaction(editingTransaction._id, newTransaction);
+    } else {
+      data = await createTransaction(newTransaction);
+    }
     if (data.success === false) {
       setError(data.message);
       return;
@@ -60,9 +90,14 @@ function AddTransactionModal({
       <div className="bg-white/10 backdrop-blur-xl border border-white/20 w-full max-w-2xl rounded-3xl p-6 shadow-2xl">
         {/* HEADER */}
         <div className="flex justify-between items-center mb-5">
-          <p className="text-white text-2xl font-bold">Add Transaction</p>
+          <p className="text-white text-2xl font-bold">
+            {editingTransaction ? "Edit Transaction" : "Add Transaction"}
+          </p>
           <button
-            onClick={() => setShowTransactionModal(false)}
+            onClick={() => {
+              setEditingTransaction(null);
+              setShowTransactionModal(false);
+            }}
             className="text-gray-400 hover:text-white text-4xl cursor-pointer transition"
           >
             ×
@@ -70,41 +105,39 @@ function AddTransactionModal({
         </div>
 
         {/* BUY / SELL / TRANSFER TOGGLE */}
-        <div className="bg-white/10 border border-white/10 rounded-2xl p-0.5 flex mb-4">
-          {["buy", "sell", "transfer"].map((type) => (
-            <button
-              key={type}
-              onClick={() => {
-                if (type === "transfer") {
-                  setIsTransfer(true);
-                  setPrice(0);
-                } else {
-                  setIsTransfer(false);
-                }
-                setTransactionType(type);
-              }}
-              className={`flex-1 py-1.5 rounded-xl font-semibold capitalize transition cursor-pointer text-sm
+        {!editingTransaction && (
+          <div className="bg-white/10 border border-white/10 rounded-2xl p-0.5 flex mb-4">
+            {["buy", "sell", "transfer"].map((type) => (
+              <button
+                key={type}
+                onClick={() => {
+                  if (type === "transfer") {
+                    setIsTransfer(true);
+                    setPrice(0);
+                  } else {
+                    setIsTransfer(false);
+                  }
+                  setTransactionType(type);
+                }}
+                className={`flex-1 py-1.5 rounded-xl font-semibold capitalize transition cursor-pointer text-sm
                 ${
                   transactionType === type
                     ? "bg-white/20 text-white"
                     : "text-gray-400 hover:text-white"
                 }`}
-            >
-              {type}
-            </button>
-          ))}
-        </div>
+              >
+                {type}
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* COIN LABEL */}
         <div className="flex items-center gap-2 mt-8 mb-8 text-lg">
-          <img
-            src={selectedCoin.image}
-            alt={selectedCoin.name}
-            className="w-7 h-7"
-          />
-          <p className="text-4xl text-white font-medium">{selectedCoin.name}</p>
+          <img src={coinData?.image} alt={coinData?.name} className="w-7 h-7" />
+          <p className="text-4xl text-white font-medium">{coinData?.name}</p>
           <p className="text-gray-400 text-sm">
-            {selectedCoin.symbol.toUpperCase()}
+            {coinData?.symbol?.toUpperCase()}
           </p>
         </div>
 
@@ -212,7 +245,7 @@ function AddTransactionModal({
           onClick={handleSubmit}
           className="w-full bg-blue-600 hover:bg-blue-700 transition text-white font-semibold py-3 rounded-2xl cursor-pointer"
         >
-          Add Transaction
+          {editingTransaction ? "Update Transaction" : "Add Transaction"}
         </button>
       </div>
     </div>

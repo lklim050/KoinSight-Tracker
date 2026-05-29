@@ -2,7 +2,14 @@ import { Pencil, Trash2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { getTransactions } from "../services/transactionApi.js";
 
-export function TransactionTable({ refreshTrigger, user }) {
+export function TransactionTable({
+  refreshTrigger,
+  user,
+  setEditingTransaction,
+  setShowTransactionModal,
+  setDeletingTransaction,
+  setShowDeleteModal,
+}) {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -71,14 +78,30 @@ export function TransactionTable({ refreshTrigger, user }) {
       <table className="w-full border-collapse">
         <thead className="bg-white/10 backdrop-blur-xl">
           <tr>
-            <th className="border-b border-white/10 p-4 text-left text-white text-sm font-semibold">Type</th>
-            <th className="border-b border-white/10 p-4 text-left text-white text-sm font-semibold">Date</th>
-            <th className="border-b border-white/10 p-4 text-left text-white text-sm font-semibold">Asset</th>
-            <th className="border-b border-white/10 p-4 text-left text-white text-sm font-semibold">Price</th>
-            <th className="border-b border-white/10 p-4 text-left text-white text-sm font-semibold">Amount</th>
-            <th className="border-b border-white/10 p-4 text-left text-white text-sm font-semibold">Fees</th>
-            <th className="border-b border-white/10 p-4 text-left text-white text-sm font-semibold">Notes</th>
-            <th className="border-b border-white/10 p-4 text-right text-white text-sm font-semibold">Actions</th>
+            <th className="border-b border-white/10 p-4 text-left text-white text-sm font-semibold">
+              Type
+            </th>
+            <th className="border-b border-white/10 p-4 text-left text-white text-sm font-semibold">
+              Date
+            </th>
+            <th className="border-b border-white/10 p-4 text-left text-white text-sm font-semibold">
+              Asset
+            </th>
+            <th className="border-b border-white/10 p-4 text-left text-white text-sm font-semibold">
+              Price
+            </th>
+            <th className="border-b border-white/10 p-4 text-left text-white text-sm font-semibold">
+              Amount
+            </th>
+            <th className="border-b border-white/10 p-4 text-left text-white text-sm font-semibold">
+              Fees
+            </th>
+            <th className="border-b border-white/10 p-4 text-left text-white text-sm font-semibold">
+              Notes
+            </th>
+            <th className="border-b border-white/10 p-4 text-right text-white text-sm font-semibold">
+              Actions
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -88,21 +111,29 @@ export function TransactionTable({ refreshTrigger, user }) {
               className="border-b border-white/5 hover:bg-white/5 transition"
             >
               <td className="p-4 text-sm font-medium whitespace-nowrap">
-                <span className={transactionConfig[transaction.transType]?.color}>
+                <span
+                  className={transactionConfig[transaction.transType]?.color}
+                >
                   {transactionConfig[transaction.transType]?.label}
                 </span>
               </td>
               <td className="p-4 text-white text-sm">
-                {new Date(transaction.date).toLocaleDateString("en-SG", {
-                  day: "numeric",
-                  month: "short",
-                  year: "numeric",
-                })}
+                <div>
+                  <p>
+                    {new Date(transaction.date).toLocaleDateString("en-SG", {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    })}
+                  </p>
+
+                  <p className="text-xs text-gray-400">{transaction.time}</p>
+                </div>
               </td>
               <td className="p-4 text-white text-sm">
                 <div className="flex items-center gap-2">
                   <img
-                    src={transaction.coinType?.image || ""}
+                    src={transaction.coinType?.image}
                     alt={transaction.coinType?.name || "Unknown"}
                     className="w-6 h-6"
                   />
@@ -116,23 +147,40 @@ export function TransactionTable({ refreshTrigger, user }) {
                 ${transaction.pricePerCoin}
               </td>
               <td className="p-4 text-sm">
-                <p className={`${transactionConfig[transaction.transType]?.color} font-semibold`}>
+                <p
+                  className={`${transactionConfig[transaction.transType]?.color} font-semibold`}
+                >
                   {transactionConfig[transaction.transType]?.sign}
                   {transaction.quantity}{" "}
                   {transaction.coinType?.symbol?.toUpperCase()}
                 </p>
                 <p className="text-xs text-gray-400">
-                  ${(transaction.quantity * transaction.pricePerCoin).toLocaleString()}
+                  $
+                  {(
+                    transaction.quantity * transaction.pricePerCoin
+                  ).toLocaleString()}
                 </p>
               </td>
               <td className="p-4 text-white text-sm">${transaction.fee}</td>
               <td className="p-4 text-gray-400 text-sm">{transaction.notes}</td>
               <td className="p-4 text-right">
                 <div className="flex justify-end gap-3">
-                  <button className="text-gray-400 hover:text-blue-400 cursor-pointer transition">
+                  <button
+                    onClick={() => {
+                      setEditingTransaction(transaction);
+                      setShowTransactionModal(true);
+                    }}
+                    className="text-gray-400 hover:text-blue-400 cursor-pointer transition"
+                  >
                     <Pencil size={16} />
                   </button>
-                  <button className="text-gray-400 hover:text-red-400 cursor-pointer transition">
+                  <button
+                    onClick={() => {
+                      setDeletingTransaction(transaction);
+                      setShowDeleteModal(true);
+                    }}
+                    className="text-gray-400 hover:text-red-400 cursor-pointer transition"
+                  >
                     <Trash2 size={16} />
                   </button>
                 </div>
