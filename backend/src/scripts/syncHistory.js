@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import UserModel from "../models/User.js";
 
 // this is main version, many documents based on watchlist with 289 entries (1 days 5 min interval) to DB
 
@@ -140,6 +141,15 @@ export const sync30daysHistories = async (
     } catch (error) {
       console.error(`❌ Error on ${coin}:`, error.message);
     }
+  }
+};
+
+export const readUserCoins = async (user) => {
+  try {
+    console.log("check user coins from user transactions");
+    const user = await UserModel.find({}, "transactions.coinType");
+  } catch (error) {
+    console.error("Error reading user coins failed:", error.message);
   }
 };
 
