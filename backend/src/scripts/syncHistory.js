@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import UserModel from "../models/User.js";
+import { response } from "express";
 
 // this is main version, many documents based on watchlist with 289 entries (1 days 5 min interval) to DB
 
@@ -148,47 +149,10 @@ export const readUserCoins = async (user) => {
   try {
     console.log("check user coins from user transactions");
     const user = await UserModel.find({}, "transactions.coinType");
+
+    const coinArray = user.flatMap(user);
+    return user;
   } catch (error) {
     console.error("Error reading user coins failed:", error.message);
   }
 };
-
-// // // To read into user portfoilo coin id and past into syncwatchlist24hhistories
-// // // and later to be worked by cron
-// // 🌟 THE NEW STRATEGIC WRAPPER: Gathers all active user portfolio IDs out of MongoDB
-// export const syncAllActiveUserWatchlists = async () => {
-//   try {
-//     console.log(
-//       "🔍 Database lookup: scanning user records for active coins...",
-//     );
-
-//     // 1. Fetch all user records, but only return their transaction arrays to save RAM
-//     const users = await Auth.find({}, "transactions.coinType");
-
-//     // 2. Extract out all coin IDs and flatten them into a single array
-//     // Example output: ['bitcoin', 'ethereum', 'bitcoin', 'solana']
-//     const rawCoinIds = users.flatMap((user) =>
-//       user.transactions.map((tx) => tx.coinType),
-//     );
-
-//     // 3. Remove duplicate IDs so your loops don't call CoinGecko twice for the same coin!
-//     // Example clean output: ['bitcoin', 'ethereum', 'solana']
-//     const uniqueWatchlistCoins = [...new Set(rawCoinIds)];
-
-//     if (uniqueWatchlistCoins.length === 0) {
-//       console.log(
-//         "📭 No active portfolio coins found across user accounts. Skipping run.",
-//       );
-//       return;
-//     }
-
-//     console.log(
-//       `🎯 Active tracking list generated: [${uniqueWatchlistCoins.join(", ")}]`,
-//     );
-
-//     // 4. Pass the dynamically generated list straight into your worker loop
-//     await sync24hrHistories(uniqueWatchlistCoins);
-//   } catch (error) {
-//     console.error("Watchlist aggregation failed:", error.message);
-//   }
-// };

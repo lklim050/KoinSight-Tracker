@@ -116,7 +116,7 @@ export default function PortfolioPage({ user }) {
           <div>
             {user && (
               <div className="text-2xl text-gray-400 mb-2">
-                {user.username}'s Portfolio
+                Hi {user.username}, here is your Portfolio Overview:
               </div>
             )}
 
@@ -148,13 +148,7 @@ export default function PortfolioPage({ user }) {
                 maximumFractionDigits: 2,
               })}{" "}
               {portfolioConfig[status_priceChange24h]?.icon}{" "}
-              {portfolio.totalPriceChange24hPercent.toLocaleString("en-US", {
-                style: "currency",
-                currency: "USD",
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}{" "}
-              (24h)
+              {portfolio.totalPriceChange24hPercent?.toFixed(2)}% (24h)
             </div>
           </div>
           <div className="flex gap-2">
@@ -212,7 +206,9 @@ export default function PortfolioPage({ user }) {
 
           {/* Chart placeholder — swap with your chart component */}
           <div className="h-64 rounded-xl bg-white/5 flex items-center justify-center text-gray-400 text-sm">
-            {chartType === "line" ? "Line chart coming soon" : "Pie chart coming soon"}
+            {chartType === "line"
+              ? "Line chart coming soon"
+              : "Pie chart coming soon"}
           </div>
         </div>
       </div>
