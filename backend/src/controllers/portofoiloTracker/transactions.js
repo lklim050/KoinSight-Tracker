@@ -19,7 +19,7 @@ export const seedTranactions = async (req, res) => {
         fee: 2,
         notes: "this is a test transaction to input, does not mean i very rich",
         pricePerCoin: 77500.02,
-        date: "2026-06-10",
+        date: "2026-05-28T00:00:00.000+00:00",
         time: "14:00",
       },
       {
@@ -31,7 +31,7 @@ export const seedTranactions = async (req, res) => {
         notes:
           "this is a test transaction to input, does not mean i very rich plus I am super poor you know",
         pricePerCoin: 77598.01,
-        date: "2026-06-12",
+        date: "2026-05-29T00:00:00.000+00:00",
         time: "15:00",
       },
       {
@@ -43,7 +43,7 @@ export const seedTranactions = async (req, res) => {
         notes:
           "this is a test transaction to input, although this is cheaper but I still no money to buy and I am testing string length as well",
         pricePerCoin: 2127.89,
-        date: "2026-05-30",
+        date: "2026-05-29T00:00:00.000+00:00",
         time: "09:00",
       },
       {
@@ -55,7 +55,7 @@ export const seedTranactions = async (req, res) => {
         notes:
           "this is a test transaction to input, sell liao also not my money",
         pricePerCoin: 656.68,
-        date: "2026-05-25",
+        date: "2026-05-29T00:00:00.000+00:00",
         time: "14:30",
       },
       {
@@ -67,8 +67,8 @@ export const seedTranactions = async (req, res) => {
         notes:
           "this is a test transaction to input, sell liao also not my money",
         pricePerCoin: 649.18,
-        date: "2026-05-25",
-        time: "14:30",
+        date: "2026-05-29T00:00:00.000+00:00",
+        time: "19:30",
       },
       {
         _id: "6a0b0f79e03e3f8a0c7caeab",
@@ -79,7 +79,7 @@ export const seedTranactions = async (req, res) => {
         notes:
           "this is a test transaction to input, sell liao also not my money",
         pricePerCoin: 86.65,
-        date: "2026-05-29",
+        date: "2026-05-29T00:00:00.000+00:00",
         time: "14:30",
       },
       {
@@ -91,7 +91,7 @@ export const seedTranactions = async (req, res) => {
         notes:
           "this is a test transaction to input, sell liao also not my money",
         pricePerCoin: 85.65,
-        date: "2026-05-31",
+        date: "2026-05-29T00:00:00.000+00:00",
         time: "09:30",
       },
     ];

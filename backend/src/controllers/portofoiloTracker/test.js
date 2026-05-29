@@ -111,11 +111,13 @@ export const getOrSyncPortfolioHistory = async (req, res) => {
 
         // Store the price under this exact 5-minute block
         timelineMap[timeStr][coinRecord._id] = point.price;
-        console.log(dateObj);
       });
     });
 
     // 6. Build final portfolio timeline coordinates using your assets array
+    // Keep track of the most recent price for each coin as we move forward in time
+    const lastKnownPrices = {};
+
     const finalPortfolioTimeline = Object.keys(timelineMap)
       .sort()
       .map((timeStr) => {
@@ -123,7 +125,16 @@ export const getOrSyncPortfolioHistory = async (req, res) => {
         let totalPortfolioValue = 0;
 
         assets.forEach((asset) => {
-          const coinPrice = pricesAtTime[asset._id] || 0;
+          const coinId = asset._id;
+
+          // 1. If the current bucket has a price, use it and update our tracker
+          if (pricesAtTime[coinId] !== undefined) {
+            lastKnownPrices[coinId] = pricesAtTime[coinId];
+          }
+
+          // 2. Fallback: If this bucket missed the price, use the last known price.
+          // Only use 0 if we have absolutely never fetched a price for it yet.
+          const coinPrice = lastKnownPrices[coinId] || 0;
           const currentHoldings = asset.holdings || 0;
 
           totalPortfolioValue += currentHoldings * coinPrice;
@@ -146,11 +157,3 @@ export const getOrSyncPortfolioHistory = async (req, res) => {
     res.status(500).json({ msg: "Internal server error" });
   }
 };
-
-// Notes:
-// 1) check userId and return with user information and transactions history especially the coinType (findById, populate)
-// 2) find all coinType which is the target of the history that we want to grab (uniqueCoinId)
-// 3) generate timestamp of 15 min ago with respect to current time
-// 4) the for loop is the big one, check each unique coin check and fetch from coingeckoAPI then save to DB, only do the thing inside if when history either not exist or more than 15min
-// 5) fetch all history based on the uniqueCoinId based on user transaction and group based on merged timestamps
-// 6) calculate start here with identifying pricepoint and multiply by holdings
