@@ -72,6 +72,7 @@ export const calculateUserAssets = (user) => {
         price_change_percentage_7d:
           asset.coin.price_change_percentage_7d_in_currency,
         assetEarning: assetEarning,
+        show: assetsMap,
       };
     })
     .filter((asset) => asset.holdings > 0);
