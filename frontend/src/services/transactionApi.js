@@ -61,3 +61,16 @@ export const updateTransaction = async (transactionId, transactionData) => {
     console.error(error);
   }
 };
+
+export const deleteTransaction = async (transactionId) => {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(`${BASE_URL}/transactions/${transactionId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return await response.json();
+};

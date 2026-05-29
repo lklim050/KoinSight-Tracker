@@ -7,6 +7,8 @@ export function TransactionTable({
   user,
   setEditingTransaction,
   setShowTransactionModal,
+  setDeletingTransaction,
+  setShowDeleteModal,
 }) {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -172,7 +174,13 @@ export function TransactionTable({
                   >
                     <Pencil size={16} />
                   </button>
-                  <button className="text-gray-400 hover:text-red-400 cursor-pointer transition">
+                  <button
+                    onClick={() => {
+                      setDeletingTransaction(transaction);
+                      setShowDeleteModal(true);
+                    }}
+                    className="text-gray-400 hover:text-red-400 cursor-pointer transition"
+                  >
                     <Trash2 size={16} />
                   </button>
                 </div>

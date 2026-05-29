@@ -5,6 +5,7 @@ import SelectCoinModal from "./addTransactionButton/SelectCoinModal.jsx";
 import { Tabs, Button, ButtonGroup } from "flowbite-react";
 import AddTransactionModal from "./addTransactionButton/AddTransactionModal.jsx";
 import { getMyPortfolio } from "../services/assetApi.js";
+import DeleteTransactionModal from "../components/DeleteTransactionModal.jsx";
 
 import DecryptedText from "../components/DecryptedText.jsx";
 
@@ -18,6 +19,8 @@ export default function PortfolioPage({ user }) {
   const [assetRefreshKey, setAssetRefreshKey] = useState(0);
   const [portfolioRefreshKey, setPortfolioRefreshKey] = useState(0);
   const [selectedCoin, setSelectedCoin] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deletingTransaction, setDeletingTransaction] = useState(null);
 
   const [asset, setAsset] = useState([]);
   const [portfolio, setPortfolio] = useState(null);
@@ -156,9 +159,10 @@ export default function PortfolioPage({ user }) {
             <Button
               onClick={() => {
                 setEditingTransaction(null);
-                setShowTransactionModal(true);
+                setSelectedCoin(null);
+                setShowCoinModal(true);
               }}
-              className="bg-blue-600"
+              className="bg-blue-600 cursor-pointer"
             >
               + Add Transaction
             </Button>
@@ -180,6 +184,17 @@ export default function PortfolioPage({ user }) {
                   setTransactionRefreshKey((currentKey) => currentKey + 1);
                   setAssetRefreshKey((currentKey) => currentKey + 1);
                   setPortfolioRefreshKey((currentKey) => currentKey + 1);
+                }}
+              />
+            )}
+            {showDeleteModal && (
+              <DeleteTransactionModal
+                deletingTransaction={deletingTransaction}
+                setShowDeleteModal={setShowDeleteModal}
+                onSuccess={() => {
+                  setTransactionRefreshKey((k) => k + 1);
+                  setAssetRefreshKey((k) => k + 1);
+                  setPortfolioRefreshKey((k) => k + 1);
                 }}
               />
             )}
@@ -322,6 +337,8 @@ export default function PortfolioPage({ user }) {
             refreshTrigger={transactionRefreshKey}
             setEditingTransaction={setEditingTransaction}
             setShowTransactionModal={setShowTransactionModal}
+            setDeletingTransaction={setDeletingTransaction}
+            setShowDeleteModal={setShowDeleteModal}
           />
         </Tabs.Item>
       </Tabs>
