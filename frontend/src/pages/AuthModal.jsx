@@ -30,16 +30,10 @@ function AuthModal({ showAuthModal, setShowAuthModal, onLogin }) {
           email: formData.email,
           password: formData.password,
         });
-
-        console.log("Login successful:", data);
       } else {
         data = await signupUser(formData);
         setMessage(data.message);
-        setFormData({
-          username: "",
-          email: "",
-          password: "",
-        });
+        setFormData({ username: "", email: "", password: "" });
       }
 
       if (data.success === false) {
@@ -78,7 +72,10 @@ function AuthModal({ showAuthModal, setShowAuthModal, onLogin }) {
     >
       <div
         className="
-          bg-[#111827]
+          bg-white/10
+          backdrop-blur-xl
+          border
+          border-white/20
           w-full
           max-w-md
           rounded-2xl
@@ -110,7 +107,7 @@ function AuthModal({ showAuthModal, setShowAuthModal, onLogin }) {
             text-center
           "
         >
-          {isLogin ? "Registered User" : "Create Account"}
+          {isLogin ? "Login" : "Create Account"}
         </h1>
 
         <div
@@ -132,7 +129,7 @@ function AuthModal({ showAuthModal, setShowAuthModal, onLogin }) {
               cursor-pointer
               transition
 
-              ${isLogin ? "text-purple-400" : "text-gray-400"}
+              ${isLogin ? "text-purple-400 underline" : "text-gray-400"}
             `}
           >
             Log In
@@ -149,7 +146,7 @@ function AuthModal({ showAuthModal, setShowAuthModal, onLogin }) {
               cursor-pointer
               transition
 
-              ${!isLogin ? "text-purple-400" : "text-gray-400"}
+              ${!isLogin ? "text-purple-400 underline" : "text-gray-400"}
             `}
           >
             Sign Up
@@ -159,7 +156,11 @@ function AuthModal({ showAuthModal, setShowAuthModal, onLogin }) {
         {/* FORM */}
 
         <form className="space-y-4" onSubmit={handleSubmit}>
-          {!isLogin && (
+          <div
+            className={`overflow-hidden transition-all duration-300 ease-in-out ${
+              !isLogin ? "max-h-24 opacity-100" : "max-h-0 opacity-0"
+            }`}
+          >
             <input
               type="text"
               placeholder="Username"
@@ -170,12 +171,17 @@ function AuthModal({ showAuthModal, setShowAuthModal, onLogin }) {
                 w-full
                 p-3
                 rounded-lg
-                bg-gray-800
+                bg-white/10
+                border
+                border-white/20
                 text-white
                 outline-none
+                focus:bg-white/15
+                focus:border-white/40
+                placeholder-gray-500
               "
             />
-          )}
+          </div>
 
           <input
             type="email"
@@ -187,9 +193,14 @@ function AuthModal({ showAuthModal, setShowAuthModal, onLogin }) {
               w-full
               p-3
               rounded-lg
-              bg-gray-800
+              bg-white/10
+              border
+              border-white/20
               text-white
               outline-none
+              focus:bg-white/15
+              focus:border-white/40
+              placeholder-gray-500
             "
           />
 
@@ -203,11 +214,17 @@ function AuthModal({ showAuthModal, setShowAuthModal, onLogin }) {
               w-full
               p-3
               rounded-lg
-              bg-gray-800
+              bg-white/10
+              border
+              border-white/20
               text-white
               outline-none
+              focus:bg-white/15
+              focus:border-white/40
+              placeholder-gray-500
             "
           />
+
           {message && (
             <p
               className="
