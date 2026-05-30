@@ -25,7 +25,7 @@ export const postCoin24hrHistory = async (req, res) => {
       show: coin24hr,
     });
   } catch (error) {
-    console.error(error.message);
+    console.error("❌", error.message);
     res.status(500).json({ msg: "Internal server error" });
   }
 };
@@ -51,7 +51,7 @@ export const postCoin30daysHistory = async (req, res) => {
       show: coin30days,
     });
   } catch (error) {
-    console.error(error.message);
+    console.error("❌", error.message);
     res.status(500).json({ msg: "Internal server error" });
   }
 };
@@ -65,7 +65,7 @@ export const getTop250Coins = async (req, res) => {
       show: allCoins,
     });
   } catch (error) {
-    console.error(error.message);
+    console.error("❌", error.message);
     res.status(500).json({ msg: "Internal server error" });
   }
 };
@@ -79,7 +79,7 @@ export const postTop250Coins = async (req, res) => {
       show: coin,
     });
   } catch (error) {
-    console.error(error.message);
+    console.error("❌", error.message);
     res.status(500).json({ msg: "Internal server error" });
   }
 };

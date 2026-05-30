@@ -1,7 +1,7 @@
 // this is to capture json error
 export const jsonErrorHandler = (err, req, res, next) => {
   if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
-    console.error("JSON parsing error:", err.message);
+    console.error("❌ JSON parsing error:", err.message);
     return res.status(400).json({
       status: 400,
       msg: "invalid JSON format",
@@ -11,7 +11,7 @@ export const jsonErrorHandler = (err, req, res, next) => {
     err.status === 400 &&
     err.type === "entity.parse.failed"
   ) {
-    console.error("URL-encoded parsing error:", err.message);
+    console.error("❌ URL-encoded parsing error:", err.message);
     return res.status(400).json({
       status: 400,
       msg: "invalid form data format",
@@ -23,9 +23,9 @@ export const jsonErrorHandler = (err, req, res, next) => {
 
 // this is to capture server error
 export const globalErrorHandler = (err, req, res, next) => {
-  console.error("Unhandled error:", err);
-  console.error(err.message);
-  console.error(err.stack);
+  console.error("❌ Unhandled error:", err);
+  console.error("❌", err.message);
+  console.error("❌", err.stack);
 
   res.status(err.status || 500).json({
     status: "error",

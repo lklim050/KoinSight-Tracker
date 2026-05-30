@@ -4,7 +4,6 @@ import { CryptoTop250Coins } from "../../scripts/syncTop250.js";
 export const seedTranactions = async (req, res) => {
   try {
     const userIdFromToken = req.user.id.toString();
-    console.log(userIdFromToken);
     const user = await UserModel.findById(userIdFromToken);
     if (!user) return res.status(404).json({ msg: "user not found" });
     user.transactions = [];
@@ -102,7 +101,7 @@ export const seedTranactions = async (req, res) => {
       count: `${user.transactions.length} entries created`,
     });
   } catch (error) {
-    console.error(error.message);
+    console.error("❌", error.message);
     res.status(500).json({
       status: "error",
       msg: "internal server error, check console message",
@@ -118,7 +117,7 @@ export const createTransaction = async (req, res) => {
     const trans = {
       transType: req.body.transType,
       coinType: req.body.coinType,
-      quantity: req.body.quantity || "",
+      quantity: req.body.quantity || 0,
       pricePerCoin: req.body.pricePerCoin || 0,
       fee: req.body.fee || 0,
       notes: req.body.notes || "",
@@ -134,7 +133,7 @@ export const createTransaction = async (req, res) => {
       create: last,
     });
   } catch (error) {
-    console.error(error.message);
+    console.error("❌", error.message);
     res.status(500).json({
       status: "error",
       msg: "internal server error, check console message",
@@ -177,7 +176,7 @@ export const readAllTransactions = async (req, res) => {
       data: data,
     });
   } catch (error) {
-    console.error(error.message);
+    console.error("❌", error.message);
     res.status(500).json({
       status: "error",
       msg: "internal server error, check console message",
@@ -207,7 +206,7 @@ export const updateTransaction = async (req, res) => {
       content: updated,
     });
   } catch (error) {
-    console.error(error.message);
+    console.error("❌", error.message);
     res.status(500).json({
       status: "error",
       msg: "internal server error, check console message",
@@ -228,7 +227,7 @@ export const deleteTransaction = async (req, res) => {
       content: user.transactions,
     });
   } catch (error) {
-    console.error(error.message);
+    console.error("❌", error.message);
     res.status(500).json({
       status: "error",
       msg: "internal server error, check console message",
@@ -274,7 +273,7 @@ export const postTransaction = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error(error.message);
+    console.error("❌", error.message);
     res.status(500).json({
       status: "error",
       msg: "internal server error, check console message",

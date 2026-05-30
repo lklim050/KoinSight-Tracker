@@ -6,7 +6,7 @@ const connectDB = async () => {
       serverSelectionTimeoutMS: 5000,
     });
   } catch (error) {
-    console.error(error.message);
+    console.error("❌", error.message);
     process.exit(1);
   }
 };

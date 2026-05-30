@@ -52,7 +52,7 @@ export const signup = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error(error);
+    console.error("❌", error);
 
     res.status(500).json({
       message: error.message,
@@ -108,7 +108,7 @@ export const login = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error(error);
+    console.error("❌", error);
 
     res.status(500).json({
       message: error.message,
