@@ -2,8 +2,6 @@ import express from "express";
 import {
   getAssets,
   getPortfolio,
-  readAllAssets,
-  seedAssets,
   getOrSyncPortfolioHistory,
 } from "../../controllers/portofoiloTracker/assets.js";
 import { protect } from "../../middlewares/auth.js";
