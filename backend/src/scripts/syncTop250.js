@@ -41,7 +41,7 @@ export const syncTop250coins = async () => {
     );
 
     if (!res.ok) {
-      console.error(`⚠️Status ${res.status}`);
+      console.error(`❌ Status ${res.status}`);
     }
 
     const data = await res.json();

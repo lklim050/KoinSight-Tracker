@@ -74,7 +74,7 @@ export const getOrSyncPortfolioHistory = async (req, res) => {
           );
         } catch (apiError) {
           console.error(
-            `Failed to refresh CoinGecko data for ${coinId}:`,
+            `❌ Failed to refresh CoinGecko data for ${coinId}:`,
             apiError.message,
           );
           // Fallback: If CoinGecko rate-limits you or fails, continue with whatever is in DB
@@ -153,7 +153,7 @@ export const getOrSyncPortfolioHistory = async (req, res) => {
       data: finalPortfolioTimeline,
     });
   } catch (error) {
-    console.error("Portfolio history mapping error:", error.message);
+    console.error("❌ Portfolio history mapping error:", error.message);
     res.status(500).json({ msg: "Internal server error" });
   }
 };

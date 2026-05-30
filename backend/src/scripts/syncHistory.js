@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import UserModel from "../models/User.js";
-import { response } from "express";
 
 // this is main version, many documents based on watchlist with 289 entries (1 days 5 min interval) to DB
 
@@ -73,7 +72,7 @@ export const sync24hrHistories = async (
       );
 
       if (!response.ok) {
-        console.error(`⚠️ Skipped ${coin}: Status ${response.status}`);
+        console.error(`❌ Skipped ${coin}: Status ${response.status}`);
         continue;
       }
 
@@ -117,7 +116,7 @@ export const sync30daysHistories = async (
       );
 
       if (!response.ok) {
-        console.error(`⚠️ Skipped ${coin}: Status ${response.status}`);
+        console.error(`❌ Skipped ${coin}: Status ${response.status}`);
         continue;
       }
 
@@ -142,17 +141,5 @@ export const sync30daysHistories = async (
     } catch (error) {
       console.error(`❌ Error on ${coin}:`, error.message);
     }
-  }
-};
-
-export const readUserCoins = async (user) => {
-  try {
-    console.log("check user coins from user transactions");
-    const user = await UserModel.find({}, "transactions.coinType");
-
-    const coinArray = user.flatMap(user);
-    return user;
-  } catch (error) {
-    console.error("Error reading user coins failed:", error.message);
   }
 };

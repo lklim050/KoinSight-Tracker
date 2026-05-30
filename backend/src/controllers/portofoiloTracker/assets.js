@@ -9,7 +9,7 @@ export const readAllAssets = async (req, res) => {
     const allAssets = await Assets.find();
     res.json(allAssets);
   } catch (error) {
-    console.error(error.message);
+    console.error("❌", error.message);
     res.status(404).json({ status: "error", msg: "fail to update" });
   }
 };
@@ -33,7 +33,7 @@ export const seedAssets = async (req, res) => {
       msg: `seed successfully, ${seed.length} entries created`,
     });
   } catch (error) {
-    console.error(error.message);
+    console.error("❌", error.message);
     res.status(404).json({ status: "error", msg: "fail to seed" });
   }
 };
@@ -54,7 +54,7 @@ export const getAssets = async (req, res) => {
       assets,
     });
   } catch (error) {
-    console.error(error.message);
+    console.error("❌", error.message);
     res.status(500).json({
       status: "ok",
       msg: "Internal server failed, please check console log",
@@ -125,7 +125,7 @@ export const getPortfolio = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error(error.message);
+    console.error("❌", error.message);
     res.status(500).json({ msg: "Internal server error" });
   }
 };
@@ -210,7 +210,7 @@ export const getOrSyncPortfolioHistory = async (req, res) => {
           );
         } catch (apiError) {
           console.error(
-            `Failed to refresh CoinGecko data for ${targetCoinId}:`,
+            `❌ Failed to refresh CoinGecko data for ${targetCoinId}:`,
             apiError.message,
           );
           if (!coinHistory) continue;
@@ -347,7 +347,7 @@ export const getOrSyncPortfolioHistory = async (req, res) => {
     });
   } catch (error) {
     console.error(
-      "Portfolio history mapping error:",
+      "❌ Portfolio history mapping error:",
       error.stack || error.message,
     );
     res.status(500).json({ msg: "Internal server error" });
