@@ -55,11 +55,9 @@ export const getPortfolio = async (req, res) => {
     });
 
     const allocation = assets.map((asset) => {
-      const assetCostBasis = asset.avgBuyPrice * asset.holdings;
+      const totalValue = asset.currentPrice * asset.holdings;
       const percent =
-        totalPortfolioCost > 0
-          ? (assetCostBasis / totalPortfolioCost) * 100
-          : 0;
+        totalPortfolioCost > 0 ? (totalValue / totalPortfolioCost) * 100 : 0;
       return {
         _id: asset._id,
         percent: Number(percent),
