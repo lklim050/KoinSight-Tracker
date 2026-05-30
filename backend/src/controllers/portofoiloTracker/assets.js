@@ -231,7 +231,6 @@ export const getOrSyncPortfolioHistory = async (req, res) => {
         }
       });
     });
-
     // ==========================================
     // 5. Pre-parse transactions with the correct fields
     // ==========================================
@@ -243,19 +242,27 @@ export const getOrSyncPortfolioHistory = async (req, res) => {
           const baseTimeStr =
             tx.time && tx.time.trim() ? tx.time.trim() : "00:00";
 
-          // Match front-end inputs directly as local numbers
           txMs = new Date(`${baseDateStr}T${baseTimeStr}:00.000Z`).getTime();
         }
 
+        // --- 🚀 FIX FOR COIN ID STRINGS vs POPULATED OBJECTS ---
+        let finalCoinId = null;
+        if (tx.coinType) {
+          if (typeof tx.coinType === "object" && tx.coinType._id) {
+            finalCoinId = tx.coinType._id.toString(); // For populated objects
+          } else {
+            finalCoinId = tx.coinType.toString(); // For flat strings like "bitcoin"
+          }
+        }
+
         return {
-          coinId:
-            tx.coinType && tx.coinType._id ? tx.coinType._id.toString() : null,
+          coinId: finalCoinId,
           type: tx.transType || tx.type,
-          amount: Number(tx.quantity) || Number(tx.amount) || 0, // Keeps your working quantity fix
+          amount: Number(tx.quantity) || Number(tx.amount) || 0,
           txMs,
         };
       })
-      .filter((tx) => tx.coinId);
+      .filter((tx) => tx.coinId); // Now flat string matches won't get blocked!
 
     // ==========================================
     // 6. Calculate running balances across chart points
@@ -265,7 +272,6 @@ export const getOrSyncPortfolioHistory = async (req, res) => {
     sortedTimelineKeys.forEach((timeStr) => {
       balanceTimelineMap[timeStr] = {};
 
-      // Appending "Z" here strictly for the internal loop millisecond boundary check
       const currentBucketMs = new Date(`${timeStr}Z`).getTime();
 
       uniqueCoinIds.forEach((id) => {
@@ -275,14 +281,24 @@ export const getOrSyncPortfolioHistory = async (req, res) => {
       cleanedTransactions.forEach((tx) => {
         if (tx.txMs > currentBucketMs) return;
 
-        if (tx.type === "buy" || tx.type === "Buy") {
+        // Clean and unify matching transaction actions
+        const normalizedType = tx.type ? tx.type.toLowerCase().trim() : "";
+
+        if (
+          normalizedType === "buy" ||
+          normalizedType === "transfer_in" ||
+          normalizedType === "transfer in"
+        ) {
           balanceTimelineMap[timeStr][tx.coinId] += tx.amount;
-        } else if (tx.type === "sell" || tx.type === "Sell") {
+        } else if (
+          normalizedType === "sell" ||
+          normalizedType === "transfer_out" ||
+          normalizedType === "transfer out"
+        ) {
           balanceTimelineMap[timeStr][tx.coinId] -= tx.amount;
         }
       });
     });
-
     // ==========================================
     // 7. Compute Final Portfolio Values (Holdings * Prices)
     // ==========================================
