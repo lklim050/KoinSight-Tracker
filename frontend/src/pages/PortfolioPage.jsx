@@ -316,7 +316,7 @@ export default function PortfolioPage({ user }) {
                     formatter={(value) => `$${value.toFixed(2)}`}
                   />
                   <Line
-                    type="natural"
+                    type="linear"
                     dataKey="value"
                     stroke="#06DF73"
                     dot={false}
