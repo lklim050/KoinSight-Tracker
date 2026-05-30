@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { AssetsTable } from "../components/AssetsTable.jsx";
 import { TransactionTable } from "../components/TransactionTable.jsx";
 import SelectCoinModal from "./addTransactionButton/SelectCoinModal.jsx";
-import { Tabs, Button, ButtonGroup } from "flowbite-react";
+import { Tabs, Button } from "flowbite-react";
 import AddTransactionModal from "./addTransactionButton/AddTransactionModal.jsx";
 import { getMyChart, getMyPortfolio } from "../services/assetApi.js";
 import {
@@ -27,7 +27,6 @@ export default function PortfolioPage({ user }) {
   const [showCoinModal, setShowCoinModal] = useState(false);
   const [showTransactionModal, setShowTransactionModal] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState(null);
-  const [chartType, setChartType] = useState("line");
   const [transactionRefreshKey, setTransactionRefreshKey] = useState(0);
   const [assetRefreshKey, setAssetRefreshKey] = useState(0);
   const [portfolioRefreshKey, setPortfolioRefreshKey] = useState(0);
@@ -255,102 +254,84 @@ export default function PortfolioPage({ user }) {
       </div>
 
       {/* Charts Grid */}
-      <div className="mb-8">
+      <div className="grid grid-cols-[2fr_1fr] gap-6 mb-8">
+        {/* Line Chart */}
         <div className="rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="text-lg font-semibold text-white">Holdings</h3>
-            <ButtonGroup>
-              <Button
-                size="sm"
-                color={chartType === "line" ? "blue" : "gray"}
-                onClick={() => setChartType("line")}
-              >
-                Line
-              </Button>
-              <Button
-                size="sm"
-                color={chartType === "pie" ? "blue" : "gray"}
-                onClick={() => setChartType("pie")}
-              >
-                Pie
-              </Button>
-            </ButtonGroup>
-          </div>
+          <h3 className="text-lg font-semibold text-white mb-6">
+            Portfolio Value
+          </h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart
+              data={chart}
+              margin={{ top: 10, right: 10, left: 10, bottom: 20 }}
+            >
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="rgba(255,255,255,0.1)"
+              />
+              <XAxis
+                dataKey="timestamp"
+                stroke="rgba(255,255,255,0.5)"
+                tick={{ fontSize: 11 }}
+                interval={Math.ceil(chart.length / 6)}
+                tickFormatter={(tick) =>
+                  new Date(tick).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
+                }
+              />
+              <YAxis
+                stroke="rgba(255,255,255,0.5)"
+                tick={{ fontSize: 11 }}
+                tickCount={4}
+                tickFormatter={(v) => `$${(v / 1000).toFixed(0)}k`}
+                padding={{ top: 0, bottom: 30 }}
+                domain={[
+                  (dataMin) => Math.floor(dataMin * 0.99),
+                  (dataMax) => Math.ceil(dataMax * 1.01),
+                ]}
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "#2E303D",
+                  border: "1px solid rgba(255,255,255,0.2)",
+                }}
+                formatter={(value) => `$${value.toFixed(2)}`}
+              />
+              <Line
+                type="linear"
+                dataKey="value"
+                stroke="#06DF73"
+                dot={false}
+                strokeWidth={2}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
 
-          {/* Chart placeholder — swap with your chart component */}
-          <div className="h-64 rounded-xl bg-white/5 flex items-center justify-center text-gray-400 text-sm">
-            {chartType === "line" ? (
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart
-                  data={chart}
-                  margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
-                >
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    stroke="rgba(255,255,255,0.1)"
-                  />
-                  <XAxis
-                    dataKey="timestamp"
-                    stroke="rgba(255,255,255,0.5)"
-                    tick={{ fontSize: 12 }}
-                    tickFormatter={(tick) =>
-                      new Date(tick).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })
-                    }
-                  />
-                  <YAxis
-                    stroke="rgba(255,255,255,0.5)"
-                    tick={{ fontSize: 12 }}
-                    domain={[
-                      (dataMin) => Math.floor(dataMin * 0.9),
-                      (dataMax) => Math.ceil(dataMax * 1.1),
-                    ]}
-                  />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "#2E303D",
-                      border: "1px solid rgba(255,255,255,0.2)",
-                    }}
-                    formatter={(value) => `$${value.toFixed(2)}`}
-                  />
-                  <Line
-                    type="linear"
-                    dataKey="value"
-                    stroke="#06DF73"
-                    dot={false}
-                    strokeWidth={2}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            ) : (
-              <ResponsiveContainer>
-                <PieChart>
-                  <Tooltip />
-                  <Legend
-                    verticalAlign="bottom"
-                    height={36}
-                    iconType="circle"
-                  />
-                  <Pie
-                    data={allocationData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={80}
-                    dataKey="percent"
-                    nameKey="_id"
-                  >
-                    {allocationData.map((entry, index) => (
-                      // 🚀 Generates a completely new random color for every single slice!
-                      <Cell key={`cell-${index}`} fill={getRandomColor()} />
-                    ))}
-                  </Pie>
-                </PieChart>
-              </ResponsiveContainer>
-            )}
-          </div>
+        {/* Pie Chart */}
+        <div className="rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 p-6">
+          <h3 className="text-lg font-semibold text-white mb-6">Allocation</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <PieChart>
+              <Tooltip />
+              <Legend verticalAlign="bottom" height={36} iconType="circle" />
+              <Pie
+                data={allocationData}
+                cx="50%"
+                cy="50%"
+                innerRadius={60}
+                outerRadius={90}
+                dataKey="percent"
+                nameKey="_id"
+              >
+                {allocationData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={getRandomColor()} />
+                ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
         </div>
       </div>
 

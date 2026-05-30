@@ -6,6 +6,8 @@ import AuthModal from "./pages/AuthModal.jsx";
 import MagicRings from "./components/MagicRings.jsx";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
+import { Routes, Route } from "react-router-dom";
+import AssetDetailPage from "./pages/AssetDetailPage.jsx";
 
 function App() {
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -54,7 +56,14 @@ function App() {
           clickBurst={false}
         />
       </div>
-      <PortfolioPage user={user} />
+      <Routes>
+        <Route path="/" element={<PortfolioPage user={user} />} />
+        <Route
+          path="/asset/:assetId"
+          element={<AssetDetailPage user={user} />}
+        />
+      </Routes>
+
       <AuthModal
         showAuthModal={showAuthModal}
         setShowAuthModal={setShowAuthModal}

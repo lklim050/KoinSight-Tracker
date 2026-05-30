@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { getMyAssets } from "../services/assetApi.js";
+import { useNavigate } from "react-router-dom";
 
 export function AssetsTable({ user, refreshTrigger, getAssetToPortfolio }) {
   const [assets, setAssets] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!user) {
@@ -123,7 +125,8 @@ export function AssetsTable({ user, refreshTrigger, getAssetToPortfolio }) {
             return (
               <tr
                 key={`${idx}-${asset._id}`}
-                className="border-b border-white/5 hover:bg-white/5 transition"
+                onClick={() => navigate(`/asset/${asset._id}`)}
+                className="border-b border-white/5 hover:bg-white/5 transition cursor-pointer"
               >
                 <td className="p-4 text-white text-sm whitespace-nowrap">
                   <div className="flex items-center gap-2">
