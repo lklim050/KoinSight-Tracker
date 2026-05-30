@@ -87,7 +87,7 @@ export default function PortfolioPage({ user }) {
     }, 300000);
     // if user switch chart, clear interval
     return () => clearInterval(interval);
-  }, [user]);
+  }, [user, transactionRefreshKey]);
 
   if (loading) {
     return <p>Loading...</p>;
