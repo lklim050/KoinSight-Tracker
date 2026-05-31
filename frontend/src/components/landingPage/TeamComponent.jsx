@@ -1,5 +1,5 @@
-import ericTanProfileImg from "../assets/eric-tan-profile-img.png";
-import lincolnImg from "../assets/LK-cartoon-2026_2.PNG";
+import ericTanProfileImg from "../../assets/eric-tan-profile-img.png";
+import lincolnImg from "../../assets/LK-cartoon-2026_2.PNG";
 import kennethProfileImg from "../../assets/azuki-nft-411.jpg";
 import DecryptedText from "../ui/DecryptedText.jsx";
 
@@ -27,7 +27,7 @@ const teamMembers = [
       "Focused on the frontend, crafting the landing page, portfolio dashboard, and features with React and Tailwind CSS.",
     socialLinks: [
       {
-        href: "https://www.linkedin.com/in/eric-tan-ms/",
+        href: "https://www.linkedin.com/in/ericistan/",
         icon: <LinkedinIcon />,
       },
       { href: "https://github.com/ericistan", icon: <GithubIcon /> },
@@ -36,7 +36,7 @@ const teamMembers = [
   {
     image: {
       src: lincolnImg,
-      alt: "Team Member 2",
+      alt: "Lincoln",
     },
     name: "Lincoln",
     jobTitle: "Full Stack Developer/Engineer",
