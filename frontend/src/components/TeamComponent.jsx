@@ -1,4 +1,5 @@
 import ericTanProfileImg from "../assets/eric-tan-profile-img.png";
+import lincolnImg from "../assets/LK-cartoon-2026_2.PNG";
 
 const LinkedinIcon = () => (
   <svg viewBox="0 0 24 24" className="size-5" fill="currentColor">
@@ -32,16 +33,19 @@ const teamMembers = [
   },
   {
     image: {
-      src: "https://placehold.co/400x400/1a1a2e/ffffff?text=TM2",
+      src: lincolnImg,
       alt: "Team Member 2",
     },
     name: "Lincoln",
-    jobTitle: "Full Stack Developer",
+    jobTitle: "Full Stack Developer/Engineer",
     description:
       "Focused on backend architecture, API integration, and bringing the portfolio data layer to life.",
     socialLinks: [
-      { href: "#", icon: <LinkedinIcon /> },
-      { href: "#", icon: <GithubIcon /> },
+      {
+        href: "https://www.linkedin.com/in/leng-khoon-lim/",
+        icon: <LinkedinIcon />,
+      },
+      { href: "https://github.com/lklim050", icon: <GithubIcon /> },
     ],
   },
   {
