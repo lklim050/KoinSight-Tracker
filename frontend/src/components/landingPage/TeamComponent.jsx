@@ -1,7 +1,5 @@
-import ericTanProfileImg from "../../assets/eric-tan-profile-img.png";
-import lincolnProfileImg from "../../assets/Coolcats_Merlion.png";
-import kennethProfileImg from "../../assets/azuki-nft-411.jpg";
-import DecryptedText from "../ui/DecryptedText.jsx";
+import ericTanProfileImg from "../assets/eric-tan-profile-img.png";
+import lincolnImg from "../assets/LK-cartoon-2026_2.PNG";
 
 const LinkedinIcon = () => (
   <svg viewBox="0 0 24 24" className="size-5" fill="currentColor">
@@ -35,16 +33,19 @@ const teamMembers = [
   },
   {
     image: {
-      src: lincolnProfileImg,
-      alt: "Lincoln",
+      src: lincolnImg,
+      alt: "Team Member 2",
     },
     name: "Lincoln",
-    jobTitle: "Full Stack Developer",
+    jobTitle: "Full Stack Developer/Engineer",
     description:
       "Focused on backend architecture, API integration, and bringing the portfolio data layer to life.",
     socialLinks: [
-      { href: "#", icon: <LinkedinIcon /> },
-      { href: "#", icon: <GithubIcon /> },
+      {
+        href: "https://www.linkedin.com/in/leng-khoon-lim/",
+        icon: <LinkedinIcon />,
+      },
+      { href: "https://github.com/lklim050", icon: <GithubIcon /> },
     ],
   },
   {

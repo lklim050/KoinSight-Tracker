@@ -46,21 +46,10 @@ export const Crypto30daysHistory =
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 // 🌟 Pass targetCoins dynamically as an argument
 export const sync24hrHistories = async (
-  targetCoins = [
-    "bitcoin",
-    "ethereum",
-    "tether",
-    "binancecoin",
-    "tron",
-    "ripple",
-    "solana",
-    "dogecoin",
-    "hyperliquid",
-    "zcash",
-  ],
+  targetCoins = ["bitcoin", "ethereum", "tether", "binancecoin"],
 ) => {
   // If no array is passed, it defaults to bitcoin and ethereum
-  // ["bitcoin", "ethereum", "tether", "binancecoin","tron", "ripple", "solana", "dogecoin","hyperliquid","zcash"];
+  // ["bitcoin", "ethereum", "tether", "binancecoin"];
   for (const coin of targetCoins) {
     try {
       // Throttle delay to protect your free tier limits
