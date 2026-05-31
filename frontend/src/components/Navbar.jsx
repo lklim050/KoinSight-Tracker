@@ -14,11 +14,15 @@ import {
 //user and onLogout props will be used to conditionally render login/logout buttons and handle logout functionality
 export function Navbar({ setShowAuthModal, user, onLogout }) {
   return (
-    <FlowbiteNavbar fluid rounded className="fixed top-0 w-full z-50 !bg-white/5 backdrop-blur-2xl !border-b !border-white/10 !shadow-none !rounded-none">
+    <FlowbiteNavbar
+      fluid
+      rounded
+      className="fixed top-0 w-full z-50 !bg-white/5 backdrop-blur-2xl !border-b !border-white/10 !shadow-none !rounded-none"
+    >
       <NavbarBrand href="#">
         <img src="/favicon.svg" className="mr-3 h-6 sm:h-9" alt="Logo" />
-        <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-          Koin-Sight Tracker
+        <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-gray-400">
+          KoinSight Tracker
         </span>
       </NavbarBrand>
 
