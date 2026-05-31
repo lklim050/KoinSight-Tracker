@@ -171,7 +171,7 @@ export default function PortfolioPage({ user }) {
           <div>
             {user && (
               <div className="text-2xl text-gray-400 mb-2">
-                Hi {user.username}, here is your Portfolio Overview:
+                {user.username}'s Portfolio:
               </div>
             )}
 

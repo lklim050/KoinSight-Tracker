@@ -6,8 +6,10 @@ import AuthModal from "./pages/AuthModal.jsx";
 import MagicRings from "./components/MagicRings.jsx";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import AssetDetailPage from "./pages/AssetDetailPage.jsx";
+import LandingPage from "./pages/LandingPage.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 function App() {
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -27,7 +29,7 @@ function App() {
   const handleLogin = (userData) => {
     setUser(userData);
     setShowAuthModal(false);
-    window.location.href = "/";
+    window.location.href = "/portfolio"; // Redirect to portfolio page after login
   };
 
   // Handle logout by clearing user state and removing data from localStorage
@@ -57,10 +59,31 @@ function App() {
         />
       </div>
       <Routes>
-        <Route path="/" element={<PortfolioPage user={user} />} />
+        <Route
+          path="/"
+          element={
+            user ? (
+              <Navigate to="/portfolio" replace />
+            ) : (
+              <LandingPage setShowAuthModal={setShowAuthModal} />
+            )
+          }
+        />
+        <Route
+          path="/portfolio"
+          element={
+            <ProtectedRoute user={user}>
+              <PortfolioPage user={user} />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/asset/:assetId"
-          element={<AssetDetailPage user={user} />}
+          element={
+            <ProtectedRoute user={user}>
+              <AssetDetailPage user={user} />
+            </ProtectedRoute>
+          }
         />
       </Routes>
 
