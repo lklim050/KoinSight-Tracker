@@ -1,26 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { AssetsTable } from "../components/AssetsTable.jsx";
-import { TransactionTable } from "../components/TransactionTable.jsx";
-import SelectCoinModal from "./addTransactionButton/SelectCoinModal.jsx";
-import { Tabs, Button } from "flowbite-react";
-import AddTransactionModal from "./addTransactionButton/AddTransactionModal.jsx";
+import { AssetsTable } from "../components/portfolioPage/AssetsTable.jsx";
+import { TransactionTable } from "../components/portfolioPage/TransactionTable.jsx";
+import { Tabs } from "flowbite-react";
 import { getMyChart, getMyPortfolio } from "../services/assetApi.js";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  Legend,
-} from "recharts";
-import DeleteTransactionModal from "../components/DeleteTransactionModal.jsx";
-
-import DecryptedText from "../components/DecryptedText.jsx";
+import { PortfolioCharts } from "../components/portfolioPage/PortfolioCharts.jsx";
+import { PortfolioStatsCards } from "../components/portfolioPage/PortfolioStatsCards.jsx";
+import SelectCoinModal from "../components/portfolioPage/SelectCoinModal.jsx";
+import AddTransactionModal from "../components/portfolioPage/AddTransactionModal.jsx";
+import DeleteTransactionModal from "../components/portfolioPage/DeleteTransactionModal.jsx";
+import DecryptedText from "../components/ui/DecryptedText.jsx";
 
 //{user} prop is passed down from App.jsx to render username and conditionally show portfolio data
 export default function PortfolioPage({ user }) {
@@ -119,11 +107,6 @@ export default function PortfolioPage({ user }) {
   const worstPerformer = sortAsset.at(-1) ?? [];
   const allocationData = portfolio.allocation ?? [];
 
-  const getRandomColor = () => {
-    const randomHue = Math.floor(Math.random() * 360);
-    return `hsl(${randomHue}, 75%, 55%)`; // Keeps saturation and lightness stable
-  };
-
   const portfolioConfig = {
     positive: {
       color: "text-green-400",
@@ -162,10 +145,15 @@ export default function PortfolioPage({ user }) {
       ? "positive"
       : "negative";
 
+  const handleSuccess = () => {
+    setTransactionRefreshKey((k) => k + 1);
+    setAssetRefreshKey((k) => k + 1);
+    setPortfolioRefreshKey((k) => k + 1);
+  };
+
   return (
     <div className="min-h-screen text-white p-6 pt-24">
       {/* Header */}
-
       <div className="mb-8">
         <div className="flex justify-between items-start mb-4">
           <div>
@@ -174,7 +162,6 @@ export default function PortfolioPage({ user }) {
                 {user.username}'s Portfolio:
               </div>
             )}
-
             <div style={{ marginTop: "1rem" }}>
               <div className="text-4xl text-white mb-2">
                 <DecryptedText
@@ -192,7 +179,6 @@ export default function PortfolioPage({ user }) {
                 />
               </div>
             </div>
-
             <div
               className={`${portfolioConfig[status_priceChange24h]?.color} font-semibold text-sm flex items-center gap-1`}
             >
@@ -206,17 +192,19 @@ export default function PortfolioPage({ user }) {
               {portfolio.totalPriceChange24hPercent?.toFixed(2)}% (24h)
             </div>
           </div>
+
           <div className="flex gap-2">
-            <Button
+            <button
               onClick={() => {
                 setEditingTransaction(null);
                 setSelectedCoin(null);
                 setShowCoinModal(true);
               }}
-              className="bg-blue-600 cursor-pointer"
+              className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold transition cursor-pointer"
             >
               + Add Transaction
-            </Button>
+            </button>
+
             {showCoinModal && (
               <SelectCoinModal
                 setShowCoinModal={setShowCoinModal}
@@ -231,22 +219,15 @@ export default function PortfolioPage({ user }) {
                 editingTransaction={editingTransaction}
                 setShowTransactionModal={setShowTransactionModal}
                 setEditingTransaction={setEditingTransaction}
-                onSuccess={() => {
-                  setTransactionRefreshKey((currentKey) => currentKey + 1);
-                  setAssetRefreshKey((currentKey) => currentKey + 1);
-                  setPortfolioRefreshKey((currentKey) => currentKey + 1);
-                }}
+                onSuccess={handleSuccess}
               />
             )}
+
             {showDeleteModal && (
               <DeleteTransactionModal
                 deletingTransaction={deletingTransaction}
                 setShowDeleteModal={setShowDeleteModal}
-                onSuccess={() => {
-                  setTransactionRefreshKey((k) => k + 1);
-                  setAssetRefreshKey((k) => k + 1);
-                  setPortfolioRefreshKey((k) => k + 1);
-                }}
+                onSuccess={handleSuccess}
               />
             )}
           </div>
@@ -254,177 +235,36 @@ export default function PortfolioPage({ user }) {
       </div>
 
       {/* Charts Grid */}
-      <div className="grid grid-cols-[2fr_1fr] gap-6 mb-8">
-        {/* Line Chart */}
-        <div className="rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 p-6">
-          <h3 className="text-lg font-semibold text-white mb-6">
-            Portfolio Value
-          </h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart
-              data={chart}
-              margin={{ top: 10, right: 10, left: 10, bottom: 20 }}
-            >
-              <CartesianGrid
-                strokeDasharray="3 3"
-                stroke="rgba(255,255,255,0.1)"
-              />
-              <XAxis
-                dataKey="timestamp"
-                stroke="rgba(255,255,255,0.5)"
-                tick={{ fontSize: 11 }}
-                interval={Math.ceil(chart.length / 6)}
-                tickFormatter={(tick) =>
-                  new Date(tick).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })
-                }
-              />
-              <YAxis
-                stroke="rgba(255,255,255,0.5)"
-                tick={{ fontSize: 11 }}
-                tickCount={4}
-                tickFormatter={(v) => `$${(v / 1000).toFixed(0)}k`}
-                padding={{ top: 0, bottom: 30 }}
-                domain={[
-                  (dataMin) => Math.floor(dataMin * 0.99),
-                  (dataMax) => Math.ceil(dataMax * 1.01),
-                ]}
-              />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "#2E303D",
-                  border: "1px solid rgba(255,255,255,0.2)",
-                }}
-                formatter={(value) => `$${value.toFixed(2)}`}
-              />
-              <Line
-                type="linear"
-                dataKey="value"
-                stroke="#06DF73"
-                dot={false}
-                strokeWidth={2}
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* Pie Chart */}
-        <div className="rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 p-6">
-          <h3 className="text-lg font-semibold text-white mb-6">Allocation</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Tooltip />
-              <Legend verticalAlign="bottom" height={36} iconType="circle" />
-              <Pie
-                data={allocationData}
-                cx="50%"
-                cy="50%"
-                innerRadius={60}
-                outerRadius={90}
-                dataKey="percent"
-                nameKey="_id"
-              >
-                {allocationData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={getRandomColor()} />
-                ))}
-              </Pie>
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
+      <PortfolioCharts chart={chart} allocationData={allocationData} />
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-3 gap-6 mb-8">
-        <div className="rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 p-6">
-          <h4 className="text-gray-400 text-sm mb-2">All-time profit</h4>
-          <p
-            className={`${portfolioConfig[status_allTime]?.color} text-2xl mb-2 font-semibold`}
-          >
-            {portfolio.allTimeProfitLoss.toLocaleString("en-US", {
-              style: "currency",
-              currency: "USD",
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
-          </p>
-          <p
-            className={`${portfolioConfig[status_allTime]?.color} text-sm font-semibold`}
-          >
-            {portfolioConfig[status_allTime]?.icon}{" "}
-            {portfolio.allTimeProfitLossPercent?.toFixed(3)}%
-          </p>
-        </div>
-
-        <div className="rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 p-6">
-          <h4 className="text-gray-400 text-sm mb-2">Cost Basis</h4>
-          <p className="text-2xl font-bold">
-            {portfolio.totalPortfolioCost.toLocaleString("en-US", {
-              style: "currency",
-              currency: "USD",
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
-          </p>
-        </div>
-
-        <div className="rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 p-6">
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <h4 className="text-gray-400 text-sm mb-2">Best Performer</h4>
-              <div className="flex flex-row gap-3">
-                <img
-                  src={bestPerformer.image}
-                  alt={bestPerformer.name}
-                  style={{ width: "24px", height: "24px" }}
-                />{" "}
-                <p className="text-lg font-bold mb-2">
-                  {bestPerformer.symbol?.toUpperCase()}
-                </p>
-              </div>
-              <p className={`${portfolioConfig[status_profitLossBest]?.color}`}>
-                {bestPerformer.profitLoss?.toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}{" "}
-                {portfolioConfig[status_profitLossBest]?.sign}{" "}
-                {bestPerformer.profitLoss_percentage?.toFixed(2)}%
-              </p>
-            </div>
-            <div>
-              <h4 className="text-gray-400 text-sm mb-2">Worst Performer</h4>
-              <div className="flex flex-row gap-3 mb-2">
-                <img
-                  src={worstPerformer.image}
-                  alt={worstPerformer.name}
-                  style={{ width: "24px", height: "24px" }}
-                />
-                <p className="text-lg font-bold">
-                  {worstPerformer.symbol?.toUpperCase()}
-                </p>
-              </div>
-              <p
-                className={`${portfolioConfig[status_profitLossWorst]?.color}`}
-              >
-                {worstPerformer.profitLoss?.toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}{" "}
-                {portfolioConfig[status_profitLossWorst]?.sign}{" "}
-                {worstPerformer.profitLoss_percentage?.toFixed(2)}%
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <PortfolioStatsCards
+        portfolio={portfolio}
+        portfolioConfig={portfolioConfig}
+        status_allTime={status_allTime}
+        bestPerformer={bestPerformer}
+        worstPerformer={worstPerformer}
+        status_profitLossBest={status_profitLossBest}
+        status_profitLossWorst={status_profitLossWorst}
+      />
 
       {/* Tabs & Table */}
-      <Tabs>
+      <Tabs
+        theme={{
+          tablist: {
+            tabitem: {
+              styles: {
+                default: {
+                  active: {
+                    on: "bg-gray-100 text-white dark:bg-gray-800 dark:text-white",
+                    off: "text-gray-400 hover:text-gray-300 dark:text-gray-400 dark:hover:text-gray-300",
+                  },
+                },
+              },
+            },
+          },
+        }}
+      >
         <Tabs.Item title="Assets" active>
           <AssetsTable
             user={user}

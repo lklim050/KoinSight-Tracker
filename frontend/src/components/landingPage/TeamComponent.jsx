@@ -1,4 +1,7 @@
-import ericTanProfileImg from "../assets/eric-tan-profile-img.png";
+import ericTanProfileImg from "../../assets/eric-tan-profile-img.png";
+import lincolnProfileImg from "../../assets/Coolcats_Merlion.png";
+import kennethProfileImg from "../../assets/azuki-nft-411.jpg";
+import DecryptedText from "../ui/DecryptedText.jsx";
 
 const LinkedinIcon = () => (
   <svg viewBox="0 0 24 24" className="size-5" fill="currentColor">
@@ -32,8 +35,8 @@ const teamMembers = [
   },
   {
     image: {
-      src: "https://placehold.co/400x400/1a1a2e/ffffff?text=TM2",
-      alt: "Team Member 2",
+      src: lincolnProfileImg,
+      alt: "Lincoln",
     },
     name: "Lincoln",
     jobTitle: "Full Stack Developer",
@@ -46,8 +49,8 @@ const teamMembers = [
   },
   {
     image: {
-      src: "https://placehold.co/400x400/1a1a2e/ffffff?text=TM3",
-      alt: "Team Member 3",
+      src: kennethProfileImg,
+      alt: "Kenneth",
     },
     name: "Kenneth",
     jobTitle: "Full Stack Developer",
@@ -100,11 +103,20 @@ export function TeamComponent() {
           The Team
         </p>
         <h2 className="mb-5 text-3xl font-bold text-white md:text-4xl lg:text-5xl">
-          Built by developers, for investors
+          <DecryptedText
+            text="Devs Behind KoinSight"
+            animateOn="view"
+            sequential={true}
+            revealDirection="start"
+            speed={30}
+            className="text-white"
+            encryptedClassName="text-neutral-500"
+          />
         </h2>
         <p className="text-lg text-neutral-400">
-          A team of three General Assembly students who built KoinSight from the
-          ground up in under two weeks.
+          A team of three General Assembly bootcamp students who built this
+          project under two weeks and learned the value of collaboration,
+          teamwork, and resolving conflict merges.
         </p>
       </div>
       <div className="mx-auto grid max-w-5xl grid-cols-1 gap-x-8 gap-y-12 md:grid-cols-3 md:gap-y-16">

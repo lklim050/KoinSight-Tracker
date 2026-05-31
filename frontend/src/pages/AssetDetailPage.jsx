@@ -4,8 +4,8 @@ import { getMyAssets } from "../services/assetApi.js";
 import { getTransactions } from "../services/transactionApi.js";
 import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
 import { Button } from "flowbite-react";
-import AddTransactionModal from "./addTransactionButton/AddTransactionModal.jsx";
-import DeleteTransactionModal from "../components/DeleteTransactionModal.jsx";
+import AddTransactionModal from "../components/portfolioPage/AddTransactionModal.jsx";
+import DeleteTransactionModal from "../components/portfolioPage/DeleteTransactionModal.jsx";
 
 const AssetDetailPage = ({ user }) => {
   const { assetId } = useParams();

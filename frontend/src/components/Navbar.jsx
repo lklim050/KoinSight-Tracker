@@ -10,6 +10,7 @@ import {
   DropdownHeader,
   DropdownItem,
 } from "flowbite-react";
+import { LogOut } from "lucide-react";
 
 //user and onLogout props will be used to conditionally render login/logout buttons and handle logout functionality
 export function Navbar({ setShowAuthModal, user, onLogout }) {
@@ -20,9 +21,13 @@ export function Navbar({ setShowAuthModal, user, onLogout }) {
       className="fixed top-0 w-full z-50 !bg-white/5 backdrop-blur-2xl !border-b !border-white/10 !shadow-none !rounded-none"
     >
       <NavbarBrand href="#">
-        <img src="/favicon.svg" className="mr-3 h-6 sm:h-9" alt="Logo" />
+        <img
+          src="/koinsight-logo.png"
+          className="mr-3 h-6 sm:h-9"
+          alt="KoinSight Logo"
+        />
         <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-gray-400">
-          KoinSight Tracker
+          KoinSight
         </span>
       </NavbarBrand>
 
@@ -31,23 +36,16 @@ export function Navbar({ setShowAuthModal, user, onLogout }) {
         <div className="hidden md:flex items-center gap-6">
           <a
             href="#"
-            className="text-sm font-medium text-gray-900 dark:text-white"
+            className="text-sm font-medium text-white/60 hover:text-white transition-colors duration-200"
           >
             Home
           </a>
           <a
             href="https://koinsight.netlify.app/"
             target="_blank"
-            className="text-sm text-gray-500 dark:text-gray-400 hover:text-white"
+            className="text-sm font-medium text-white/60 hover:text-white transition-colors duration-200"
           >
             Marketplace
-          </a>
-          <a
-            href="https://koinsight.netlify.app/watchlist"
-            target="_blank"
-            className="text-sm text-gray-500 dark:text-gray-400 hover:text-white"
-          >
-            Watchlist
           </a>
         </div>
 
@@ -63,6 +61,21 @@ export function Navbar({ setShowAuthModal, user, onLogout }) {
                 rounded
               />
             }
+            theme={{
+              floating: {
+                base: "z-10 w-fit divide-y divide-white/10 overflow-hidden rounded-2xl shadow-lg !bg-[#1D1F2E] border border-white/20 focus:outline-none",
+                style: {
+                  auto: "",
+                  dark: "",
+                  light: "",
+                },
+                header: "block px-4 py-2 text-sm text-white",
+                item: {
+                  base: "flex w-full cursor-pointer items-center justify-start px-4 py-2 text-sm text-white/80 hover:!bg-white/20 focus:!bg-white/20 focus:outline-none",
+                },
+                divider: "my-1 h-px bg-white/10",
+              },
+            }}
           >
             <DropdownHeader>
               <span className="block text-sm font-semibold">
@@ -71,14 +84,19 @@ export function Navbar({ setShowAuthModal, user, onLogout }) {
               <span className="block truncate text-sm">{user.email}</span>
             </DropdownHeader>
             <DropdownDivider />
-            <DropdownItem onClick={onLogout}>Sign out</DropdownItem>
+            <DropdownItem onClick={onLogout}>
+              <span className="flex items-center gap-2">
+                <LogOut size={14} />
+                Sign out
+              </span>
+            </DropdownItem>
           </Dropdown>
         ) : (
           <button
             onClick={() => setShowAuthModal(true)}
-            className="bg-purple-600 px-3 py-2 rounded-lg text-white hover:bg-purple-700 cursor-pointer"
+            className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold transition cursor-pointer"
           >
-            Log In
+            Login
           </button>
         )}
         <NavbarToggle />
@@ -86,17 +104,27 @@ export function Navbar({ setShowAuthModal, user, onLogout }) {
 
       {/* Mobile only */}
       <NavbarCollapse className="md:hidden">
-        <NavbarLink href="#" active>
+        <NavbarLink
+          href="#"
+          active
+          theme={{
+            active: {
+              on: "bg-white/10 text-white dark:text-white md:bg-transparent",
+            },
+          }}
+        >
           Home
         </NavbarLink>
-        <NavbarLink href="https://koinsight.netlify.app/" target="_blank">
-          Marketplace
-        </NavbarLink>
         <NavbarLink
-          href="https://koinsight.netlify.app/watchlist"
+          href="https://koinsight.netlify.app/"
           target="_blank"
+          theme={{
+            active: {
+              off: "border-b border-white/10 text-white/60 hover:bg-white/10 dark:border-white/10 dark:text-white/60 dark:hover:bg-white/10 dark:hover:text-white",
+            },
+          }}
         >
-          Watchlist
+          Marketplace
         </NavbarLink>
       </NavbarCollapse>
     </FlowbiteNavbar>

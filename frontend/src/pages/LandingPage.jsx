@@ -1,11 +1,12 @@
 import { useNavigate } from "react-router-dom";
-import BorderGlow from "../components/BorderGlow.jsx";
-import { LandingPageFeatureComponent } from "../components/LandingPageFeatureComponent.jsx";
-import { ScrollingLogoComponent } from "../components/ScrollingLogoComponent.jsx";
-import { TimelineComponent } from "../components/TimelineComponent.jsx";
-import { TeamComponent } from "../components/TeamComponent.jsx";
-import { HeaderComponent } from "../components/HeaderComponent.jsx";
-import { FooterComponent } from "../components/FooterComponent.jsx";
+import DecryptedText from "../components/ui/DecryptedText.jsx";
+import BorderGlow from "../components/landingPage/BorderGlow.jsx";
+import { LandingPageFeatureComponent } from "../components/landingPage/LandingPageFeatureComponent.jsx";
+import { ScrollingLogoComponent } from "../components/landingPage/ScrollingLogoComponent.jsx";
+import { TimelineComponent } from "../components/landingPage/TimelineComponent.jsx";
+import { TeamComponent } from "../components/landingPage/TeamComponent.jsx";
+import { HeaderComponent } from "../components/landingPage/HeaderComponent.jsx";
+import { FooterComponent } from "../components/landingPage/FooterComponent.jsx";
 const LandingPage = ({ setShowAuthModal }) => {
   const navigate = useNavigate();
 
@@ -18,11 +19,19 @@ const LandingPage = ({ setShowAuthModal }) => {
             {/* Top row — heading left, description + buttons right */}
             <div className="max-w-2xl mx-auto mb-12 flex flex-col gap-y-5 text-center lg:mb-20">
               <h1 className="text-5xl font-bold leading-tight md:text-4xl lg:text-5xl text-white">
-                Track your crypto portfolio with ease
+                <DecryptedText
+                  text="Track your crypto with ease"
+                  animateOn="view"
+                  sequential={true}
+                  revealDirection="start"
+                  speed={40}
+                  className="text-white"
+                  encryptedClassName="text-neutral-500"
+                />
               </h1>
               <p className="text-gray-400 text-lg">
                 Monitor your holdings, log every transaction, and understand
-                your performance, all in one place.
+                your performance, all in one place with KoinSight.
               </p>
 
               <div>
@@ -65,11 +74,22 @@ const LandingPage = ({ setShowAuthModal }) => {
         <section className="px-[5%] py-16 md:py-24 lg:py-24">
           <div className="max-w-2xl mx-auto mb-12 flex flex-col gap-y-5 text-center lg:mb-10">
             <h2 className="text-3xl font-bold leading-tight md:text-4xl lg:text-5xl text-white">
-              Features
+              <DecryptedText
+                text="Features"
+                animateOn="view"
+                sequential={true}
+                revealDirection="start"
+                speed={40}
+                className="text-white"
+                encryptedClassName="text-neutral-500"
+              />
             </h2>
             <p className="text-gray-400 text-lg"></p>
           </div>
           <LandingPageFeatureComponent />
+        </section>
+
+        <section className="px-[5%] py-16 md:py-24 lg:py-24">
           <TimelineComponent />
         </section>
 

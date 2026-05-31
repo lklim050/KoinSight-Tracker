@@ -165,3 +165,8 @@ h6 {
 @utility animate-loop-horizontally {
   animation: loop-horizontally 90s linear infinite;
 }
+
+/* Override Flowbite Tabs active colour */
+[role="tablist"] button[aria-selected="true"] {
+  color: white !important;
+}

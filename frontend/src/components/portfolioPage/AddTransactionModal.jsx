@@ -197,7 +197,7 @@ function AddTransactionModal({
               type="datetime-local"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="w-full bg-white/10 border border-white/20 text-gray-300 p-2 rounded-2xl outline-none focus:bg-white/15 focus:border-white/40 transition"
+              className="w-full bg-white/10 border border-white/20 text-gray-300 p-2 rounded-2xl outline-none focus:bg-white/15 focus:border-white/40 transition [color-scheme:dark]"
             />
           </div>
           <div className="w-32">
@@ -243,7 +243,7 @@ function AddTransactionModal({
 
         <button
           onClick={handleSubmit}
-          className="w-full bg-blue-600 hover:bg-blue-700 transition text-white font-semibold py-3 rounded-2xl cursor-pointer"
+          className="w-full bg-green-500 hover:bg-green-600 transition text-white font-semibold py-3 rounded-2xl cursor-pointer"
         >
           {editingTransaction ? "Update Transaction" : "Add Transaction"}
         </button>

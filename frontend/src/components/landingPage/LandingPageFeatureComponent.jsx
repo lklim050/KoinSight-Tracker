@@ -1,4 +1,4 @@
-import { Tabs } from "./ui/tabs";
+import { Tabs } from "../ui/tabs";
 
 export function LandingPageFeatureComponent() {
   const tabs = [

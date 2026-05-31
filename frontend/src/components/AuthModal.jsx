@@ -129,7 +129,7 @@ function AuthModal({ showAuthModal, setShowAuthModal, onLogin }) {
               cursor-pointer
               transition
 
-              ${isLogin ? "text-purple-400 underline" : "text-gray-400"}
+              ${isLogin ? "text-green-500 underline" : "text-gray-400"}
             `}
           >
             Log In
@@ -146,7 +146,7 @@ function AuthModal({ showAuthModal, setShowAuthModal, onLogin }) {
               cursor-pointer
               transition
 
-              ${!isLogin ? "text-purple-400 underline" : "text-gray-400"}
+              ${!isLogin ? "text-green-500 underline" : "text-gray-400"}
             `}
           >
             Sign Up
@@ -242,8 +242,8 @@ function AuthModal({ showAuthModal, setShowAuthModal, onLogin }) {
             type="submit"
             className="
               w-full
-              bg-purple-600
-              hover:bg-purple-700
+              bg-green-500
+              hover:bg-green-600
               text-white
               p-3
               rounded-lg

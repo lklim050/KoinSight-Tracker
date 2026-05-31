@@ -1,6 +1,6 @@
 import { Pencil, Trash2 } from "lucide-react";
 import { useState, useEffect } from "react";
-import { getTransactions } from "../services/transactionApi.js";
+import { getTransactions } from "../../services/transactionApi.js";
 
 export function TransactionTable({
   refreshTrigger,

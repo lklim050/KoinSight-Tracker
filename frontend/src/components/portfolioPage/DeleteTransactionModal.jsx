@@ -1,4 +1,4 @@
-import { deleteTransaction } from "../services/transactionApi";
+import { deleteTransaction } from "../../services/transactionApi";
 
 function DeleteTransactionModal({
   deletingTransaction,

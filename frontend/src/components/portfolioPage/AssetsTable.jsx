@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getMyAssets } from "../services/assetApi.js";
+import { getMyAssets } from "../../services/assetApi.js";
 import { useNavigate } from "react-router-dom";
 
 export function AssetsTable({ user, refreshTrigger, getAssetToPortfolio }) {

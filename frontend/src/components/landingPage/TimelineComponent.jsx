@@ -1,8 +1,9 @@
 import React from "react";
 import { Timeline } from "@/components/ui/timeline";
-import projectTracking from "../assets/p3-project-tracking.jpg";
-import p3CodingTerminal from "../assets/p3-coding-terminal.png";
-import projectInitialPlanning from "../assets/p3-initial-planning.jpg";
+import DecryptedText from "../ui/DecryptedText.jsx";
+import projectTracking from "../../assets/p3-project-tracking.jpg";
+import p3CodingTerminal from "../../assets/p3-coding-terminal.png";
+import projectInitialPlanning from "../../assets/p3-initial-planning.jpg";
 
 export function TimelineComponent() {
   const data = [
@@ -10,6 +11,17 @@ export function TimelineComponent() {
       title: "Phase 1",
       content: (
         <div>
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+            <DecryptedText
+              text="Project Timeline"
+              animateOn="view"
+              sequential={true}
+              revealDirection="start"
+              speed={30}
+              className="text-white"
+              encryptedClassName="text-neutral-500"
+            />
+          </h2>
           <p className="mb-2 text-xl font-semibold text-neutral-200">
             Planning & Ideation
           </p>
@@ -205,7 +217,7 @@ export function TimelineComponent() {
     },
   ];
   return (
-    <div className="relative w-full overflow-clip mt-32">
+    <div className="relative w-full overflow-clip">
       <Timeline data={data} />
     </div>
   );
