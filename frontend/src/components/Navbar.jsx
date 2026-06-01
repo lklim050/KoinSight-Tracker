@@ -45,7 +45,7 @@ export function Navbar({ setShowAuthModal, user, onLogout }) {
             target="_blank"
             className="text-sm font-medium text-white/60 hover:text-white transition-colors duration-200"
           >
-            Marketplace
+            Market Insight
           </a>
         </div>
 
@@ -94,7 +94,7 @@ export function Navbar({ setShowAuthModal, user, onLogout }) {
         ) : (
           <button
             onClick={() => setShowAuthModal(true)}
-            className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold transition cursor-pointer"
+            className="px-4 py-2 rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold transition cursor-pointer"
           >
             Login
           </button>

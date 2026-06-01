@@ -99,7 +99,7 @@ export function TimelineComponent() {
               cron jobs
             </div>
             <div>
-              ⚛️ Built the React frontend with Vite, Tailwind CSS, and Flowbite
+              ⚛️ Built the React frontend with Vite, Tailwind CSS, and Reactbits
               components
             </div>
             <div>
@@ -108,23 +108,52 @@ export function TimelineComponent() {
             </div>
           </div>
           <div className="mb-6">
-            <p className="mb-4 text-sm uppercase tracking-widest text-neutral-500">Tech Stack</p>
+            <p className="mb-4 text-sm uppercase tracking-widest text-neutral-500">
+              Tech Stack
+            </p>
             <div className="flex flex-wrap gap-6">
               {[
-                { name: "React", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
-                { name: "Vite", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vite/vite-original.svg" },
-                { name: "Tailwind", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg" },
-                { name: "JavaScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" },
-                { name: "Node.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" },
-                { name: "Express", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg", invert: true },
-                { name: "MongoDB", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" },
+                {
+                  name: "React",
+                  icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
+                },
+                {
+                  name: "Vite",
+                  icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vite/vite-original.svg",
+                },
+                {
+                  name: "Tailwind",
+                  icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg",
+                },
+                {
+                  name: "JavaScript",
+                  icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg",
+                },
+                {
+                  name: "Node.js",
+                  icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
+                },
+                {
+                  name: "Express",
+                  icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg",
+                  invert: true,
+                },
+                {
+                  name: "MongoDB",
+                  icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg",
+                },
               ].map((tech) => (
-                <div key={tech.name} className="flex flex-col items-center gap-2">
+                <div
+                  key={tech.name}
+                  className="flex flex-col items-center gap-2"
+                >
                   <img
                     src={tech.icon}
                     alt={tech.name}
                     className="h-10 w-10"
-                    style={tech.invert ? { filter: "brightness(0) invert(1)" } : {}}
+                    style={
+                      tech.invert ? { filter: "brightness(0) invert(1)" } : {}
+                    }
                   />
                   <span className="text-sm text-neutral-400">{tech.name}</span>
                 </div>
@@ -160,21 +189,26 @@ export function TimelineComponent() {
               ✅ Portfolio overview with live CoinGecko price data
             </div>
             <div className="flex items-center gap-2 text-lg text-neutral-300">
-              ✅ Transaction log with add, edit, and delete flows
+              ✅ CRUD Transaction log with add, edit, and delete flows
             </div>
             <div className="flex items-center gap-2 text-lg text-neutral-300">
               ✅ Asset detail page with filtered transactions per coin
             </div>
             <div className="flex items-center gap-2 text-lg text-neutral-300">
-              ⚠️ Debugged 429 rate limiting caused by React StrictMode
-              double-firing effects in dev
+              ✅ Integrated charting library and calculations in backend for
+              profit/loss
+            </div>
+            <div className="flex items-center gap-2 text-lg text-neutral-300">
+              ⚠️ Manage CORS with CoinGecko API and handle rate limits
+              gracefully via Cron jobs and caching
             </div>
             <div className="flex items-center gap-2 text-lg text-neutral-300">
               ⚠️ Resolved repeated git merge conflicts across feature branches
+              among team
             </div>
             <div className="flex items-center gap-2 text-lg text-neutral-300">
-              ⚠️ Traced Vite asset import issues — relative paths in JSX don't
-              work, must import assets as modules
+              ⚠️ Learned the importance of refactoring and breaking down code to
+              component level for better readability and maintainability.
             </div>
           </div>
         </div>
@@ -193,22 +227,18 @@ export function TimelineComponent() {
           </p>
           <div className="mb-8">
             <div className="flex items-center gap-2 text-lg text-neutral-300">
-              🔄 Real-time price updates via WebSockets or polling — no more
-              manual refreshes
+              💱 Multi-currency support: toggle between USD, SGD, and other fiat
+              currencies
             </div>
             <div className="flex items-center gap-2 text-lg text-neutral-300">
-              💱 Multi-currency support — toggle between USD, SGD, and other
-              fiat currencies
+              🧮 Calculator conversion feature: convert between crypto and fiat
+              currencies
             </div>
             <div className="flex items-center gap-2 text-lg text-neutral-300">
-              📊 Portfolio performance chart — visualise gains and losses over
-              time
+              🔔 Price alerts. Notify users when a coin hits a target price
             </div>
             <div className="flex items-center gap-2 text-lg text-neutral-300">
-              🔔 Price alerts — notify users when a coin hits a target price
-            </div>
-            <div className="flex items-center gap-2 text-lg text-neutral-300">
-              📱 Mobile-responsive polish — optimised experience for smaller
+              📱 Mobile-responsive polish. Optimised experience for smaller
               screens
             </div>
           </div>

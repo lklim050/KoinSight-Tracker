@@ -24,7 +24,7 @@ const teamMembers = [
     name: "Eric Tan",
     jobTitle: "UX Engineer",
     description:
-      "Focused on the frontend, crafting the landing page, portfolio dashboard, and features with React and Tailwind CSS.",
+      "The craft behind KoinSight. Designed and engineered the frontend experience, from the landing page and portfolio dashboard to the component system and UI details that make everything feel polished.",
     socialLinks: [
       {
         href: "https://www.linkedin.com/in/ericistan/",
@@ -41,7 +41,7 @@ const teamMembers = [
     name: "Lincoln",
     jobTitle: "Full Stack Developer/Engineer",
     description:
-      "Focused on backend architecture, API integration, and bringing the portfolio data layer to life.",
+      "The backbone of KoinSight. Architected the database schema, REST API, and CoinGecko integration that power every live price, profit/loss calculation, and portfolio chart in the app.",
     socialLinks: [
       {
         href: "https://www.linkedin.com/in/leng-khoon-lim/",
@@ -58,10 +58,13 @@ const teamMembers = [
     name: "Kenneth",
     jobTitle: "Full Stack Developer",
     description:
-      "Versatile contributor across the stack, helping with both frontend transaction logic and backend functionality to ensure a seamless user experience.",
+      "The bridge between both worlds. Built the authentication system end-to-end, engineered the full transaction flow from UI to API, moving seamlessly between frontend and backend.",
     socialLinks: [
-      { href: "#", icon: <LinkedinIcon /> },
-      { href: "#", icon: <GithubIcon /> },
+      {
+        href: "https://www.linkedin.com/in/kenneth-wong-yx/",
+        icon: <LinkedinIcon />,
+      },
+      { href: "https://github.com/kenneth-wong94", icon: <GithubIcon /> },
     ],
   },
 ];

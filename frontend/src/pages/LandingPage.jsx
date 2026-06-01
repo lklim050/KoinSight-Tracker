@@ -18,6 +18,18 @@ const LandingPage = ({ setShowAuthModal }) => {
           <div className="max-w-7xl mx-auto">
             {/* Top row — heading left, description + buttons right */}
             <div className="max-w-2xl mx-auto mb-12 flex flex-col gap-y-5 text-center lg:mb-20">
+              {/* Brand mark */}
+              <div className="flex items-center justify-center gap-3">
+                <img
+                  src="/koinsight-logo.png"
+                  alt="KoinSight logo"
+                  className="w-10 h-10"
+                />
+                <span className="text-2xl font-semibold text-white font-['Bruno_Ace_SC']">
+                  KoinSight
+                </span>
+              </div>
+
               <h1 className="text-5xl font-bold leading-tight md:text-4xl lg:text-5xl text-white">
                 <DecryptedText
                   text="Track your crypto with ease"
@@ -37,7 +49,7 @@ const LandingPage = ({ setShowAuthModal }) => {
               <div>
                 <button
                   onClick={() => setShowAuthModal(true)}
-                  className="px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold transition cursor-pointer"
+                  className="px-6 py-3 rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold transition cursor-pointer"
                 >
                   Get Started
                 </button>
@@ -59,7 +71,7 @@ const LandingPage = ({ setShowAuthModal }) => {
               >
                 <div style={{ padding: "0.5rem" }}>
                   <img
-                    src="../src/assets/koin-sight_detail-page.jpg"
+                    src="../src/assets/koinsight-portfolio-page.jpg"
                     alt="Portfolio dashboard preview"
                     className="w-full object-cover rounded-2xl drop-shadow-2xl"
                   />
