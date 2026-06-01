@@ -112,7 +112,9 @@ export function TransactionTable({
             >
               {/* Type */}
               <td className="px-4 py-3 text-sm font-medium whitespace-nowrap">
-                <span className={transactionConfig[transaction.transType]?.color}>
+                <span
+                  className={transactionConfig[transaction.transType]?.color}
+                >
                   {transactionConfig[transaction.transType]?.label}
                 </span>
               </td>
@@ -126,7 +128,15 @@ export function TransactionTable({
                     year: "numeric",
                   })}
                 </p>
-                <p className="text-xs text-gray-500 mt-0.5">{transaction.time}</p>
+                <p className="text-xs text-gray-500 mt-0.5">
+                  {new Date(
+                    `1970-01-01T${transaction.time}`,
+                  ).toLocaleTimeString("en-SG", {
+                    hour: "numeric",
+                    minute: "2-digit",
+                    hour12: true,
+                  })}
+                </p>
               </td>
 
               {/* Asset */}
@@ -153,21 +163,22 @@ export function TransactionTable({
 
               {/* Amount */}
               <td className="px-4 py-3 text-sm">
-                <p className={`font-medium ${transactionConfig[transaction.transType]?.color}`}>
+                <p
+                  className={`font-medium ${transactionConfig[transaction.transType]?.color}`}
+                >
                   {transactionConfig[transaction.transType]?.sign}
                   {transaction.quantity}{" "}
                   {transaction.coinType?.symbol?.toUpperCase()}
                 </p>
                 <p className="text-xs text-gray-500 mt-0.5">
-                  {(transaction.quantity * transaction.pricePerCoin).toLocaleString(
-                    "en-US",
-                    {
-                      style: "currency",
-                      currency: "USD",
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    }
-                  )}
+                  {(
+                    transaction.quantity * transaction.pricePerCoin
+                  ).toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
                 </p>
               </td>
 
