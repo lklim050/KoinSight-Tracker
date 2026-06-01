@@ -16,42 +16,54 @@ export function FooterComponent() {
   return (
     <footer className="px-[5%] py-12 md:py-16 border-t border-white/10">
       <div className="max-w-7xl mx-auto flex flex-col items-center gap-y-6 md:flex-row md:items-center md:justify-between">
-
         {/* Left: brand + copyright */}
-        <div className="flex flex-col items-center gap-y-1 md:items-start">
-          <a href="/">
-            <span className="text-xl font-bold text-white tracking-tight">KoinSight</span>
+        <div className="flex flex-col items-center gap-y-3 md:items-start">
+          <a href="/" className="flex items-center gap-2.5 mb-1">
+            <img
+              src="/koinsight-logo.png"
+              alt="KoinSight logo"
+              className="w-8 h-8"
+            />
+            <span className="text-xl font-semibold text-white font-['Bruno_Ace_SC']">
+              KoinSight
+            </span>
           </a>
-          <p className="text-sm text-neutral-500">© {new Date().getFullYear()} KoinSight.</p>
-          <p className="text-sm text-neutral-500">Built at General Assembly's Software Engineering Bootcamp. SEB62</p>
+          <p className="text-sm text-neutral-500">
+            © {new Date().getFullYear()} KoinSight, all rights reserved.
+          </p>
         </div>
 
-        {/* Right: nav links + GitHub icon */}
-        <div className="flex items-center gap-6">
-          {navLinks.map((link, index) => (
-            <a
-              key={index}
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm font-semibold text-neutral-400 hover:text-white transition"
-            >
-              {link.title}
-            </a>
-          ))}
-          {socialLinks.map((link, index) => (
-            <a
-              key={index}
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-neutral-400 hover:text-white transition"
-            >
-              {link.icon}
-            </a>
-          ))}
+        {/* Right: nav links + GitHub icon + attribution */}
+        <div className="flex flex-col items-center gap-y-3 md:items-end">
+          <div className="flex items-center gap-6">
+            {navLinks.map((link, index) => (
+              <a
+                key={index}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-semibold text-neutral-400 hover:text-white transition"
+              >
+                {link.title}
+              </a>
+            ))}
+            {socialLinks.map((link, index) => (
+              <a
+                key={index}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-neutral-400 hover:text-white transition"
+              >
+                {link.icon}
+              </a>
+            ))}
+          </div>
+          <p className="text-sm text-neutral-500">
+            Built with ❤️ at General Assembly's Software Engineering Bootcamp
+            (Singapore 🇸🇬)
+          </p>
         </div>
-
       </div>
     </footer>
   );
