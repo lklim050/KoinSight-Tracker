@@ -19,11 +19,7 @@ export const createTransaction = async (transactionData) => {
     return data;
   } catch (error) {
     console.error("Create Transaction Error:", error);
-    throw error; // ← rethrow so the catch in TransactionTable handles it
-    return {
-      success: false,
-      message: error.message,
-    };
+    throw error;
   }
 };
 
