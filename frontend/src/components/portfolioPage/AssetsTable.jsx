@@ -59,7 +59,7 @@ export function AssetsTable({ user, refreshTrigger, getAssetToPortfolio }) {
       sign: "-",
     },
     neutral: {
-      color: "text-gray-400",
+      color: "text-gray-500",
       icon: "-",
       sign: " ",
     },
@@ -68,30 +68,30 @@ export function AssetsTable({ user, refreshTrigger, getAssetToPortfolio }) {
   return (
     <div className="overflow-x-auto rounded-3xl bg-white/5 backdrop-blur-lg border border-white/10">
       <table className="w-full border-collapse">
-        <thead className="bg-white/10 backdrop-blur-xl">
+        <thead className="bg-white/5">
           <tr>
-            <th className="border-b border-white/10 p-4 text-left text-white text-sm font-semibold">
+            <th className="border-b border-white/10 px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
               Name
             </th>
-            <th className="border-b border-white/10 p-4 text-left text-white text-sm font-semibold">
+            <th className="border-b border-white/10 px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
               Price
             </th>
-            <th className="border-b border-white/10 p-4 text-left text-white text-sm font-semibold">
+            <th className="border-b border-white/10 px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
               1h%
             </th>
-            <th className="border-b border-white/10 p-4 text-left text-white text-sm font-semibold">
+            <th className="border-b border-white/10 px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
               24h%
             </th>
-            <th className="border-b border-white/10 p-4 text-left text-white text-sm font-semibold">
+            <th className="border-b border-white/10 px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
               7d%
             </th>
-            <th className="border-b border-white/10 p-4 text-left text-white text-sm font-semibold">
+            <th className="border-b border-white/10 px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
               Holdings
             </th>
-            <th className="border-b border-white/10 p-4 text-left text-white text-sm font-semibold">
+            <th className="border-b border-white/10 px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
               Avg. Buy Price
             </th>
-            <th className="border-b border-white/10 p-4 text-left text-white text-sm font-semibold">
+            <th className="border-b border-white/10 px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
               Profit/Loss
             </th>
           </tr>
@@ -128,45 +128,50 @@ export function AssetsTable({ user, refreshTrigger, getAssetToPortfolio }) {
                 onClick={() => navigate(`/asset/${asset._id}`)}
                 className="border-b border-white/5 hover:bg-white/5 transition cursor-pointer"
               >
-                <td className="p-4 text-white text-sm whitespace-nowrap">
+                {/* Name */}
+                <td className="px-4 py-3 text-sm whitespace-nowrap">
                   <div className="flex items-center gap-2">
                     <img
                       src={asset.image}
                       alt={asset.name}
-                      className="w-6 h-6"
+                      className="w-5 h-5"
                     />
-                    <span>{asset.name}</span>
-                    <span className="text-gray-400 text-sm">
+                    <span className="text-white font-medium">{asset.name}</span>
+                    <span className="text-gray-500 text-xs">
                       {asset.symbol?.toUpperCase()}
                     </span>
                   </div>
                 </td>
-                <td className="p-4 text-white text-sm font-semibold">
+
+                {/* Price */}
+                <td className="px-4 py-3 text-white text-sm font-medium">
                   ${asset.currentPrice.toLocaleString()}
                 </td>
-                <td
-                  className={`p-4 text-sm font-semibold ${assetConfig[status_1h]?.color}`}
-                >
+
+                {/* 1h% */}
+                <td className={`px-4 py-3 text-sm font-medium ${assetConfig[status_1h]?.color}`}>
                   {assetConfig[status_1h]?.icon}{" "}
                   {percent_1h ? percent_1h.toFixed(2) : "--"}%
                 </td>
-                <td
-                  className={`p-4 text-sm font-semibold ${assetConfig[status_24h]?.color}`}
-                >
+
+                {/* 24h% */}
+                <td className={`px-4 py-3 text-sm font-medium ${assetConfig[status_24h]?.color}`}>
                   {assetConfig[status_24h]?.icon}{" "}
                   {percent_24h ? percent_24h.toFixed(2) : "--"}%
                 </td>
-                <td
-                  className={`p-4 text-sm font-semibold ${assetConfig[status_7d]?.color}`}
-                >
+
+                {/* 7d% */}
+                <td className={`px-4 py-3 text-sm font-medium ${assetConfig[status_7d]?.color}`}>
                   {assetConfig[status_7d]?.icon}{" "}
                   {percent_7d ? percent_7d.toFixed(2) : "--"}%
                 </td>
-                <td className="p-4 text-white text-sm font-bold">
-                  <p>
+
+                {/* Holdings */}
+                <td className="px-4 py-3 text-sm">
+                  <p className="text-white font-medium">
                     {asset.holdings} {asset.symbol?.toUpperCase()}
                   </p>
-                  <p className="text-gray-400 text-xs">
+                  <p className="text-gray-500 text-xs mt-0.5">
                     {(asset.holdings * asset.avgBuyPrice).toLocaleString(
                       "en-US",
                       {
@@ -178,7 +183,9 @@ export function AssetsTable({ user, refreshTrigger, getAssetToPortfolio }) {
                     )}
                   </p>
                 </td>
-                <td className="p-4 text-white text-sm font-semibold">
+
+                {/* Avg. Buy Price */}
+                <td className="px-4 py-3 text-white text-sm font-medium">
                   {asset.avgBuyPrice.toLocaleString("en-US", {
                     style: "currency",
                     currency: "USD",
@@ -186,10 +193,10 @@ export function AssetsTable({ user, refreshTrigger, getAssetToPortfolio }) {
                     maximumFractionDigits: 2,
                   })}
                 </td>
-                <td
-                  className={`p-4 text-sm font-bold ${assetConfig[status_profitLoss]?.color}`}
-                >
-                  <p>
+
+                {/* Profit/Loss */}
+                <td className={`px-4 py-3 text-sm ${assetConfig[status_profitLoss]?.color}`}>
+                  <p className="font-semibold">
                     {asset.profitLoss.toLocaleString("en-US", {
                       style: "currency",
                       currency: "USD",
@@ -197,7 +204,7 @@ export function AssetsTable({ user, refreshTrigger, getAssetToPortfolio }) {
                       maximumFractionDigits: 2,
                     })}
                   </p>
-                  <p>
+                  <p className="text-xs mt-0.5">
                     {assetConfig[status_profitLoss]?.icon}
                     {asset.profitLoss_percentage.toFixed(2)}%
                   </p>

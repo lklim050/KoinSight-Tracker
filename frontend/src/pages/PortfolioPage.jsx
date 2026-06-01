@@ -155,15 +155,15 @@ export default function PortfolioPage({ user }) {
     <div className="min-h-screen text-white p-6 pt-24">
       {/* Header */}
       <div className="mb-8">
-        <div className="flex justify-between items-start mb-4">
+        <div className="flex justify-between items-center mb-4">
           <div>
             {user && (
-              <div className="text-2xl text-gray-400 mb-2">
+              <div className="text-md font-medium text-gray-400 mb-2">
                 {user.username}'s Portfolio:
               </div>
             )}
-            <div style={{ marginTop: "1rem" }}>
-              <div className="text-4xl text-white mb-2">
+            <div>
+              <div className="text-5xl text-white mb-2">
                 <DecryptedText
                   text={portfolio.totalPortfolioValue.toLocaleString("en-US", {
                     style: "currency",
@@ -180,7 +180,7 @@ export default function PortfolioPage({ user }) {
               </div>
             </div>
             <div
-              className={`${portfolioConfig[status_priceChange24h]?.color} font-semibold text-sm flex items-center gap-1`}
+              className={`${portfolioConfig[status_priceChange24h]?.color} font-semibold text-md flex items-center gap-1`}
             >
               {portfolio.totalPriceChange24h.toLocaleString("en-US", {
                 style: "currency",
@@ -200,7 +200,7 @@ export default function PortfolioPage({ user }) {
                 setSelectedCoin(null);
                 setShowCoinModal(true);
               }}
-              className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold transition cursor-pointer"
+              className="px-4 py-2 rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold transition cursor-pointer"
             >
               + Add Transaction
             </button>

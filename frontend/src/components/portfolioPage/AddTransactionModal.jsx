@@ -243,7 +243,7 @@ function AddTransactionModal({
 
         <button
           onClick={handleSubmit}
-          className="w-full bg-green-500 hover:bg-green-600 transition text-white font-semibold py-3 rounded-2xl cursor-pointer"
+          className="w-full bg-green-600 hover:bg-green-700 transition text-white font-semibold py-3 rounded-2xl cursor-pointer"
         >
           {editingTransaction ? "Update Transaction" : "Add Transaction"}
         </button>

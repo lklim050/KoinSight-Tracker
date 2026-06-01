@@ -30,9 +30,9 @@ export function PortfolioCharts({ chart, allocationData }) {
     <div className="grid grid-cols-[2fr_1fr] gap-6 mb-8">
       {/* Line Chart */}
       <div className="rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 p-6">
-        <h3 className="text-lg font-semibold text-white mb-6">
+        <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-4">
           Portfolio Value
-        </h3>
+        </p>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart
             data={chart}
@@ -85,7 +85,7 @@ export function PortfolioCharts({ chart, allocationData }) {
 
       {/* Pie Chart */}
       <div className="rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 p-6">
-        <h3 className="text-lg font-semibold text-white mb-6">Allocation</h3>
+        <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-4">Allocation</p>
         <ResponsiveContainer width="100%" height={300}>
           <PieChart>
             <Tooltip />

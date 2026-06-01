@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { motion } from "motion/react";
 import { getMyAssets } from "../services/assetApi.js";
 import { getTransactions } from "../services/transactionApi.js";
-import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
-import { Button } from "flowbite-react";
+import { ChevronLeft, Pencil, Trash2, TrendingUp, Layers, Tag, Wallet } from "lucide-react";
+import DecryptedText from "../components/ui/DecryptedText.jsx";
 import AddTransactionModal from "../components/portfolioPage/AddTransactionModal.jsx";
 import DeleteTransactionModal from "../components/portfolioPage/DeleteTransactionModal.jsx";
 
@@ -55,41 +56,58 @@ const AssetDetailPage = ({ user }) => {
 
   return (
     <div className="min-h-screen text-white p-6 pt-24">
+      {/* ── Back button ── */}
+      <button
+        onClick={() => navigate(-1)}
+        className="flex items-center gap-1 px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-gray-400 hover:text-white transition text-sm mb-8 cursor-pointer"
+      >
+        <ChevronLeft size={16} />
+        Back
+      </button>
+
       {/* ── Header row ── */}
-      <div className="flex justify-between items-start mb-8">
+      <div className="flex justify-between items-center mb-8">
         {/* Left side */}
         <div>
-          {/* Back button */}
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center gap-1 text-gray-400 hover:text-white transition text-sm mb-4 cursor-pointer"
-          >
-            ← Back
-          </button>
-
-          {/* Coin name + icon */}
-          <div className="flex items-center gap-3 mb-2">
-            <img src={asset.image} alt={asset.name} className="w-10 h-10" />
-            <h1 className="text-3xl font-bold">
-              {asset.name}{" "}
-              <span className="text-gray-400 font-normal text-xl">
+          {/* Coin name + icon — secondary label */}
+          <div className="flex items-center gap-2 mb-3">
+            <motion.img
+              src={asset.image}
+              alt={asset.name}
+              className="w-6 h-6 rounded-full"
+              initial={{ rotateY: 0 }}
+              animate={{ rotateY: 360 }}
+              transition={{ duration: 2, ease: "easeInOut" }}
+              style={{ transformStyle: "preserve-3d" }}
+            />
+            <p className="text-sm font-medium text-gray-400">
+              {asset.name}
+              <span className="text-gray-600 ml-1">
                 ({asset.symbol?.toUpperCase()})
               </span>
-            </h1>
+            </p>
           </div>
 
-          {/* Current price */}
-          <p className="text-4xl font-bold mt-2">
-            {asset.currentPrice.toLocaleString("en-US", {
-              style: "currency",
-              currency: "USD",
-              minimumFractionDigits: 2,
-            })}
+          {/* Total holdings — hero number */}
+          <p className="text-5xl font-bold text-white tracking-tight">
+            <DecryptedText
+              text={asset.totalValue.toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD",
+                minimumFractionDigits: 2,
+              })}
+              animateOn="view"
+              sequential={true}
+              revealDirection="start"
+              speed={40}
+              className="text-white"
+              encryptedClassName="text-neutral-500"
+            />
           </p>
-          <p className="text-gray-400 text-sm mt-1">Current Price</p>
+          <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mt-2">Total Holdings</p>
         </div>
 
-        <Button
+        <button
           onClick={() => {
             setEditingTransaction(null);
             setSelectedCoin({
@@ -100,66 +118,72 @@ const AssetDetailPage = ({ user }) => {
             });
             setShowTransactionModal(true);
           }}
-          className="bg-blue-600 cursor-pointer mt-10"
+          className="px-4 py-2 rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold transition cursor-pointer"
         >
           + Add Transaction
-        </Button>
+        </button>
       </div>
       {/* ── Stat Cards ── */}
-      <div className="grid grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-4 gap-6 mb-8">
+        {/* Total Profit / Loss */}
+        <div className="rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 p-4">
+          <div className="flex items-center gap-1.5 text-gray-500 mb-2">
+            <TrendingUp size={12} />
+            <p className="text-xs font-medium uppercase tracking-wider">Total Profit / Loss</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <p className={`text-lg font-semibold ${asset.profitLoss >= 0 ? "text-green-400" : "text-red-400"}`}>
+              {asset.profitLoss.toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD",
+                minimumFractionDigits: 2,
+              })}
+            </p>
+            <p className={`text-sm font-semibold ${asset.profitLoss >= 0 ? "text-green-400" : "text-red-400"}`}>
+              {asset.profitLoss >= 0 ? "▲" : "▼"}{" "}
+              {asset.profitLoss_percentage?.toFixed(2)}%
+            </p>
+          </div>
+        </div>
+
         {/* Quantity */}
-        <div className="rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 p-6">
-          <h4 className="text-gray-400 text-sm mb-2">Quantity</h4>
-          <p className="text-2xl font-bold">
+        <div className="rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 p-4">
+          <div className="flex items-center gap-1.5 text-gray-500 mb-2">
+            <Layers size={12} />
+            <p className="text-xs font-medium uppercase tracking-wider">Quantity</p>
+          </div>
+          <p className="text-lg font-semibold">
             {asset.holdings} {asset.symbol?.toUpperCase()}
-          </p>
-          <p className="text-gray-400 text-sm mt-1">
-            {(asset.holdings * asset.currentPrice).toLocaleString("en-US", {
-              style: "currency",
-              currency: "USD",
-              minimumFractionDigits: 2,
-            })}{" "}
-            at current price
           </p>
         </div>
 
         {/* Avg Buy Price */}
-        <div className="rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 p-6">
-          <h4 className="text-gray-400 text-sm mb-2">Avg. Buy Price</h4>
-          <p className="text-2xl font-bold">
+        <div className="rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 p-4">
+          <div className="flex items-center gap-1.5 text-gray-500 mb-2">
+            <Tag size={12} />
+            <p className="text-xs font-medium uppercase tracking-wider">Avg. Buy Price</p>
+          </div>
+          <p className="text-lg font-semibold">
             {asset.avgBuyPrice.toLocaleString("en-US", {
               style: "currency",
               currency: "USD",
               minimumFractionDigits: 2,
             })}
           </p>
-          <p className="text-gray-400 text-sm mt-1">
-            Cost basis:{" "}
+        </div>
+
+        {/* Cost Basis */}
+        <div className="rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 p-4">
+          <div className="flex items-center gap-1.5 text-gray-500 mb-2">
+            <Wallet size={12} />
+            <p className="text-xs font-medium uppercase tracking-wider">Cost Basis</p>
+          </div>
+          <p className="text-lg font-semibold">
             {(asset.holdings * asset.avgBuyPrice).toLocaleString("en-US", {
               style: "currency",
               currency: "USD",
               minimumFractionDigits: 2,
             })}
-          </p>
-        </div>
-
-        {/* Total Profit / Loss */}
-        <div className="rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 p-6">
-          <h4 className="text-gray-400 text-sm mb-2">Total Profit / Loss</h4>
-          <p
-            className={`text-2xl font-bold ${asset.profitLoss >= 0 ? "text-green-400" : "text-red-400"}`}
-          >
-            {asset.profitLoss.toLocaleString("en-US", {
-              style: "currency",
-              currency: "USD",
-              minimumFractionDigits: 2,
-            })}
-          </p>
-          <p
-            className={`text-sm font-semibold mt-1 ${asset.profitLoss >= 0 ? "text-green-400" : "text-red-400"}`}
-          >
-            {asset.profitLoss >= 0 ? "▲" : "▼"}{" "}
-            {asset.profitLoss_percentage?.toFixed(2)}%
           </p>
         </div>
       </div>

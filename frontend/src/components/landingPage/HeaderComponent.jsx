@@ -21,7 +21,7 @@ export function HeaderComponent({
                   <button
                     key={index}
                     onClick={button.onClick}
-                    className="px-6 py-3 rounded-xl bg-green-500 text-white font-semibold hover:bg-green-600 transition cursor-pointer"
+                    className="px-6 py-3 rounded-xl bg-green-600 text-white font-semibold hover:bg-green-700 transition cursor-pointer"
                   >
                     {button.title}
                   </button>

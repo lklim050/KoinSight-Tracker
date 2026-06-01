@@ -242,8 +242,8 @@ function AuthModal({ showAuthModal, setShowAuthModal, onLogin }) {
             type="submit"
             className="
               w-full
-              bg-green-500
-              hover:bg-green-600
+              bg-green-600
+              hover:bg-green-700
               text-white
               p-3
               rounded-lg
