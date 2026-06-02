@@ -231,7 +231,7 @@ Used inside `User.transactions`.
 | Field          | Type     | Notes                                            |
 | -------------- | -------- | ------------------------------------------------ |
 | `transType`    | `String` | Required, typically `buy`, `sell`, or `transfer` |
-| `coinType`     | `String` | Required, CoinGecko coin id or asset reference   |
+| `coinType`     | `String` | Required, coin id, ref to top250 coins document  |
 | `quantity`     | `Number` | Required                                         |
 | `pricePerCoin` | `Number` | Defaults to `0` in the embedded schema           |
 | `fee`          | `Number` | Optional                                         |
@@ -240,32 +240,32 @@ Used inside `User.transactions`.
 | `time`         | `String` | Required                                         |
 | `created_at`   | `Date`   | Defaults to now                                  |
 
-### Cached Top 250 Coins Collection
+### Referenced Top 250 Coins Collection
 
 - Note this is written under scripts folder instead of models for better separation and readiability, since it's only used for syncing and caching API data, not directly referenced in user transactions or assets.
   Collection: `crypto_top250Coins`
 
-| Field                                     | Type     | Notes             |
-| ----------------------------------------- | -------- | ----------------- |
-| `_id`                                     | `String` | CoinGecko coin id |
-| `symbol`                                  | `String` | Required          |
-| `name`                                    | `String` | Required          |
-| `image`                                   | `String` | Required          |
-| `current_price`                           | `Number` | Required          |
-| `market_cap`                              | `Number` | Required          |
-| `market_cap_rank`                         | `Number` | Required          |
-| `fully_diluted_valuation`                 | `Number` | Required          |
-| `total_volume`                            | `Number` | Required          |
-| `high_24h`                                | `Number` | Defaults to `0`   |
-| `low_24h`                                 | `Number` | Defaults to `0`   |
-| `price_change_24h`                        | `Number` | Defaults to `0`   |
-| `price_change_percentage_24h`             | `Number` | Defaults to `0`   |
-| `market_cap_change_24h`                   | `Number` | Defaults to `0`   |
-| `market_cap_change_percentage_24h`        | `Number` | Defaults to `0`   |
-| `last_updated`                            | `Date`   | Required          |
-| `price_change_percentage_1h_in_currency`  | `Number` | Defaults to `0`   |
-| `price_change_percentage_24h_in_currency` | `Number` | Defaults to `0`   |
-| `price_change_percentage_7d_in_currency`  | `Number` | Defaults to `0`   |
+| Field                                     | Type     | Notes                |
+| ----------------------------------------- | -------- | -------------------- |
+| `_id`                                     | `String` | Referenced (Coin id) |
+| `symbol`                                  | `String` | Required             |
+| `name`                                    | `String` | Required             |
+| `image`                                   | `String` | Required             |
+| `current_price`                           | `Number` | Required             |
+| `market_cap`                              | `Number` | Required             |
+| `market_cap_rank`                         | `Number` | Required             |
+| `fully_diluted_valuation`                 | `Number` | Required             |
+| `total_volume`                            | `Number` | Required             |
+| `high_24h`                                | `Number` | Defaults to `0`      |
+| `low_24h`                                 | `Number` | Defaults to `0`      |
+| `price_change_24h`                        | `Number` | Defaults to `0`      |
+| `price_change_percentage_24h`             | `Number` | Defaults to `0`      |
+| `market_cap_change_24h`                   | `Number` | Defaults to `0`      |
+| `market_cap_change_percentage_24h`        | `Number` | Defaults to `0`      |
+| `last_updated`                            | `Date`   | Required             |
+| `price_change_percentage_1h_in_currency`  | `Number` | Defaults to `0`      |
+| `price_change_percentage_24h_in_currency` | `Number` | Defaults to `0`      |
+| `price_change_percentage_7d_in_currency`  | `Number` | Defaults to `0`      |
 
 ### 24 Hour History Collection
 
