@@ -83,19 +83,35 @@ The following is the list of frontend components:
 ```text
 frontend/src/
 ├── components/ # Reusable React components
-│ ├── Navbar.jsx # Navigation header
-│ ├── AssetsTable.jsx # Assets overview table
-│ ├── TransactionTable.jsx # Transactions list/table
-│ ├── MagicRings.jsx # Animated background effect
-│ ├── DecryptedText.jsx # Animated numeric display
-│ ├── DeleteTransactionModal.jsx # Modal to delete transactions
-│ └── ErrorComponent.jsx # ErrorBoundary fallback
-├── pages/ # Page-level components
-│ ├── PortfolioPage.jsx # Main dashboard page
 │ ├── AuthModal.jsx # Login / Signup modal
-│ └── addTransactionButton/ # Transaction modals
-│ ├── SelectCoinModal.jsx
-│ └── AddTransactionModal.jsx
+│ ├── ErrorComponent.jsx # ErrorBoundary fallback
+│ ├── Navbar.jsx # Navigation header
+│ ├── ProtectedRoute.jsx # Redirects unauthenticated users
+│ ├── landingPage/ # Landing page section components
+│ │ ├── BorderGlow.jsx # Decorative border glow effect
+│ │ ├── FooterComponent.jsx # Page footer
+│ │ ├── HeaderComponent.jsx # Hero / header section
+│ │ ├── LandingPageFeatureComponent.jsx # Features highlight section
+│ │ ├── ScrollingLogoComponent.jsx # Auto-scrolling coin logo strip
+│ │ ├── TeamComponent.jsx # Team section
+│ │ └── TimelineComponent.jsx # Project timeline section
+│ ├── portfolioPage/ # Portfolio dashboard components
+│ │ ├── AddTransactionModal.jsx # Form to add a new transaction
+│ │ ├── AssetsTable.jsx # Assets overview table
+│ │ ├── DeleteTransactionModal.jsx # Confirmation modal to delete a transaction
+│ │ ├── PortfolioCharts.jsx # Portfolio value line chart
+│ │ ├── PortfolioStatsCards.jsx # Summary stat cards (value, P&L, etc.)
+│ │ ├── SelectCoinModal.jsx # Coin picker for adding transactions
+│ │ └── TransactionTable.jsx # Transactions list/table
+│ └── ui/ # Generic UI primitives
+│ ├── DecryptedText.jsx # Animated numeric display
+│ ├── MagicRings.jsx # Animated background effect
+│ ├── tabs.jsx # Tabs primitive (shadcn)
+│ └── timeline.jsx # Timeline primitive (shadcn)
+├── pages/ # Page-level components
+│ ├── AssetDetailPage.jsx # Per-asset detail view
+│ ├── LandingPage.jsx # Public landing page
+│ └── PortfolioPage.jsx # Main dashboard page
 ├── services/ # API wrappers
 │ ├── assetApi.js # Asset-related API calls
 │ ├── authApi.js # Authentication-related API calls
@@ -104,7 +120,7 @@ frontend/src/
 ├── lib/ # Utilities
 │ └── utils.js # Contains service and helper functions
 ├── main.jsx # App bootstrap and ErrorBoundary
-└── App.jsx # Top-level component
+└── App.jsx # Top-level component with routing
 ```
 
 This is for backend:
