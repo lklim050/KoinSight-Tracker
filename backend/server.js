@@ -1,5 +1,6 @@
-import express from "express";
 import dotenv from "dotenv";
+dotenv.config();
+import express from "express";
 import connectDB from "./src/db/db.js";
 import {
   jsonErrorHandler,
@@ -14,8 +15,16 @@ import assets from "./src/routers/portofoiloTracker/assets.js";
 import getAPI from "./src/routers/portofoiloTracker/getAPI.js";
 import getDB from "./src/routers/portofoiloTracker/getDB.js";
 import { initCronJobs } from "./src/config/cron.js";
+import dns from "dns";
+import mongoose from "mongoose";
 
-dotenv.config();
+// for deployment at altas
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
+mongoose
+  .connect(process.env.DATABASE)
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
+
 connectDB();
 const app = express();
 app.use(cors());

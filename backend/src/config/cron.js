@@ -32,7 +32,7 @@ export const initCronJobs = () => {
   });
 
   // Job: to fetch top 250coins
-  cron.schedule("3/15 * * * *", async () => {
+  cron.schedule("2/15 * * * *", async () => {
     await waitForLock();
     isDbSyncing = true;
     try {
