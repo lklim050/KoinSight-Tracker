@@ -20,7 +20,7 @@ export function Navbar({ setShowAuthModal, user, onLogout }) {
       rounded
       className="fixed top-0 w-full z-50 !bg-white/5 backdrop-blur-2xl !border-b !border-white/10 !shadow-none !rounded-none"
     >
-      <NavbarBrand href="#">
+      <NavbarBrand href="/">
         <img
           src="/koinsight-logo.png"
           className="mr-3 h-6 sm:h-9"
@@ -35,18 +35,18 @@ export function Navbar({ setShowAuthModal, user, onLogout }) {
         {/* Desktop links */}
         <div className="hidden md:flex items-center gap-6">
           <a
-            href="#"
+            href="/"
             className="text-sm font-medium text-white/60 hover:text-white transition-colors duration-200"
           >
             Home
           </a>
-          <a
+          {/* <a
             href="https://koinsight.netlify.app/"
             target="_blank"
             className="text-sm font-medium text-white/60 hover:text-white transition-colors duration-200"
           >
             Market Insight
-          </a>
+          </a> */}
         </div>
 
         {/* Avatar or Login */}
@@ -105,7 +105,7 @@ export function Navbar({ setShowAuthModal, user, onLogout }) {
       {/* Mobile only */}
       <NavbarCollapse className="md:hidden">
         <NavbarLink
-          href="#"
+          href="/"
           active
           theme={{
             active: {
@@ -115,7 +115,7 @@ export function Navbar({ setShowAuthModal, user, onLogout }) {
         >
           Home
         </NavbarLink>
-        <NavbarLink
+        {/* <NavbarLink
           href="https://koinsight.netlify.app/"
           target="_blank"
           theme={{
@@ -125,7 +125,7 @@ export function Navbar({ setShowAuthModal, user, onLogout }) {
           }}
         >
           Marketplace
-        </NavbarLink>
+        </NavbarLink> */}
       </NavbarCollapse>
     </FlowbiteNavbar>
   );
