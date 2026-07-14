@@ -20,6 +20,7 @@ import mongoose from "mongoose";
 
 // for deployment at altas
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
+console.log("DNS override applied");
 mongoose
   .connect(process.env.DATABASE)
   .then(() => console.log("✅ MongoDB connected"))
@@ -48,6 +49,10 @@ app.use(limiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+app.use((req, res, next) => {
+  console.log(`${req.method} method is sent to ${req.url}`);
+  next();
+});
 // Define all your routes and controllers here:
 app.use("/auth", auth);
 app.use("/api", getAPI);
