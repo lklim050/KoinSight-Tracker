@@ -25,16 +25,19 @@ export default function PortfolioPage({ user }) {
 
   const [asset, setAsset] = useState([]);
   const [portfolio, setPortfolio] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   // get Portfolio
   useEffect(() => {
     if (!user) {
+      setLoading(false); // ← ensure loading stops if no user
       return;
     }
 
     const getPortfolio = async () => {
+      setLoading(true); // ← explicitly start loading
+      setError(null); // ← clear previous error before each fetch
       try {
         const data = await getMyPortfolio();
         console.log("Portfolio data:", data);
@@ -46,15 +49,22 @@ export default function PortfolioPage({ user }) {
       }
     };
     getPortfolio();
-  }, [portfolioRefreshKey]);
+  }, [portfolioRefreshKey, user]);
 
   // draw chart
   useEffect(() => {
     if (!user) {
+      setLoading(false); // ← stop spinner if no user
       return;
     }
+    let isInitialLoad = true; // ← track first load vs interval refresh
 
     const getChart = async () => {
+      if (isInitialLoad) {
+        setLoading(true); // ← only show spinner on first load
+      }
+      setError(null); // ← clear previous error before each fetch
+
       try {
         const data = await getMyChart();
         console.log("Chart data:", data);
@@ -62,7 +72,10 @@ export default function PortfolioPage({ user }) {
       } catch (err) {
         setError("Failed to load chart");
       } finally {
-        setLoading(false);
+        if (isInitialLoad) {
+          setLoading(false); // ← only stop spinner on first load
+          isInitialLoad = false;
+        }
       }
     };
     // initial draw

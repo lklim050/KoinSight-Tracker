@@ -56,6 +56,13 @@ function AuthModal({ showAuthModal, setShowAuthModal, onLogin }) {
     }
   };
 
+  const fillDemoAccount = () => {
+    setFormData({
+      email: "demo-account@anymail.com",
+      password: "password123",
+    });
+  };
+
   if (!showAuthModal) return null;
 
   return (
@@ -254,6 +261,14 @@ function AuthModal({ showAuthModal, setShowAuthModal, onLogin }) {
             {isLogin ? "Log In" : "Create Account"}
           </button>
         </form>
+        <div className="mt-4 text-center">
+          <button
+            onClick={fillDemoAccount}
+            className="text-sm text-gray-400 hover:text-white transition"
+          >
+            Click here: Quick Start to fill in Demo Account
+          </button>
+        </div>
       </div>
     </div>
   );
