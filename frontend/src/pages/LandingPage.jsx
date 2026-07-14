@@ -7,6 +7,7 @@ import { TimelineComponent } from "../components/landingPage/TimelineComponent.j
 import { TeamComponent } from "../components/landingPage/TeamComponent.jsx";
 import { HeaderComponent } from "../components/landingPage/HeaderComponent.jsx";
 import { FooterComponent } from "../components/landingPage/FooterComponent.jsx";
+import portfolioPreview from "../assets/koinsight-portfolio-page.jpg";
 const LandingPage = ({ setShowAuthModal }) => {
   const navigate = useNavigate();
 
@@ -71,7 +72,7 @@ const LandingPage = ({ setShowAuthModal }) => {
               >
                 <div style={{ padding: "0.5rem" }}>
                   <img
-                    src="../src/assets/koinsight-portfolio-page.jpg"
+                    src={portfolioPreview}
                     alt="Portfolio dashboard preview"
                     className="w-full object-cover rounded-2xl drop-shadow-2xl"
                   />

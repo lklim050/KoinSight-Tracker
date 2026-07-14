@@ -1,5 +1,16 @@
 import { Tabs } from "../ui/tabs";
-import { LayoutDashboard, ArrowLeftRight, Layers, TrendingUp, Star } from "lucide-react";
+import {
+  LayoutDashboard,
+  ArrowLeftRight,
+  Layers,
+  TrendingUp,
+  Star,
+} from "lucide-react";
+import portfolioImg from "../../assets/koinsight-portfolio-page.jpg";
+import transactionImg from "../../assets/koin-sight-transaction-tab.jpg";
+import assetDetailImg from "../../assets/koin-sight-asset-detail-page.jpg";
+import marketInsightImg from "../../assets/koin-sight_detail-page.jpg";
+import watchlistImg from "../../assets/koin-sight_watchlist.jpg";
 
 const FeatureCard = ({ title, description, icon, imgSrc, imgAlt }) => (
   <div
@@ -8,7 +19,9 @@ const FeatureCard = ({ title, description, icon, imgSrc, imgAlt }) => (
   >
     <div className="flex items-center justify-center gap-2.5 mb-1">
       <span className="text-green-400">{icon}</span>
-      <p className="text-2xl md:text-3xl font-semibold font-['Bruno_Ace_SC']">{title}</p>
+      <p className="text-2xl md:text-3xl font-semibold font-['Bruno_Ace_SC']">
+        {title}
+      </p>
     </div>
     <p className="text-sm md:text-base font-normal text-neutral-400 mt-2 mb-4 max-w-lg mx-auto">
       {description}
@@ -33,7 +46,7 @@ export function LandingPageFeatureComponent() {
           title="Portfolio Overview"
           description="Track your total portfolio value, all-time profit/loss, and asset allocation at a glance. Live data, beautifully visualised."
           icon={<LayoutDashboard size={24} />}
-          imgSrc="../src/assets/koinsight-portfolio-page.jpg"
+          imgSrc={portfolioImg}
           imgAlt="portfolio overview"
         />
       ),
@@ -46,7 +59,7 @@ export function LandingPageFeatureComponent() {
           title="Transaction Logging"
           description="Log every buy, sell, and transfer with full detail: price, quantity, fees, and notes. Your complete transaction history in one place."
           icon={<ArrowLeftRight size={24} />}
-          imgSrc="../src/assets/koin-sight-transaction-tab.jpg"
+          imgSrc={transactionImg}
           imgAlt="transaction logging"
         />
       ),
@@ -59,7 +72,7 @@ export function LandingPageFeatureComponent() {
           title="Asset Details"
           description="Drill into any holding. See your average buy price, cost basis, total P&L, and every transaction tied to that asset."
           icon={<Layers size={24} />}
-          imgSrc="../src/assets/koin-sight-asset-detail-page.jpg"
+          imgSrc={assetDetailImg}
           imgAlt="asset details"
         />
       ),
@@ -72,7 +85,7 @@ export function LandingPageFeatureComponent() {
           title="Market Insight"
           description="Browse live prices and market data for 250+ cryptocurrencies. Stay informed before you make your next move."
           icon={<TrendingUp size={24} />}
-          imgSrc="../src/assets/koin-sight_detail-page.jpg"
+          imgSrc={marketInsightImg}
           imgAlt="market insight"
         />
       ),
@@ -85,7 +98,7 @@ export function LandingPageFeatureComponent() {
           title="Watchlist"
           description="Keep tabs on coins you don't own yet. Monitor price movements and stay ready for your next entry."
           icon={<Star size={24} />}
-          imgSrc="../src/assets/koin-sight_watchlist.jpg"
+          imgSrc={watchlistImg}
           imgAlt="watchlist"
         />
       ),
